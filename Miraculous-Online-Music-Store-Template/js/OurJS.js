@@ -3,6 +3,31 @@ const apiStart = `https://localhost:${port}/api`;
 $(document).ready(function () {
     $("#RegisterForm").submit(Register);
     $("#LoginForm").submit(Login);
+
+
+    // מוחק את המידע מטופס ההרשמה והלוגין אם לחצו אסקייפ לסגירתו
+    document.addEventListener('keydown', function(event) {
+        // Check if the pressed key is the escape key
+        if (event.key === 'Escape') {
+          let LoginForm = document.getElementById('myModal1');
+          let RegisterForm = document.getElementById('myModal');
+          let bIsPopupOpen = $(LoginForm).hasClass('show') || $(RegisterForm).hasClass('show');
+          if (bIsPopupOpen) {
+            $('#myModal1').modal('hide');
+            $('#myModal').modal('hide');
+          }
+        }
+      });
+      $('#myModal1').on('hidden.bs.modal', function () {
+        RemoveErrorMesseages();
+      });
+      
+      $('#myModal').on('hidden.bs.modal', function () {
+        RemoveErrorMesseages();
+      });
+      // סוף הטפסים
+
+
 });
 function Register() {
     let password = document.getElementById("RegisterPassword").value;
@@ -19,18 +44,20 @@ function Register() {
         name: name,
         password: password
     };
-    ajaxCall("POST", api, JSON.stringify(User), RegisterSuccessCallback, ErrorCallback);
+    ajaxCall("POST", api, JSON.stringify(User), RegisterSuccessCallback, RegisterErrorCallback);
     return false;
 }
 function RegisterSuccessCallback(data) {
     // TODO: change the alert
-    console.log(data)
-    alert(data.message);
+    // console.log(data)
+    // alert(data.message);
+    document.getElementById("RegisterErrorMSG").innerHTML = "";
 }
-function ErrorCallback(error) {
+function RegisterErrorCallback(error) {
     // TODO: change the alert
     console.log(error)
-    alert(error.responseJSON.message)
+    // alert(error.responseJSON.message)
+    document.getElementById("RegisterErrorMSG").innerHTML = error.responseJSON.message;
 }
 function Login() {
     let email = document.getElementById("LoginEmail").value;
@@ -40,9 +67,30 @@ function Login() {
     if (password.length < 3)
         alert("Please enter your password");
     const api = `${apiStart}/Users/Login?email=${email}&password=${password}`;
-    ajaxCall("POST", api, "", LoginSuccessCallback, ErrorCallback);
+    ajaxCall("POST", api, "", LoginSuccessCallback, LoginErrorCallback);
     return false;
 }
 function LoginSuccessCallback(data) {
-    console.log(data)
+    let KeepSignedIn = document.getElementById("KeepMeSignedInCheckBox").checked;
+    if (KeepSignedIn)
+        localStorage['User'] = JSON.stringify(data);
+    else sessionStorage['User'] = JSON.stringify(data);
+    // console.log(data)
+    document.getElementById("LoginErrorMSG").innerHTML = "";
+}
+function LoginErrorCallback(error) {
+    // TODO: change the alert
+    console.log(error)
+    // alert(error.responseJSON.message)
+    document.getElementById("LoginErrorMSG").innerHTML = error.responseJSON.message;
+}
+function RemoveErrorMesseages() {
+    document.getElementById("RegisterErrorMSG").innerHTML = "";
+    document.getElementById("LoginErrorMSG").innerHTML = "";
+    document.getElementById("RegisterPassword").value = "";
+    document.getElementById("RegisterConfirmPassword").value = "";
+    document.getElementById("RegisterEmail").value = "";
+    document.getElementById("RegisterName").value = "";
+    document.getElementById("LoginEmail").value = "";
+    document.getElementById("LoginPassword").value = "";
 }

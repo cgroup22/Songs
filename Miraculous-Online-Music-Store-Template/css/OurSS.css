@@ -15,5 +15,10 @@
 }
 input[type="submit"] {
     cursor: pointer;
-  }
-  
+}
+#LoginErrorMSG, #RegisterErrorMSG {
+    font-style: normal;
+    color:red;
+    font-weight: 500;
+    font-size: 30px;
+}

@@ -217,7 +217,7 @@
                             </div>
                             <div class="ms_banner_text">
                                 <h1>This Month’s</h1>
-                                <h1 class="ms_color">Record Breaking Albums !</h1>
+                                <h1 class="ms_color">Record Breaking Albums!</h1>
                                 <p>Dream your moments, Until I Met You, Gimme Some Courage, Dark Alley, One More Of A Stranger, Endless<br> Things, The Heartbeat Stops, Walking Promises, Desired Games and many more...</p>
                                 <div class="ms_banner_btn">
                                     <a href="#" class="ms_btn">Listen Now</a>
@@ -2380,7 +2380,7 @@
             <div class="modal-dialog register_dialog">
                 <!-- Modal content-->
                 <div class="modal-content">
-                    <button type="button" class="close" data-dismiss="modal">
+                    <button type="button" class="close" data-dismiss="modal" onclick="RemoveErrorMesseages()">
 						<i class="fa_icon form_close"></i>
 					</button>
                     <div class="modal-body">
@@ -2417,6 +2417,7 @@
                                 <!--<a href="#" class="ms_btn">register now</a>-->
                                 <input type="submit" class="ms_btn" value="register now">
                                 <p>Already Have An Account? <a href="#myModal1" data-toggle="modal" class="ms_modal hideCurrentModel">login here</a></p>
+                                <p id="RegisterErrorMSG"></p>
                             </div>
                         </form>
                     </div>
@@ -2452,7 +2453,7 @@
                                 </div>
                                 <div class="remember_checkbox">
                                     <label>Keep me signed in
-                                <input type="checkbox">
+                                <input type="checkbox" id="KeepMeSignedInCheckBox">
                                 <span class="checkmark"></span>
                             </label>
                                 </div>
@@ -2462,6 +2463,7 @@
                                     <a href="#">Forgot Password?</a>
                                 </div>
                                 <p>Don't Have An Account? <a href="#myModal" data-toggle="modal" class="ms_modal1 hideCurrentModel">register here</a></p>
+                                <p id="LoginErrorMSG"></p>
                             </div>
                         </form>
                     </div>
