@@ -41,6 +41,19 @@ namespace FinalProject.Controllers
             }
         }
 
+        [HttpPost("Login")]
+        public IActionResult Post(string email, string password)
+        {
+            try
+            {
+                return Ok(Models.User.Login(email, password));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
+        }
+
         // PUT api/<UsersController>/5
         [HttpPut("{id}")]
         public void Put(int id, [FromBody] string value)

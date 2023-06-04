@@ -12,6 +12,18 @@ namespace FinalProject.Models
         public string Email { get => email; set => email = value; }
         public string Name { get => name; set => name = value; }
         public string Password { get => password; set => password = value; }
+
+        public static User Login(string email, string password)
+        {
+            if (email == null || password == null || email == "" || password == "")
+                throw new Exception("User not found");
+            DBservices db = new DBservices();
+            User user = db.Login(email, password);
+            if (user == null)
+                throw new Exception("Error");
+            return user;
+        }
+
         // Inserts a new user into the user table
         public bool Insert()
         {

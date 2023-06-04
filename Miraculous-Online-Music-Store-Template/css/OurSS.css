@@ -8,3 +8,12 @@
     width: auto;
     margin-top: 10px;
 }
+.ms_register_form input.ms_btn:hover,
+.ms_lang_popup .modal-content.add_lang .ms_lang_btn input.ms_btn:hover {
+	background-color: #ffffff;
+	color: #22bed7;
+}
+input[type="submit"] {
+    cursor: pointer;
+  }
+  

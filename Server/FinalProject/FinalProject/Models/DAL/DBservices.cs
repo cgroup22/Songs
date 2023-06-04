@@ -318,6 +318,65 @@ public class DBservices
 
     }
 
+    public User Login(string email, string password)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+
+        paramDic.Add("@email", email);
+        paramDic.Add("@password", password);
+
+        cmd = CreateCommandWithStoredProcedure("SP_UserLogin", con, paramDic);             // create the command
+        var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
+        returnParameter.Direction = ParameterDirection.ReturnValue;
+
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            if (dataReader.Read())
+            {
+                User s = new User();
+                s.Email = dataReader["email"].ToString();
+                s.Password = dataReader["password"].ToString();
+                s.Name = dataReader["name"].ToString();
+                return s;
+            }
+            throw new Exception("Server error");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+            var result = returnParameter.Value;
+            if ((int)result == 0)
+                throw new ArgumentException("This user does not exist");
+            else if ((int)result == 1) throw new ArgumentException("Wrong password");
+        }
+    }
+
 
     //---------------------------------------------------------------------------------
     // Create the SqlCommand using a stored procedure
