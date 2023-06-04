@@ -1,0 +1,10 @@
+.ms_register_form input.ms_btn {
+    background-color: transparent;
+    height: 40px;
+    border: 1px solid #fff;
+    /* margin-left: 0px; */
+    padding: 0px 31px;
+    line-height: 40px;
+    width: auto;
+    margin-top: 10px;
+}

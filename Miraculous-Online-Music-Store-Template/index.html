@@ -26,6 +26,10 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <!-- Favicon Link -->
     <link rel="shortcut icon" type="image/png" href="images/favicon.png">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="js/ajaxCalls.js"></script>
+    <script src="js/OurJS.js"></script>
+    <link rel="stylesheet" href="css/OurSS.css">
 </head>
 
 <body>
@@ -2383,35 +2387,38 @@
                         <div class="ms_register_img">
                             <img src="images/register_img.png" alt="" class="img-fluid" />
                         </div>
-                        <div class="ms_register_form">
-                            <h2>Register / Sign Up</h2>
-                            <div class="form-group">
-                                <input type="text" placeholder="Enter Your Name" class="form-control">
-                                <span class="form_icon">
-							<i class="fa_icon form-user" aria-hidden="true"></i>
-							</span>
+                        <form id="RegisterForm">
+                            <div class="ms_register_form">
+                                <h2>Register / Sign Up</h2>
+                                <div class="form-group">
+                                    <input type="text" placeholder="Enter Your Name" class="form-control" id="RegisterName" required>
+                                    <span class="form_icon">
+                                <i class="fa_icon form-user" aria-hidden="true"></i>
+                                </span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="email" placeholder="Enter Your Email" class="form-control" id="RegisterEmail" required>
+                                    <span class="form_icon">
+                                <i class="fa_icon form-envelope" aria-hidden="true"></i>
+                            </span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" placeholder="Enter Password" class="form-control" id="RegisterPassword" required>
+                                    <span class="form_icon">
+                            <i class="fa_icon form-lock" aria-hidden="true"></i>
+                            </span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" placeholder="Confirm Password" class="form-control" id="RegisterConfirmPassword" required minlength="3">
+                                    <span class="form_icon">
+                            <i class=" fa_icon form-lock" aria-hidden="true"></i>
+                            </span>
+                                </div>
+                                <!--<a href="#" class="ms_btn">register now</a>-->
+                                <input type="submit" class="ms_btn" value="register now">
+                                <p>Already Have An Account? <a href="#myModal1" data-toggle="modal" class="ms_modal hideCurrentModel">login here</a></p>
                             </div>
-                            <div class="form-group">
-                                <input type="text" placeholder="Enter Your Email" class="form-control">
-                                <span class="form_icon">
-							<i class="fa_icon form-envelope" aria-hidden="true"></i>
-						</span>
-                            </div>
-                            <div class="form-group">
-                                <input type="password" placeholder="Enter Password" class="form-control">
-                                <span class="form_icon">
-						<i class="fa_icon form-lock" aria-hidden="true"></i>
-						</span>
-                            </div>
-                            <div class="form-group">
-                                <input type="password" placeholder="Confirm Password" class="form-control">
-                                <span class="form_icon">
-						<i class=" fa_icon form-lock" aria-hidden="true"></i>
-						</span>
-                            </div>
-                            <a href="#" class="ms_btn">register now</a>
-                            <p>Already Have An Account? <a href="#myModal1" data-toggle="modal" class="ms_modal hideCurrentModel">login here</a></p>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
