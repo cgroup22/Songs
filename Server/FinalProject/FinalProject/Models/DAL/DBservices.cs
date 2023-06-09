@@ -35,6 +35,214 @@ public class DBservices
         return con;
     }
 
+    public int Update(User u, bool isNewEmail, string token)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@UserID", u.Id);
+        paramDic.Add("@UserName", u.Name);
+        paramDic.Add("@UserEmail", u.Email);
+        paramDic.Add("@UserPassword", u.Password);
+        paramDic.Add("@isNewEmail", isNewEmail ? 1 : 0);
+        paramDic.Add("@token", token);
+
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_UpdateUser", con, paramDic);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
+    public bool IsUserVerified(int id)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@UserID", id);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_IsAccountVerified", con, paramDic);             // create the command
+        
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                return Convert.ToInt32(dataReader["Result"]) == 1;
+            }
+            throw new ArgumentException("User doesn't exist");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
+    public int ValidateUser(string email, string token)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@UserEmail", email);
+        paramDic.Add("@UserToken", token);
+
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_Validate_Email", con, paramDic);             // create the command
+        var returnParameter = cmd.Parameters.Add("@flag", SqlDbType.Int);
+        returnParameter.Direction = ParameterDirection.ReturnValue;
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+                // note that the return value appears only after closing the connection
+                int result = (int)returnParameter.Value;
+                if (result == 1)
+                    throw new ArgumentException("This user doesn't exist");
+                if (result == 2)
+                    throw new ArgumentException("You're already verified!");
+                if (result == 3)
+                    throw new ArgumentException("Invalid token");
+                if (result == 4)
+                    throw new ArgumentException("30 minutes have passed. Try again!");
+            }
+        }
+    }
+
+    public int InitiateNewValidation(int id, string token)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@UserID", id);
+        paramDic.Add("@UserToken", token);
+
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_InitiateNewValidation", con, paramDic);             // create the command
+        var returnParameter = cmd.Parameters.Add("@flag", SqlDbType.Int);
+        returnParameter.Direction = ParameterDirection.ReturnValue;
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+                // note that the return value appears only after closing the connection
+                int result = (int)returnParameter.Value;
+                if (result == 1)
+                    throw new ArgumentException("This user doesn't exist");
+                if (result == 2)
+                    throw new ArgumentException("You're already verified!");
+            }
+        }
+    }
+
     /*
     //--------------------------------------------------------------------------------------------------
     // This method update a student to the student table 
@@ -271,7 +479,7 @@ public class DBservices
     */
 
     // Inserts a new user into the user table
-    public int Insert(User u)
+    public int Insert(User u, string Token)
     {
         SqlConnection con;
         SqlCommand cmd;
@@ -291,9 +499,10 @@ public class DBservices
         paramDic.Add("@email", u.Email);
         paramDic.Add("@password", u.Password);
         paramDic.Add("@name", u.Name);
+        paramDic.Add("@token", Token);
 
 
-        cmd = CreateCommandWithStoredProcedure("SP_PostUser", con, paramDic);             // create the command
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_PostUser", con, paramDic);             // create the command
 
         try
         {
@@ -338,7 +547,7 @@ public class DBservices
         paramDic.Add("@email", email);
         paramDic.Add("@password", password);
 
-        cmd = CreateCommandWithStoredProcedure("SP_UserLogin", con, paramDic);             // create the command
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_UserLogin", con, paramDic);             // create the command
         var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
         returnParameter.Direction = ParameterDirection.ReturnValue;
 
@@ -349,11 +558,12 @@ public class DBservices
 
             if (dataReader.Read())
             {
-                User s = new User();
-                s.Email = dataReader["email"].ToString();
-                s.Password = dataReader["password"].ToString();
-                s.Name = dataReader["name"].ToString();
-                return s;
+                User u = new User();
+                u.Email = dataReader["UserEmail"].ToString();
+                u.Password = dataReader["UserPassword"].ToString();
+                u.Name = dataReader["UserName"].ToString();
+                u.Id = Convert.ToInt32(dataReader["UserID"]);
+                return u;
             }
             throw new Exception("Server error");
         }
@@ -403,7 +613,4 @@ public class DBservices
 
         return cmd;
     }
-
-
-
 }

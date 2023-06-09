@@ -1,11 +1,8 @@
-const port = "44355";
-const apiStart = `https://localhost:${port}/api`;
 $(document).ready(function () {
     $("#RegisterForm").submit(Register);
     $("#LoginForm").submit(Login);
     TryLogin();
-
-
+    
     // מוחק את המידע מטופס ההרשמה והלוגין אם לחצו אסקייפ לסגירתו
     document.addEventListener('keydown', function(event) {
         // Check if the pressed key is the escape key
@@ -30,6 +27,21 @@ $(document).ready(function () {
 
 
 });
+function TextDecod() {
+    //const api = `https://api.deezer.com/search?q={7%20Rings}&secret_key=${DeezerSecretKey}`;
+    const api = `${apiStart}/Users`;
+    console.log(api)
+    ajaxCall("GET", api, "", TestCB, ECB);
+}
+function TestCB(data) {
+    console.log(data);
+    console.log(data.data[0].preview)
+    var audio = new Audio(data.data[0].preview);
+    audio.play();
+}
+function ECB(e) {
+    console.log(e)
+}
 function Register() {
     let password = document.getElementById("RegisterPassword").value;
     let confirmPassword = document.getElementById("RegisterConfirmPassword").value;
@@ -98,36 +110,15 @@ function RemoveErrorMesseages() {
     document.getElementById("LoginEmail").value = "";
     document.getElementById("LoginPassword").value = "";
 }
-// מקבלת שם, ומחזירה את האותיות הראשונות לפי השם הפרטי ושם המשפחה
-// מקסימום - 3 אותיות, זה משומש בתמונה של המשתמש אחרי ההתחברות
-function GetFirstLettersOfName(name) {
-    let s = name.split(' ');
-    let res = '';
-    for (i in s) {
-        if (i > 2)
-            break;
-        res += s[i][0];
-    }
-    return res;
-}
-function IsLoggedIn() {
-    return sessionStorage['User'] != undefined || localStorage['User'] != undefined;
-}
 function TryLogin() {
     if (!IsLoggedIn()) return; // Returns if the user is not logged in
-    let data = localStorage['User'] == undefined ? JSON.parse(sessionStorage['User']) : JSON.parse(localStorage['User']);
+    let data = localStorage['User'] == undefined || localStorage['User'] == "" ? JSON.parse(sessionStorage['User']) : JSON.parse(localStorage['User']);
     /*document.getElementById('LoginRegisterAccountHeader').innerHTML = `<a href="upload.html" class="ms_btn">upload</a>`
     + `<a href="javascript:;" class="ms_admin_name">Hello ${data.name.split(' ')[0]} <span class="ms_pro_name">${GetFirstLettersOfName(data.name)}</span></a><ul class="pro_dropdown_menu"><li><a href="profile.html">Profile</a></li>` + 
     `<li><a href="manage_acc.html" target="_blank">Pricing Plan</a></li><li><a href="blog.html" target="_blank">Blog</a></li><li><a href="#">Setting</a></li>` +
     `<li><a href="#">Logout</a></li></ul>`;*/
-    document.getElementById('LoginRegisterAccountHeader').innerHTML = `<a href="javascript:;" class="ms_admin_name">Hello ${data.name.split(' ')[0]} <span class="ms_pro_name">${GetFirstLettersOfName(data.name)}</span></a><ul class="pro_dropdown_menu"><li><a href="profile.html">Profile</a></li>` + 
+    document.getElementById('LoginRegisterAccountHeader').innerHTML = `<a href="javascript:;" class="ms_admin_name" onclick="ToggleProfile()">Hello ${data.name.split(' ')[0]} <span class="ms_pro_name">${GetFirstLettersOfName(data.name)}</span></a><ul class="pro_dropdown_menu"><li><a href="profile.html">Profile</a></li>` + 
     `<li><a href="manage_acc.html" target="_blank">Pricing Plan</a></li><li><a href="blog.html" target="_blank">Blog</a></li><li><a href="#">Setting</a></li>` +
-    `<li><a href="#">Logout</a></li></ul>`;
+    `<li><a onclick="Logout()" href="#">Logout</a></li></ul>`;
     document.getElementById('NeedsMSProfile').classList.add('ms_profile');
-}
-// Removes the account from the browser storage
-function Logout() {
-    // TODO
-    localStorage['User'] = "";
-    sessionStorage['User'] = "";
 }

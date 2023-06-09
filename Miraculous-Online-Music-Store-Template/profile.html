@@ -26,10 +26,15 @@
     <link rel="stylesheet" type="text/css" href="css/style.css">
     <!-- Favicon Link -->
     <link rel="shortcut icon" type="image/png" href="images/favicon.png">
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
+    <script src="js/ajaxCalls.js"></script>
+    <script src="js/GeneralJS.js"></script>
+    <script src="js/MyProfile.js"></script>
+    <link rel="stylesheet" href="css/OurSS.css">
 </head>
-<body>
+<body style="visibility:hidden;" onload="LoginHeader()">
     <!----Main Wrapper Start---->
-    <div class="ms_main_wrapper ms_profile">
+    <div class="ms_main_wrapper ms_profile" id="NeedsMSProfile">
         <!---Side Menu Start--->
                 <!---Side Menu Start--->
         <div class="ms_sidemenu_wrapper">
@@ -188,10 +193,7 @@
                     </div>
                 </div>
                 <div class="ms_top_right">
-                    <div class="ms_top_lang">
-                        <span data-toggle="modal" data-target="#lang_modal">languages <img src="images/svg/lang.svg" alt=""></span>
-                    </div>
-                    <div class="ms_top_btn">
+                    <div class="ms_top_btn" id="LoginRegisterAccountHeader">
                         <a href="upload.html" class="ms_btn">upload</a>
                         <a href="javascript:;" class="ms_admin_name">Hello Bella <span class="ms_pro_name">ns</span>													
 						</a>
@@ -209,34 +211,38 @@
             <div class="ms_profile_wrapper">
                 <h1>Edit Profile</h1>
                 <div class="ms_profile_box">
-                    <div class="ms_pro_img">
-                        <img src="images/pro_img.jpg" alt="" class="img-fluid">
-                        <div class="pro_img_overlay">
-                            <i class="fa_icon edit_icon"></i>
+                    <form id="UpdateUserForm">
+                        <div class="ms_pro_img">
+                            <img src="images/pro_img.jpg" alt="" class="img-fluid">
+                            <div class="pro_img_overlay">
+                                <i class="fa_icon edit_icon"></i>
+                            </div>
                         </div>
-                    </div>
-                    <div class="ms_pro_form">
-                        <div class="form-group">
-                            <label>Your Name *</label>
-                            <input type="text" placeholder="Bella Scott" class="form-control">
+                        <div class="ms_pro_form">
+                            <div class="form-group">
+                                <label>Your Name *</label>
+                                <input type="text" placeholder="Bella Scott" id="NamePH" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Your Email *</label>
+                                <input type="email" placeholder="bella.scott@dummymail.com" id="EmailPH" class="form-control" required>
+                            </div>
+                            <div class="form-group">
+                                <label>Your Password *</label>
+                                <input type="password" placeholder="******" class="form-control" id="PasswordPH" required minlength="3">
+                            </div>
+                            <div class="form-group">
+                                <label>Confirm Password *</label>
+                                <input type="password" placeholder="******" class="form-control" id="ConfirmPasswordPH" required minlength="3">
+                            </div>
+                            <div class="pro-form-btn text-center marger_top15">
+                                <!--<a href="#" class="ms_btn">save</a>-->
+                                <input type="submit" class="ms_btn" value="Save" style="border:0;">
+                                <input type="button" class="ms_btn" id="verifyAccount" value="Verify account" onclick="VerifyRequest()" style="border:0; display: none; cursor: pointer;">
+                                <p id="LoginErrorMSG" style="padding-top: 11px;"></p>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label>Your Email *</label>
-                            <input type="text" placeholder="bella.scott@dummymail.com" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label>Your Password *</label>
-                            <input type="password" placeholder="******" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label>Confirm Password *</label>
-                            <input type="password" placeholder="******" class="form-control">
-                        </div>
-                        <div class="pro-form-btn text-center marger_top15">
-                            <a href="#" class="ms_btn">save</a>
-                            <a href="#" class="ms_btn">cancel</a>
-                        </div>
-                    </div>
+                    </form>
                 </div>
             </div>
             <!----Main div close---->

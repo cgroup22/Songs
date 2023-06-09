@@ -31,3 +31,6 @@ D:\Visual Studio Projects\Ruppin Year B\ServerSide\Git\Songs\Server\FinalProject
 D:\Visual Studio Projects\Ruppin Year B\ServerSide\Git\Songs\Server\FinalProject\FinalProject\obj\Debug\net6.0\FinalProject.pdb
 D:\Visual Studio Projects\Ruppin Year B\ServerSide\Git\Songs\Server\FinalProject\FinalProject\obj\Debug\net6.0\FinalProject.genruntimeconfig.cache
 D:\Visual Studio Projects\Ruppin Year B\ServerSide\Git\Songs\Server\FinalProject\FinalProject\obj\Debug\net6.0\ref\FinalProject.dll
+D:\Visual Studio Projects\Ruppin Year B\ServerSide\Git\Songs\Server\FinalProject\FinalProject\bin\Debug\net6.0\Newtonsoft.Json.dll
+D:\Visual Studio Projects\Ruppin Year B\ServerSide\Git\Songs\Server\FinalProject\FinalProject\bin\Debug\net6.0\SendGrid.dll
+D:\Visual Studio Projects\Ruppin Year B\ServerSide\Git\Songs\Server\FinalProject\FinalProject\bin\Debug\net6.0\StarkbankEcdsa.dll
