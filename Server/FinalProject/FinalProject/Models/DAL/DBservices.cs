@@ -6,6 +6,7 @@ using System.Data.SqlClient;
 using System.Data;
 using System.Text;
 using FinalProject.Models;
+using Microsoft.AspNetCore.Mvc;
 
 /// <summary>
 /// DBServices is a class created by me to provides some DataBase Services
@@ -242,6 +243,100 @@ public class DBservices
             }
         }
     }
+
+    public int Insert(Band b)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@PerformerName", b.PerformerName);
+        paramDic.Add("@establishmentDate", b.EstablishmentDate);
+        paramDic.Add("@PerformerImage", b.PerformerImage);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_InsertBand", con, paramDic);             // create the command
+
+        try
+        {
+            // int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
+    /*public int Insert(Band b)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@PerformerName", b.PerformerName);
+        paramDic.Add("@establishmentDate", b.EstablishmentDate);
+        paramDic.Add("@PerformerImage", b.PerformerImage);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_InsertBand", con, paramDic);             // create the command
+
+        try
+        {
+            // int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }*/
 
     /*
     //--------------------------------------------------------------------------------------------------
@@ -587,6 +682,53 @@ public class DBservices
         }
     }
 
+    public int InsertFileDataToSongID(int SongID, int ReleaseYear, int GenreID, byte[] fileData)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@SongID", SongID);
+        paramDic.Add("@ReleaseYear", ReleaseYear);
+        paramDic.Add("@GenreID", GenreID);
+        paramDic.Add("@FileData", fileData);
+
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_InsertFileDataToSongID", con, paramDic);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            //int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
 
     //---------------------------------------------------------------------------------
     // Create the SqlCommand using a stored procedure
@@ -612,5 +754,122 @@ public class DBservices
 
 
         return cmd;
+    }
+
+    public int InsertSong(Song SongToInsert, byte[] fileData)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@SongName", SongToInsert.Name);
+        paramDic.Add("@SongLyrics", SongToInsert.Lyrics);
+        paramDic.Add("@ReleaseYear", SongToInsert.ReleaseYear);
+        paramDic.Add("@GenreID", SongToInsert.GenreID);
+        paramDic.Add("@FileData", fileData);
+
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_InsertSongFileData", con, paramDic);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            //int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+    public Song ReadSongByID(int SongID)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@SongID", SongID);
+
+        cmd = CreateCommandWithStoredProcedure("Proj_ReadSongByID", con, paramDic);             // create the command
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            if (dataReader.Read())
+            {
+                int fileDataIndex = dataReader.GetOrdinal("FileData");
+                string SongName = dataReader["SongName"].ToString();
+                string SongLyrics = dataReader["SongLyrics"].ToString();
+                int ReleaseYear = Convert.ToInt32(dataReader["ReleaseYear"]);
+                if (SongName == null || SongLyrics == null)
+                    throw new ArgumentException("Server error");
+                int GenreID = -1;
+                if (!dataReader.IsDBNull(dataReader.GetOrdinal("GenreID")))
+                    GenreID = Convert.ToInt32(dataReader["GenreID"]);
+                int NumOfPlays = Convert.ToInt32(dataReader["NumOfPlays"]);
+              //  DateTime UploadedDate = DateTime.Parse(dataReader["UploadedDate"].ToString());
+                // Check if the column value is not DBNull
+                if (!dataReader.IsDBNull(fileDataIndex))
+                {
+                    // Get the size of the file data
+                    long fileSize = dataReader.GetBytes(fileDataIndex, 0, null, 0, 0);
+
+                    // Create a byte array to hold the file data
+                    byte[] fileData = new byte[fileSize];
+
+                    // Read the file data into the byte array
+                    dataReader.GetBytes(fileDataIndex, 0, fileData, 0, (int)fileSize);
+                    FileContentResult SongFile = new FileContentResult(fileData, "audio/mpeg");
+                    Song res = new Song(SongID, SongName, SongLyrics, NumOfPlays, SongFile, GenreID, ReleaseYear);
+                    return res;
+                }
+            }
+            throw new Exception("Song not found!");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
     }
 }

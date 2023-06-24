@@ -122,3 +122,9 @@ function TryLogin() {
     `<li><a onclick="Logout()" href="#">Logout</a></li></ul>`;
     document.getElementById('NeedsMSProfile').classList.add('ms_profile');
 }
+function TestGetSong() {
+    var audio = new Audio();
+    audio.src = `${apiStart}/Users/GetSong?name=Test.mp3`; // Replace 'songname' with the actual song name
+    audio.type = 'audio/mpeg';
+    audio.play();
+}

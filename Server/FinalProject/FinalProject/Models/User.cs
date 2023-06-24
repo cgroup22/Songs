@@ -5,6 +5,8 @@ using System.Text.RegularExpressions;
 using System.Runtime.CompilerServices;
 using System.Text;
 using Newtonsoft.Json.Linq;
+using System.Net.Http.Headers;
+using Newtonsoft.Json;
 
 namespace FinalProject.Models
 {
@@ -69,16 +71,76 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.IsUserVerified(id);
         }
+        /*
+        public static async Task<string> Zibi()
+        {
+            // Set your Spotify API credentials
+            string clientId = "spotClientID";
+            string clientSecret = "spotClientSecret";
+            string redirectUri = "https://proj.ruppin.ac.il/cgroup22/test2/tar5/Pages/index.html";
 
-        /*public static async Task<string> Zibi()
-{
-   // Set your Deezer API access token
-   string accessToken = "4adff3b9bc31de40f9e3ab9d4258ff45";
+            // Specify the required scopes for accessing Spotify resources
+            string[] scopes = { "user-read-private", "user-read-email" }; // Add any additional required scopes
 
-   // Make API requests using the access token
-   return await SearchTracks(accessToken);
+            // Build the authorization URL
+            string authorizationUrl = $"https://accounts.spotify.com/authorize" +
+                $"?response_type=code" +
+                $"&client_id={Uri.EscapeDataString(clientId)}" +
+                $"&scope={Uri.EscapeDataString(string.Join(" ", scopes))}" +
+                $"&redirect_uri={Uri.EscapeDataString(redirectUri)}";
 
-}*/
+            // Prompt the user to authorize the application
+            Console.WriteLine("Please authorize the application by visiting the following URL:");
+            Console.WriteLine(authorizationUrl);
+            Console.WriteLine("Enter the authorization code:");
+
+            // Read the authorization code from the user input
+            string authorizationCode = Console.ReadLine();
+
+            // Exchange the authorization code for an access token
+            string accessToken = await GetAccessToken(authorizationCode, clientId, clientSecret, redirectUri);
+
+            // Make API requests using the access token
+            return await SearchTracks(accessToken);
+        }
+
+        static async Task<string> GetAccessToken(string authorizationCode, string clientId, string clientSecret, string redirectUri)
+        {
+            // Set the token endpoint for exchanging the authorization code
+            string tokenEndpoint = "https://accounts.spotify.com/api/token";
+
+            // Create the HTTP client
+            HttpClient httpClient = new HttpClient();
+
+            // Set the request parameters
+            var parameters = new Dictionary<string, string>
+    {
+        { "grant_type", "authorization_code" },
+        { "code", authorizationCode },
+        { "client_id", clientId },
+        { "client_secret", clientSecret },
+        { "redirect_uri", redirectUri }
+    };
+
+            // Send the request to exchange the authorization code for an access token
+            var response = await httpClient.PostAsync(tokenEndpoint, new FormUrlEncodedContent(parameters));
+
+            // Check if the request was successful
+            if (response.IsSuccessStatusCode)
+            {
+                // Extract the access token from the response
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var tokenResponse = JsonConvert.DeserializeObject<AccessTokenResponse>(responseContent);
+                return tokenResponse.AccessToken;
+            }
+            else
+            {
+                // Request failed
+                Console.WriteLine("Request failed with status code: " + response.StatusCode);
+                return null;
+            }
+        }
+        */
         // Validates that the user info is correct. Throws an exception otherwise.
         private void Validate()
         {
@@ -119,7 +181,7 @@ namespace FinalProject.Models
 
         async Task Execute(string Token)
         {
-            var apiKey = "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";
+            var apiKey = "SGAPIKEY";
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress("csbgroup22@gmail.com", "Ruppin Music");
             var subject = "Sending with SendGrid is Fun";
@@ -181,10 +243,11 @@ namespace FinalProject.Models
             string searchQuery = "7 Rings";
 
             // Set the API endpoint for track search
-            string searchEndpoint = $"https://api.deezer.com/search?q={searchQuery}&secret_key={accessToken}";
+            string searchEndpoint = $"https://api.spotify.com/v1/search?q={Uri.EscapeDataString(searchQuery)}&type=track";
 
             // Create the HTTP client
             HttpClient httpClient = new HttpClient();
+            httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
             // Send the request to search for tracks
             var response = await httpClient.GetAsync(searchEndpoint);
@@ -207,6 +270,7 @@ namespace FinalProject.Models
                 return "ERROR";
             }
         }
+
 
         private static string GenerateToken()
         {

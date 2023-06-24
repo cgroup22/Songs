@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using FinalProject.Models;
 using System.Data.SqlClient;
+using Newtonsoft.Json;
+using System.Net;
+using System.Text;
+using System.Runtime.CompilerServices;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -14,7 +18,7 @@ namespace FinalProject.Controllers
         [HttpGet]
         public IEnumerable<string> Get()
         {
-            //return Models.User.Zibi();
+            // return Models.User.Zibi();
             return new string[] { "value1", "value2" };
         }
 
@@ -34,7 +38,7 @@ namespace FinalProject.Controllers
 
         // POST api/<UsersController>
         [HttpPost]
-        // Posts a new user into the user table
+        // Posts a new user into the user table - Register
         public IActionResult Post([FromBody] User u)
         {
             try
@@ -43,7 +47,7 @@ namespace FinalProject.Controllers
             }
             catch (Exception e)
             {
-                if (e.Message.Contains("UNIQUE KEY constraint"))
+                if (e.Message.Contains("UNIQUE KEY constraint")) // If the email is taken
                     return BadRequest(new { message = "This email is already taken" });
                 return BadRequest(new { message = e.Message });
             }
@@ -105,7 +109,6 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = e.Message });
             }
         }
-
 
         // DELETE api/<UsersController>/5
         [HttpDelete("{id}")]
