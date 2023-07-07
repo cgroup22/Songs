@@ -30,7 +30,7 @@ namespace FinalProject.Models
         public FileContentResult FileData { get => fileData; set => fileData = value; }
         public int GenreID { get => genreID; set => genreID = value; }
         public int ReleaseYear { get => releaseYear; set => releaseYear = value; }
-
+        // Inserts a song and its mp3 file to our db
         public bool Insert(IFormFile file)
         {
             if (file == null || file.Length == 0)
@@ -45,6 +45,7 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.InsertSong(this, fileData) > 0;
         }
+        // Reads a song by its id
         public static Song ReadSongByID(int SongID)
         {
             if (SongID < 1)
@@ -53,6 +54,7 @@ namespace FinalProject.Models
             Song song = db.ReadSongByID(SongID);
             return song;
         }
+        // TEMP
         public static bool InsertFileDataToSongID(int SongID, int ReleaseYear, int GenreID, IFormFile file)
         {
             if (SongID < 1)

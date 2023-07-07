@@ -35,7 +35,7 @@ public class DBservices
         con.Open();
         return con;
     }
-
+    // Update user details, and require email verification if changed. (New token) otherwise, token is set to empty string.
     public int Update(User u, bool isNewEmail, string token)
     {
 
@@ -85,7 +85,7 @@ public class DBservices
         }
 
     }
-
+    // Returns true if this user is verified
     public bool IsUserVerified(int id)
     {
 
@@ -135,7 +135,7 @@ public class DBservices
             }
         }
     }
-
+    // User clicked verify, checks the token and timestamp.
     public int ValidateUser(string email, string token)
     {
         SqlConnection con;
@@ -191,7 +191,7 @@ public class DBservices
             }
         }
     }
-
+    // Creates a new email verification request.
     public int InitiateNewValidation(int id, string token)
     {
         SqlConnection con;
@@ -243,7 +243,7 @@ public class DBservices
             }
         }
     }
-
+    // TEMP - Insert band
     public int Insert(Band b)
     {
 
@@ -621,7 +621,7 @@ public class DBservices
         }
 
     }
-
+    // User login
     public User Login(string email, string password)
     {
         SqlConnection con;
@@ -681,7 +681,7 @@ public class DBservices
             else if ((int)result == 1) throw new ArgumentException("Wrong password");
         }
     }
-
+    // TEMP
     public int InsertFileDataToSongID(int SongID, int ReleaseYear, int GenreID, byte[] fileData)
     {
         SqlConnection con;
@@ -755,7 +755,7 @@ public class DBservices
 
         return cmd;
     }
-
+    // TEMP
     public int InsertSong(Song SongToInsert, byte[] fileData)
     {
         SqlConnection con;
@@ -803,6 +803,7 @@ public class DBservices
             }
         }
     }
+    // Returns a song by its id
     public Song ReadSongByID(int SongID)
     {
         SqlConnection con;

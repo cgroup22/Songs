@@ -21,7 +21,7 @@ namespace FinalProject.Controllers
             // return Models.User.Zibi();
             return new string[] { "value1", "value2" };
         }
-
+        
         // GET api/<UsersController>/5
         [HttpGet("IsUserVerified/id/{id}")]
         public IActionResult Get(int id)
@@ -52,7 +52,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = e.Message });
             }
         } 
-
+        // Login
         [HttpPost("Login")]
         public IActionResult Post(string email, string password)
         {
@@ -65,7 +65,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = e.Message });
             }
         }
-
+        // User update details
         // PUT api/<UsersController>/5
         [HttpPut("UpdateUserDetails")]
         public IActionResult Put(User u, string oldEmail)
@@ -81,7 +81,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = e.Message });
             }
         }
-
+        // Initiates a new email validation. Needed when the user wants to verify his email, but his old request timed out.
         [HttpPut("InitiateNewValidation")]
         public IActionResult Put(int id)
         {
@@ -94,7 +94,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = e.Message });
             }
         }
-
+        // User clicked verify on his email
         // PUT api/<UsersController>/5
         [HttpPut("ValidateEmail")]
         public IActionResult Put(string email, string token)

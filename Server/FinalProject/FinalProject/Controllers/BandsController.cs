@@ -23,6 +23,7 @@ namespace FinalProject.Controllers
             return "value";
         }
 
+        // TEMP Add a band
         // POST api/<BandsController>
         [HttpPost]
         public IActionResult Post([FromBody] Band b, [FromForm] IFormFile file)

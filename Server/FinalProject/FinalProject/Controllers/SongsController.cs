@@ -40,7 +40,7 @@ namespace FinalProject.Controllers
         public void Delete(int id)
         {
         }
-
+        // TEMP UPLOAD SONG
         [HttpPost("UploadSong")]
         //public IActionResult UploadSong(string SongName, string SongLyrics, DateTime ReleaseDate, int GenreID, IFormFile file)
         public IActionResult UploadSong([FromBody] Song SongToInsert, [FromForm] IFormFile file)
@@ -57,7 +57,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = e.Message });
             }
         }
-
+        // TEMP UPLOAD MP3
         [HttpPost("InsertSongHEXData")]
         public IActionResult InsertFileDataToSongID(int SongID, int ReleaseYear, int GenreID, IFormFile file)
         {
@@ -73,7 +73,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = e.Message });
             }
         }
-
+        // TEMP
         [HttpGet("GetSongByID")]
         public IActionResult GetSongByID(int SongID)
         {

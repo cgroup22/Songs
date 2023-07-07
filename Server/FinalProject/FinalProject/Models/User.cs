@@ -24,6 +24,7 @@ namespace FinalProject.Models
         public string Password { get => password; set => password = value; }
         public bool IsVerified { get => isVerified; set => isVerified = value; }
 
+        // Used for user login
         public static User Login(string email, string password)
         {
             if (email == null || password == null || email == "" || password == "")
@@ -50,6 +51,7 @@ namespace FinalProject.Models
             return tmp;
         }
 
+        // User details update, takes the old email as an argument to check whether it's changed. If so, require verification again.
         public bool Update(string oldEmail)
         {
             Validate();
@@ -64,6 +66,7 @@ namespace FinalProject.Models
                 //Execute(Token).Wait();
             return tmp;
         }
+        // returns true if this user is verified
         public static bool IsUserVerified(int id)
         {
             if (id < 1)
@@ -156,6 +159,7 @@ namespace FinalProject.Models
             if (name.Any(char.IsDigit))
                 throw new ArgumentException("Your name cannot contain numbers");
         }
+        // Get an email, throws an exception if its format is incorrect.
         private static void ValidateEmail(string email)
         {
             if (email == "" || email == null)
@@ -206,6 +210,7 @@ namespace FinalProject.Models
             var response = await client.SendEmailAsync(msg);
         }
 
+        // User verified himself using the email sent. Check the credentials and verify. 
         public static bool ValidateUser(string email, string token)
         {
             // Don't forget to change the link of the verification and hear buttons in SendGrid whe you upload the project to Ruppin's server
@@ -236,7 +241,7 @@ namespace FinalProject.Models
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             var response = await client.SendEmailAsync(msg);
         }*/
-
+        // TEMP
         static async Task<string> SearchTracks(string accessToken)
         {
             // Set the search query
@@ -271,7 +276,7 @@ namespace FinalProject.Models
             }
         }
 
-
+        // Generates a random token for an email verification
         private static string GenerateToken()
         {
             int length = 16;
@@ -301,7 +306,8 @@ namespace FinalProject.Models
             // Return the token.
             return sb.ToString();
         }
-
+        // Sends an email to the user, to verify himself.
+        // Don't forget to update your api key
         public static bool InitiateNewValidation(int id)
         {
             if (id < 1)
