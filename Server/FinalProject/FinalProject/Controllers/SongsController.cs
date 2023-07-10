@@ -23,6 +23,67 @@ namespace FinalProject.Controllers
             return "value";
         }
 
+        [HttpGet("GetTop15")]
+        public IActionResult GetTop15()
+        {
+            try
+            {
+                return Ok(Song.GetTop15Songs());
+            }
+            catch(Exception e)
+            {
+                return BadRequest(new { message = "Server error " + e.Message });
+            }
+        }
+        [HttpGet("GetSongLyrics/SongID/{SongID}")]
+        public IActionResult GetSongLyrics(int SongID)
+        {
+            try
+            {
+                return Ok(Song.GetSonyLyrics(SongID));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "Server error " + e.Message });
+            }
+        }
+        [HttpGet("GetPerformerSongs/PerformerID/{PerformerID}")]
+        public IActionResult GetPerformerSongs(int PerformerID)
+        {
+            try
+            {
+                return Ok(Song.GetPerformerSongs(PerformerID));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "Server error " + e.Message });
+            }
+        }
+        [HttpGet("GetMostPlayedTrack")]
+        public IActionResult GetMostPlayedTrack()
+        {
+            try
+            {
+                return Ok(Song.GetMostPlayedTrack());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "Server error " + e.Message });
+            }
+        }
+        [HttpGet("GetGenreSongs/GenreID/{GenreID}")]
+        public IActionResult GetGenreSongs(int GenreID)
+        {
+            try
+            {
+                return Ok(Song.GetGenreSongs(GenreID));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "Server error " + e.Message });
+            }
+        }
+
         // POST api/<SongsController>
         [HttpPost]
         public void Post([FromBody] string value)
@@ -59,12 +120,12 @@ namespace FinalProject.Controllers
         }
         // TEMP UPLOAD MP3
         [HttpPost("InsertSongHEXData")]
-        public IActionResult InsertFileDataToSongID(int SongID, int ReleaseYear, int GenreID, IFormFile file)
+        public IActionResult InsertFileDataToSongID(int SongID, IFormFile file)
         {
             try
             {
                 //Song SongToInsert = new Song(0, SongName, SongLyrics, 0, null, GenreID, ReleaseDate);
-                bool res = Song.InsertFileDataToSongID(SongID, ReleaseYear, GenreID, file);
+                bool res = Song.InsertFileDataToSongID(SongID, file);
                 return res ? Ok(new { message = "File uploaded successfully" })
                     : BadRequest(new { message = "Couldn't insert file to SQL db" });
             }
@@ -74,20 +135,34 @@ namespace FinalProject.Controllers
             }
         }
         // TEMP
-        [HttpGet("GetSongByID")]
+        [HttpGet("GetSongByID/SongID/{SongID}")]
         public IActionResult GetSongByID(int SongID)
         {
             try
             {
                 //Response.Headers["Content-Disposition"] = $"attachment; filename=\"{name}.mp3\"";
-                //Response.Headers["Content-Type"] = "audio/mpeg";
-
                 // Return the audio file as a FileContentResult
-                Song d = Song.ReadSongByID(SongID);
-                return d.FileData;
-                //return Ok(new FileStreamResult(d.FileData, "audio/mpeg"));
-                //return Ok(Song.ReadSongByID(SongID));
-                //return Ok(db.ReadSong(name));
+                FileContentResult file = Song.ReadSongByID(SongID);
+                Response.Headers["Content-Type"] = "audio/mpeg";
+                Response.Headers["Access-Control-Allow-Headers"] = "range, accept-encoding";
+                Response.Headers["Access-Control-Allow-Origin"] = "*";
+                Response.Headers["Age"] = "3999";
+                Response.Headers["Alt-Svc"] = "h3=\":443\"; ma=86400";
+                Response.Headers["Cache-Control"] = "max-age=14400";
+                Response.Headers["Cf-Cache-Status"] = "HIT";
+                Response.Headers["Cf-Ray"] = "7e39481e5da77d95-TLV";
+                int fileSize = file.FileContents.Length;
+                Response.Headers["Content-Length"] = fileSize.ToString();
+                Response.Headers["Accept-Ranges"] = "bytes";
+                Response.Headers["Content-Range"] = $"bytes 0-{fileSize - 1}/{fileSize}";
+                //Response.Headers["Date"] = "Sat, 08 Jul 2023 15:15:16 GMT";
+                Response.Headers["Etag"] = "\"cb472-51bd07-4c9e757f2c940\"";
+                //Response.Headers["Last-Modified"] = "Mon, 17 Sep 2012 15:22:37 GMT";
+                Response.Headers["Nel"] = "{\"success_fraction\":0,\"report_to\":\"cf-nel\",\"max_age\":604800}";
+                Response.Headers["Report-To"] = "{\"endpoints\":[{\"url\":\"https://a.nel.cloudflare.com/report/v3?s=IjPaZ4YY5%2BiQZ42KvSZ4q5iPR3%2BXljS69N8lEteBDdjnh0EkMalsQXR%2BtoV41huWqXQT7DAUwNwEcKbrrmnKgg0Oza07zCqSL8OxQIbg68p3JcHGhCcmT6FhAa4TEsOqFqw%3D\"}],\"group\":\"cf-nel\",\"max_age\":604800}";
+                Response.Headers["Server"] = "cloudflare";
+                Response.Headers["Vary"] = "Accept-Encoding";
+                return Song.ReadSongByID(SongID);
             }
             catch (Exception e)
             {

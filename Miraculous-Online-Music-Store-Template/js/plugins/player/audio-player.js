@@ -1,12 +1,12 @@
 $(function() {
     "use strict";
     if ($('.audio-player').length) {
-		var myPlayListOtion = '<ul class="more_option"><li><a href="#"><span class="opt_icon" title="Add To Favourites"><span class="icon icon_fav"></span></span></a></li><li><a href="#"><span class="opt_icon" title="Add To Queue"><span class="icon icon_queue"></span></span></a></li><li><a href="#"><span class="opt_icon" title="Download Now"><span class="icon icon_dwn"></span></span></a></li><li><a href="#"><span class="opt_icon" title="Add To Playlist"><span class="icon icon_playlst"></span></span></a></li><li><a href="#"><span class="opt_icon" title="Share"><span class="icon icon_share"></span></span></a></li></ul>';
+		window.myPlayListOtion = '<ul class="more_option"><li><a href="#"><span class="opt_icon" title="Add To Favourites"><span class="icon icon_fav"></span></span></a></li><li><a href="#"><span class="opt_icon" title="Add To Queue"><span class="icon icon_queue"></span></span></a></li><li><a href="#"><span class="opt_icon" title="Download Now"><span class="icon icon_dwn"></span></span></a></li><li><a href="#"><span class="opt_icon" title="Add To Playlist"><span class="icon icon_playlst"></span></span></a></li><li><a href="#"><span class="opt_icon" title="Share"><span class="icon icon_share"></span></span></a></li></ul>';
 		
-        var myPlaylist = new jPlayerPlaylist({
+        window.myPlaylist = new jPlayerPlaylist({
             jPlayer: "#jquery_jplayer_1",
             cssSelectorAncestor: "#jp_container_1"
-        }, [{
+        }, [/*{
 			image : 'images/weekly/song1.jpg',	
             title: "Cro Magnon Man",
             artist: "Mushroom Records",
@@ -14,7 +14,7 @@ $(function() {
             oga: "http://www.jplayer.org/audio/ogg/TSP-01-Cro_magnon_man.ogg",
 			option : myPlayListOtion
         }, {
-			image : 'images/weekly/song2.jpg',	
+			image : 'images/weekly/song2.jpg',
             title: "Your Face",
             artist: "Ministry",
             mp3: "http://www.jplayer.org/audio/mp3/TSP-05-Your_face.mp3",
@@ -63,7 +63,7 @@ $(function() {
             oga: "http://www.jplayer.org/audio/ogg/Miaow-05-The-separation.ogg",
 			option : myPlayListOtion
         }, {
-			image : 'images/weekly/song9.jpg',	
+			image : 'images/weekly/song9.jpg',
             title: "Beside Me",
             artist: "Friendly Fires ",
             mp3: "http://www.jplayer.org/audio/mp3/Miaow-06-Beside-me.mp3",
@@ -98,9 +98,10 @@ $(function() {
             oga: "http://www.jplayer.org/audio/ogg/Miaow-10-Thin-ice.ogg",
 			option : myPlayListOtion
 			
-        }], {
+        }*/], {
             swfPath: "js/plugins",
-            supplied: "oga, mp3",
+            //supplied: "oga, mp3",
+            supplied: "mp3",
             wmode: "window",
             useStateClassSkin: true,
             autoBlur: false,
@@ -200,9 +201,9 @@ $(function() {
                 $('.audio-play-btn').removeClass('is_playing');
                 $(this).addClass('is_playing');
                 var playlistId = $(this).data('playlist-id');
-                myPlaylist.play(playlistId);
+                window.myPlaylist.play(playlistId);
+                
             });
-			
         });
     }
 });

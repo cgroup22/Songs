@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Text.Json;
 
 namespace FinalProject.Models
 {
@@ -46,16 +47,15 @@ namespace FinalProject.Models
             return db.InsertSong(this, fileData) > 0;
         }
         // Reads a song by its id
-        public static Song ReadSongByID(int SongID)
+        public static FileContentResult ReadSongByID(int SongID)
         {
             if (SongID < 1)
                 throw new ArgumentException("Song doesn't exist");
             DBservices db = new DBservices();
-            Song song = db.ReadSongByID(SongID);
-            return song;
+            return db.ReadSongByID(SongID);
         }
         // TEMP
-        public static bool InsertFileDataToSongID(int SongID, int ReleaseYear, int GenreID, IFormFile file)
+        public static bool InsertFileDataToSongID(int SongID, IFormFile file)
         {
             if (SongID < 1)
                 throw new ArgumentException("This song doesn't exist");
@@ -69,7 +69,42 @@ namespace FinalProject.Models
                 fileData = memoryStream.ToArray();
             }
             DBservices db = new DBservices();
-            return db.InsertFileDataToSongID(SongID, ReleaseYear, GenreID, fileData) > 0;
+            return db.InsertFileDataToSongID(SongID, fileData) > 0;
+        }
+
+        public static List<object> GetTop15Songs()
+        {
+            DBservices db = new DBservices();
+            return db.GetTop15();
+        }
+        public static List<object> GetPerformerSongs(int PID)
+        {
+            DBservices db = new DBservices();
+            return db.GetPerformerSongs(PID);
+        }
+        public static string GetSonyLyrics(int SID)
+        {
+            if (SID < 1)
+                throw new ArgumentException("Song doesn't exist");
+            DBservices db = new DBservices();
+            object res = db.GetSongLyrics(SID);
+            /*var jsonObject = new
+            {
+                popupTitle = res.SongName,
+                lyrics = res.Lyrics
+            };*/
+            string json = JsonSerializer.Serialize(res);
+            return json;
+        }
+        public static object GetMostPlayedTrack()
+        {
+            DBservices db = new DBservices();
+            return db.GetMostPlayedTrack();
+        }
+        public static List<object> GetGenreSongs(int GID)
+        {
+            DBservices db = new DBservices();
+            return db.GetGenreSongs(GID);
         }
     }
 }

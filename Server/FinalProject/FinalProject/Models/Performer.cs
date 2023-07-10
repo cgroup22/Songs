@@ -30,5 +30,10 @@ namespace FinalProject.Models
         {
             //performerImage = TranslateImageToHEX(file);
         }
+        public static List<object> GetFeaturedArtists()
+        {
+            DBservices db = new DBservices();
+            return db.GetFeaturedArtists();
+        }
     }
 }

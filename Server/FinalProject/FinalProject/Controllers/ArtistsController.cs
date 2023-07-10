@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FinalProject.Models;
+using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -21,6 +24,34 @@ namespace FinalProject.Controllers
         {
             return "value";
         }
+
+        [HttpGet("GetFeaturedArtists")]
+        public IActionResult GetFeaturedArtists()
+        {
+            try
+            {
+                return Ok(Performer.GetFeaturedArtists());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "Server error " + e.Message });
+            }
+        }
+
+        [HttpGet("ArtistImage/artistName/{artistName}")]
+        public async Task<IActionResult> InsertArtist(string artistName)
+        {
+            try
+            {
+                string b = await Artist.InsertArtist(artistName);
+                return b == null ? Ok(b) : BadRequest(new { message = "ERROR" });
+            }
+            catch(Exception ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+        }
+
 
         // POST api/<ArtistsController>
         [HttpPost]
