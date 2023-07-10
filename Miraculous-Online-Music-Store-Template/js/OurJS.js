@@ -429,7 +429,7 @@ function IsSongInQueueByNameAndArtist(artist, title) {
     return false;
 }
 function PlayGenre(GenreID) {
-    const api = `https://localhost:44355/api/Songs/GetGenreSongs/GenreID/${GenreID}`;
+    const api = `${apiStart}/Songs/GetGenreSongs/GenreID/${GenreID}`;
     // Used PlayPerformerSongsSCB here because it's updating the queue and plays the first song.
     ajaxCall("GET", api, "", PlayGenreSCB, ECB);
 }
