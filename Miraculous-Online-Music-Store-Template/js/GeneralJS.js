@@ -219,3 +219,19 @@ function Download(SongID, fileName) {
     };
     xhr.send();
   }
+  function ToggleMore(elem) {
+    let tmp = elem.parentNode.querySelector('ul');
+    if (tmp.style.visibility === "hidden") {
+        TurnOffMoreOptions();
+        tmp.style.visibility = "visible";
+        tmp.style.opacity = "1";
+    } else {
+        tmp.style.visibility = "hidden";
+        tmp.style.opacity = "0";
+    }
+}
+function TurnOffMoreOptions() {
+    for (i of document.getElementsByClassName('SongMO')) {
+        i.style.visibility = "hidden";
+        i.style.opacity = "0"; }
+}

@@ -96,7 +96,7 @@ function SearchSCB(data) {
     }
     document.getElementById('SearchArtistsContainer').innerHTML = ArtistsSTR;
     counter = 1;
-    let GenreSearch = `<ul class="album_list_name"><li>#</li><li>Song Title</li><li>Artist</li><li class="text-center">Duration</li><li class="text-center">Add To Queue</li><li class="text-center">Genre</li></ul>`;
+    let GenreSearch = `<ul class="album_list_name"><li>#</li><li>Song Title</li><li>Artist</li><li class="text-center">Duration</li><li class="text-center">More</li><li class="text-center">Genre</li></ul>`;
     for (i in data) {
         if (data[i].genreName.toLowerCase().includes(query.toLowerCase())) {
             GenreSearch += `<ul>
@@ -213,24 +213,8 @@ function SearchAddArtistToQueueSCB(data) {
     window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
     localStorage['Queue'] = JSON.stringify(window.myPlaylist.playlist);
 }
-function ToggleMore(elem) {
-    let tmp = elem.parentNode.querySelector('ul');
-    if (tmp.style.visibility === "hidden") {
-        TurnOffMoreOptions();
-        tmp.style.visibility = "visible";
-        tmp.style.opacity = "1";
-    } else {
-        tmp.style.visibility = "hidden";
-        tmp.style.opacity = "0";
-    }
-}
 function DownloadSearch(i) {
     Download(SearchedResults[i].songID, SearchedResults[i].songName + " by " + SearchedResults[i].performerName + ".mp3");
-}
-function TurnOffMoreOptions() {
-    for (i of document.getElementsByClassName('SongMO')) {
-        i.style.visibility = "hidden";
-        i.style.opacity = "0"; }
 }
 function SearchAddSongToFavorites(SongID, elem) {
     let UserID = -1;
