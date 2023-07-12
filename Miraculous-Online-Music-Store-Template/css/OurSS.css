@@ -93,3 +93,18 @@ input[type="submit"] {
   body.no-scroll {
     overflow: hidden;
   }
+  .ms_header {
+    z-index: 9;
+  }
+  .ms_free_download.ms_purchase_wrapper .album_list_wrapper>ul>li {
+    width: 16%;
+}
+#NoFavSongs {
+  text-align: center;
+  font-size: 20px;
+  padding-top: 13px;
+  color:white;
+}
+#SearchBTN {
+    border: 0;
+}

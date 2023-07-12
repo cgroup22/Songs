@@ -24,13 +24,25 @@ namespace FinalProject.Controllers
         }
 
         [HttpGet("GetTop15")]
-        public IActionResult GetTop15()
+        public IActionResult GetTop15(int UserID = -1)
         {
             try
             {
-                return Ok(Song.GetTop15Songs());
+                return Ok(Song.GetTop15Songs(UserID));
             }
             catch(Exception e)
+            {
+                return BadRequest(new { message = "Server error " + e.Message });
+            }
+        }
+        [HttpGet("Search/query/{query}/UserID/{UserID}")]
+        public IActionResult Search(string query, int UserID)
+        {
+            try
+            {
+                return Ok(Song.Search(query, UserID));
+            }
+            catch (Exception e)
             {
                 return BadRequest(new { message = "Server error " + e.Message });
             }
@@ -40,7 +52,7 @@ namespace FinalProject.Controllers
         {
             try
             {
-                return Ok(Song.GetSonyLyrics(SongID));
+                return Ok(Song.GetSongLyrics(SongID));
             }
             catch (Exception e)
             {

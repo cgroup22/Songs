@@ -16,11 +16,12 @@ GO
 -- =============================================
 -- Author:		<Author,,Name>
 -- Create date: <Create Date,,>
--- Description:	<Returns details of the top 6 artists (by # of plays)>
+-- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE Proj_SP_GetFeaturedArtists
+CREATE PROCEDURE Proj_SP_Search
 	-- Add the parameters for the stored procedure here
-	
+	@Query nvarchar(100),
+	@UserID int
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -28,8 +29,10 @@ BEGIN
 	-- SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	select top(6) P.PerformerID, P.PerformerName, P.PerformerImage from Proj_Performer P inner join Proj_PerformerSong PS on P.PerformerID = PS.PerformerID
-	group by P.PerformerID, P.PerformerName, P.PerformerImage
-	order by sum(PS.NumOfPlays) desc
+	SELECT S.SongID, S.SongName, S.NumOfPlays, S.SongLength, P.PerformerName, P.PerformerImage, P.PerformerID, G.GenreName, case when S.SongLyrics like '%' + @Query + '%' then 1 else 0 end IsQueryInLyrics,
+	case when @UserID < 1 then -1
+	when (select count(*) from Proj_UserFavorites where SongID = S.SongID and UserID = @UserID) > 0 then 1 else 0 end as InFav
+	from Proj_Song S inner join Proj_Performer P on S.PerformerID = P.PerformerID inner join Proj_Genre G on S.GenreID = G.GenreID
+	where S.SongName like '%' + @Query + '%' or P.PerformerName like '%' + @Query + '%' or S.SongLyrics like '%' + @Query + '%' or G.GenreName like '%' + @Query + '%'
 END
 GO

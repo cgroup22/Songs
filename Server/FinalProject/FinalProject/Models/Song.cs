@@ -72,17 +72,17 @@ namespace FinalProject.Models
             return db.InsertFileDataToSongID(SongID, fileData) > 0;
         }
 
-        public static List<object> GetTop15Songs()
+        public static List<object> GetTop15Songs(int UserID)
         {
             DBservices db = new DBservices();
-            return db.GetTop15();
+            return db.GetTop15(UserID);
         }
         public static List<object> GetPerformerSongs(int PID)
         {
             DBservices db = new DBservices();
             return db.GetPerformerSongs(PID);
         }
-        public static string GetSonyLyrics(int SID)
+        public static string GetSongLyrics(int SID)
         {
             if (SID < 1)
                 throw new ArgumentException("Song doesn't exist");
@@ -105,6 +105,13 @@ namespace FinalProject.Models
         {
             DBservices db = new DBservices();
             return db.GetGenreSongs(GID);
+        }
+        public static List<object> Search(string query, int UserID)
+        {
+            if (query.Length > 100)
+                throw new ArgumentException("MAX CHARACTERS: 100");
+            DBservices db = new DBservices();
+            return db.Search(query, UserID);
         }
     }
 }

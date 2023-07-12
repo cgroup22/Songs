@@ -318,5 +318,29 @@ namespace FinalProject.Models
             //Execute(Token).Wait();
             return tmp;
         }
+        public static List<object> GetUserFavorites(int UserID)
+        {
+            DBservices db = new DBservices();
+            return db.GetUserFavorites(UserID);
+        }
+        public static bool PostUserFavorite(int UserID, int SongID)
+        {
+            if (UserID < 1)
+                throw new ArgumentException("User doesn't exist");
+            if (SongID < 1)
+                throw new ArgumentException("Song doesn't exist");
+            DBservices db = new DBservices();
+            return db.PostUserFavorite(UserID, SongID) > 0;
+        }
+
+        public static bool DeleteFromFavorite(int UserID, int SongID)
+        {
+            if (UserID < 1)
+                throw new ArgumentException("User doesn't exist");
+            if (SongID < 1)
+                throw new ArgumentException("Song doesn't exist");
+            DBservices db = new DBservices();
+            return db.DeleteFromFavorites(UserID, SongID) > 0;
+        }
     }
 }

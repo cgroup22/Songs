@@ -36,6 +36,19 @@ namespace FinalProject.Controllers
             }
         }
 
+        [HttpGet("GetUserFavorites/UserID/{UserID}")]
+        public IActionResult GetUserFavorites(int UserID)
+        {
+            try
+            {
+                return Ok(Models.User.GetUserFavorites(UserID));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new {message = "Server error " + e.Message });
+            }
+        }
+
         // POST api/<UsersController>
         [HttpPost]
         // Posts a new user into the user table - Register
@@ -59,6 +72,39 @@ namespace FinalProject.Controllers
             try
             {
                 return Ok(Models.User.Login(email, password));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
+        }
+        [HttpPost("PostUserFavorite/UserID/{UserID}/SongID/{SongID}")]
+        public IActionResult PostUserFavorite(int UserID, int SongID)
+        {
+            try
+            {
+                return Ok(Models.User.PostUserFavorite(UserID, SongID));
+            }
+            catch (Exception e)
+            {
+                if (e.Message.Contains("PRIMARY KEY"))
+                    return Ok(false);
+                if (e.Message.Contains("FOREIGN KEY"))
+                {
+                    if (e.Message.Contains("UserID"))
+                        return BadRequest(new { message = "This user doesn't exist" });
+                    if (e.Message.Contains("SongID"))
+                        return BadRequest(new { message = "This song doesn't exist" });
+                }
+                return BadRequest(new { message = e.Message });
+            }
+        }
+        [HttpDelete("DeleteUserFavorite/UserID/{UserID}/SongID/{SongID}")]
+        public IActionResult DeleteUserFavorite(int UserID, int SongID)
+        {
+            try
+            {
+                return Ok(Models.User.DeleteFromFavorite(UserID, SongID));
             }
             catch (Exception e)
             {

@@ -8,7 +8,7 @@
 <!-- Begin Head -->
 
 <head>
-    <title>Miraculous - Online Music Store Html Template</title>
+    <title>Ruppin Music</title>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta name="description" content="Music">
@@ -199,10 +199,12 @@
             <div class="ms_header">
                 <div class="ms_top_left">
                     <div class="ms_top_search">
-                        <input type="text" class="form-control" placeholder="Search Music Here..">
-                        <span class="search_icon">
+                        <form id="SearchForm">
+                        <input type="text" class="form-control" placeholder="Search Music Here.." id="SearchBar">
+                        <span class="search_icon" onclick="SearchQuery()" id="SearchBTN">
 							<img src="images/svg/search.svg" alt="">
 						</span>
+                    </form>
                     </div>
                     <!--<div class="ms_top_trend">
                         <span><a href="#"  class="ms_color">Trending Songs :</a></span> <span class="top_marquee"><a href="#">Dream your moments, Until I Met You, Gimme Some Courage, Dark Alley (+8 More)</a></span>
@@ -231,9 +233,9 @@
                                 <h1 class="ms_color">Record Breaking Track!</h1>
                                 <p id="MostPlayedP">Dream your moments, Until I Met You, Gimme Some Courage, Dark Alley, One More Of A Stranger, Endless<br> Things, The Heartbeat Stops, Walking Promises, Desired Games and many more...</p>
                                 <div class="ms_banner_btn">
-                                    <a href="#" class="ms_btn" id="MostPlayedPListenNow">Listen Now</a>
-                                    <a href="#" class="ms_btn" id="MostPlayedPAddToQueue">Add To Queue</a>
-                                    <a href="#" class="ms_btn" id="MostPlayedPGetLyrics">Lyrics</a>
+                                    <a href="javascript:void(0)" class="ms_btn" id="MostPlayedPListenNow">Listen Now</a>
+                                    <a href="javascript:void(0)" class="ms_btn" id="MostPlayedPAddToQueue">Add To Queue</a>
+                                    <a href="javascript:void(0)" class="ms_btn" id="MostPlayedPGetLyrics">Lyrics</a>
                                 </div>
                             </div>
                         </div>
@@ -549,7 +551,7 @@
                                             </div>
                                         </div>
                                         <div class="w_tp_song_name">
-                                            <h3><a href="#">Until I Met You</a></h3>
+                                            <h3><a href="javascript:void(0)">Until I Met You</a></h3>
                                             <p>Ava Cornish</p>
                                         </div>
                                     </div>
@@ -561,9 +563,9 @@
 									</span>
                                 </div>
                                 <ul class="more_option">
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
+                                    <li id="FavoriteFeat0"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
+                                    <li id="AddToQFeat0"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
+                                    <li id="DownloadFeat0"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
                                     <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured0"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
@@ -584,7 +586,7 @@
                                             </div>
                                         </div>
                                         <div class="w_tp_song_name">
-                                            <h3><a href="#">Walking Promises</a></h3>
+                                            <h3><a href="javascript:void(0)">Walking Promises</a></h3>
                                             <p>Ava Cornish</p>
                                         </div>
                                     </div>
@@ -596,9 +598,9 @@
 									</span>
                                 </div>
                                 <ul class="more_option">
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
+                                    <li id="FavoriteFeat1"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
+                                    <li id="AddToQFeat1"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
+                                    <li id="DownloadFeat1"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
                                     <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured1"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
@@ -619,7 +621,7 @@
                                             </div>
                                         </div>
                                         <div class="w_tp_song_name">
-                                            <h3><a href="#">Gimme Some Courage</a></h3>
+                                            <h3><a href="javascript:void(0)">Gimme Some Courage</a></h3>
                                             <p>Ava Cornish</p>
                                         </div>
                                     </div>
@@ -631,9 +633,9 @@
 									</span>
                                 </div>
                                 <ul class="more_option">
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
+                                    <li id="FavoriteFeat2"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
+                                    <li id="AddToQFeat2"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
+                                    <li id="DownloadFeat2"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
                                     <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured2"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
@@ -654,7 +656,7 @@
                                             </div>
                                         </div>
                                         <div class="w_tp_song_name">
-                                            <h3><a href="#">Desired Games</a></h3>
+                                            <h3><a href="javascript:void(0)">Desired Games</a></h3>
                                             <p>Ava Cornish</p>
                                         </div>
                                     </div>
@@ -666,9 +668,9 @@
 									</span>
                                 </div>
                                 <ul class="more_option">
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
+                                    <li id="FavoriteFeat3"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
+                                    <li id="AddToQFeat3"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
+                                    <li id="DownloadFeat3"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
                                     <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured3"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
@@ -689,7 +691,7 @@
                                             </div>
                                         </div>
                                         <div class="w_tp_song_name">
-                                            <h3><a href="#">Dark Alley Acoustic</a></h3>
+                                            <h3><a href="javascript:void(0)">Dark Alley Acoustic</a></h3>
                                             <p>Ava Cornish</p>
                                         </div>
                                     </div>
@@ -701,9 +703,9 @@
 									</span>
                                 </div>
                                 <ul class="more_option">
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
+                                    <li id="FavoriteFeat4"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
+                                    <li id="AddToQFeat4"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
+                                    <li id="DownloadFeat4"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
                                     <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured4"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
@@ -725,7 +727,7 @@
                                             </div>
                                         </div>
                                         <div class="w_tp_song_name">
-                                            <h3><a href="#">Walking Promises</a></h3>
+                                            <h3><a href="javascript:void(0)">Walking Promises</a></h3>
                                             <p>Ava Cornish</p>
                                         </div>
                                     </div>
@@ -737,9 +739,9 @@
 									</span>
                                 </div>
                                 <ul class="more_option">
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
+                                    <li id="FavoriteFeat5"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
+                                    <li id="AddToQFeat5"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
+                                    <li id="DownloadFeat5"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
                                     <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured5"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
@@ -760,7 +762,7 @@
                                             </div>
                                         </div>
                                         <div class="w_tp_song_name">
-                                            <h3><a href="#">Endless Things</a></h3>
+                                            <h3><a href="javascript:void(0)">Endless Things</a></h3>
                                             <p>Ava Cornish</p>
                                         </div>
                                     </div>
@@ -772,9 +774,9 @@
 									</span>
                                 </div>
                                 <ul class="more_option">
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
+                                    <li id="FavoriteFeat6"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
+                                    <li id="AddToQFeat6"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
+                                    <li id="DownloadFeat6"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
                                     <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured6"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
@@ -805,7 +807,7 @@
                                             </div>-->
                                         </div>
                                         <div class="w_tp_song_name">
-                                            <h3><a href="#">Dream Your Moments</a></h3>
+                                            <h3><a href="javascript:void(0)">Dream Your Moments</a></h3>
                                             <p>Ava Cornish</p>
                                         </div>
                                     </div>
@@ -817,9 +819,9 @@
 									</span>
                                 </div>
                                 <ul class="more_option">
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
+                                    <li id="FavoriteFeat7"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
+                                    <li id="AddToQFeat7"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
+                                    <li id="DownloadFeat7"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
                                     <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured7"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
@@ -840,7 +842,7 @@
                                             </div>
                                         </div>
                                         <div class="w_tp_song_name">
-                                            <h3><a href="#">Until I Met You</a></h3>
+                                            <h3><a href="javascript:void(0)">Until I Met You</a></h3>
                                             <p>Ava Cornish</p>
                                         </div>
                                     </div>
@@ -852,9 +854,9 @@
 									</span>
                                 </div>
                                 <ul class="more_option">
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
+                                    <li id="FavoriteFeat8"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
+                                    <li id="AddToQFeat8"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
+                                    <li id="DownloadFeat8"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
                                     <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured8"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
@@ -875,7 +877,7 @@
                                             </div>
                                         </div>
                                         <div class="w_tp_song_name">
-                                            <h3><a href="#">Gimme Some Courage</a></h3>
+                                            <h3><a href="javascript:void(0)">Gimme Some Courage</a></h3>
                                             <p>Ava Cornish</p>
                                         </div>
                                     </div>
@@ -887,9 +889,9 @@
 									</span>
                                 </div>
                                 <ul class="more_option">
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
+                                    <li id="FavoriteFeat9"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
+                                    <li id="AddToQFeat9"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
+                                    <li id="DownloadFeat9"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
                                     <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured9"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
@@ -911,7 +913,7 @@
                                             </div>
                                         </div>
                                         <div class="w_tp_song_name">
-                                            <h3><a href="#">Dark Alley Acoustic</a></h3>
+                                            <h3><a href="javascript:void(0)">Dark Alley Acoustic</a></h3>
                                             <p>Ava Cornish</p>
                                         </div>
                                     </div>
@@ -923,9 +925,9 @@
 									</span>
                                 </div>
                                 <ul class="more_option">
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
+                                    <li id="FavoriteFeat10"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
+                                    <li id="AddToQFeat10"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
+                                    <li id="DownloadFeat10"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
                                     <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured10"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
@@ -946,7 +948,7 @@
                                             </div>
                                         </div>
                                         <div class="w_tp_song_name">
-                                            <h3><a href="#">The Heartbeat Stops</a></h3>
+                                            <h3><a href="javascript:void(0)">The Heartbeat Stops</a></h3>
                                             <p>Ava Cornish</p>
                                         </div>
                                     </div>
@@ -958,9 +960,9 @@
 									</span>
                                 </div>
                                 <ul class="more_option">
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
+                                    <li id="FavoriteFeat11"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
+                                    <li id="AddToQFeat11"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
+                                    <li id="DownloadFeat11"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
                                     <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured11"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
@@ -981,7 +983,7 @@
                                             </div>
                                         </div>
                                         <div class="w_tp_song_name">
-                                            <h3><a href="#">One More Stranger</a></h3>
+                                            <h3><a href="javascript:void(0)">One More Stranger</a></h3>
                                             <p>Ava Cornish</p>
                                         </div>
                                     </div>
@@ -993,9 +995,9 @@
 									</span>
                                 </div>
                                 <ul class="more_option">
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
+                                    <li id="FavoriteFeat12"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
+                                    <li id="AddToQFeat12"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
+                                    <li id="DownloadFeat12"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
                                     <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured12"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
@@ -1016,7 +1018,7 @@
                                             </div>
                                         </div>
                                         <div class="w_tp_song_name">
-                                            <h3><a href="#">Walking Promises</a></h3>
+                                            <h3><a href="javascript:void(0)">Walking Promises</a></h3>
                                             <p>Ava Cornish</p>
                                         </div>
                                     </div>
@@ -1028,9 +1030,9 @@
 									</span>
                                 </div>
                                 <ul class="more_option">
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
+                                    <li id="FavoriteFeat13"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
+                                    <li id="AddToQFeat13"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
+                                    <li id="DownloadFeat13"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
                                     <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured13"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
@@ -1051,7 +1053,7 @@
                                             </div>
                                         </div>
                                         <div class="w_tp_song_name">
-                                            <h3><a href="#">Endless Things</a></h3>
+                                            <h3><a href="javascript:void(0)">Endless Things</a></h3>
                                             <p>Ava Cornish</p>
                                         </div>
                                     </div>
@@ -1063,9 +1065,9 @@
 									</span>
                                 </div>
                                 <ul class="more_option">
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
+                                    <li id="FavoriteFeat14"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
+                                    <li id="AddToQFeat14"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
+                                    <li id="DownloadFeat14"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
                                     <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured14"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
@@ -1193,10 +1195,10 @@
                                     <img src="images/featured/song5.jpg" alt="" class="Artist0Image">
                                     <div class="ms_main_overlay">
                                         <div class="ms_box_overlay"></div>
-                                        <div class="ms_more_icon">
+                                        <div class="ms_more_icon FeaturedArtistsMore">
                                             <img src="images/svg/more.svg" alt="">
                                         </div>
-                                        <ul class="more_option">
+                                        <ul class="more_option FeaturedArtistsMore">
                                             <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                             <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                             <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
@@ -1219,10 +1221,10 @@
                                     <img src="images/featured/song6.jpg" alt="" class="Artist1Image">
                                     <div class="ms_main_overlay">
                                         <div class="ms_box_overlay"></div>
-                                        <div class="ms_more_icon">
+                                        <div class="ms_more_icon FeaturedArtistsMore">
                                             <img src="images/svg/more.svg" alt="">
                                         </div>
-                                        <ul class="more_option">
+                                        <ul class="more_option FeaturedArtistsMore">
                                             <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                             <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                             <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
@@ -1245,10 +1247,10 @@
                                     <img src="images/featured/song1.jpg" alt="" class="Artist2Image">
                                     <div class="ms_main_overlay">
                                         <div class="ms_box_overlay"></div>
-                                        <div class="ms_more_icon">
+                                        <div class="ms_more_icon FeaturedArtistsMore">
                                             <img src="images/svg/more.svg" alt="">
                                         </div>
-                                        <ul class="more_option">
+                                        <ul class="more_option FeaturedArtistsMore">
                                             <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                             <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                             <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
@@ -1271,10 +1273,10 @@
                                     <img src="images/featured/song2.jpg" alt="" class="Artist3Image">
                                     <div class="ms_main_overlay">
                                         <div class="ms_box_overlay"></div>
-                                        <div class="ms_more_icon">
+                                        <div class="ms_more_icon FeaturedArtistsMore">
                                             <img src="images/svg/more.svg" alt="">
                                         </div>
-                                        <ul class="more_option">
+                                        <ul class="more_option FeaturedArtistsMore">
                                             <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                             <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                             <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
@@ -1297,10 +1299,10 @@
                                     <img src="images/featured/song3.jpg" alt="" class="Artist4Image">
                                     <div class="ms_main_overlay">
                                         <div class="ms_box_overlay"></div>
-                                        <div class="ms_more_icon">
+                                        <div class="ms_more_icon FeaturedArtistsMore">
                                             <img src="images/svg/more.svg" alt="">
                                         </div>
-                                        <ul class="more_option">
+                                        <ul class="more_option FeaturedArtistsMore">
                                             <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                             <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                             <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
@@ -1323,10 +1325,10 @@
                                     <img src="images/featured/song4.jpg" alt="" class="Artist5Image">
                                     <div class="ms_main_overlay">
                                         <div class="ms_box_overlay"></div>
-                                        <div class="ms_more_icon">
+                                        <div class="ms_more_icon FeaturedArtistsMore">
                                             <img src="images/svg/more.svg" alt="">
                                         </div>
-                                        <ul class="more_option">
+                                        <ul class="more_option FeaturedArtistsMore">
                                             <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                             <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                             <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
@@ -2321,20 +2323,20 @@
 								</div>
                                 <div class="jp_queue_btn">
                                     <a href="javascript:;" class="ms_clear" data-toggle="modal" data-target="#clear_modal">clear</a>
-                                    <a href="clear_modal.html" class="ms_save" data-toggle="modal" data-target="#save_modal">save</a>
+                                    <!--<a href="clear_modal.html" class="ms_save" data-toggle="modal" data-target="#save_modal">save</a>-->
                                 </div>
                             </div>
                         </div>
                         <div class="jp-type-playlist">
                             <div class="jp-gui jp-interface flex-wrap">
                                 <div class="jp-controls flex-item">
-                                    <button class="jp-previous" tabindex="0">
+                                    <button class="jp-previous" tabindex="0" onclick="RemoveCurrentPlayingSongElements()">
 					<i class="ms_play_control"></i>
 				</button>
                                     <button class="jp-play" tabindex="0">
 					<i class="ms_play_control"></i>
 				</button>
-                                    <button class="jp-next" tabindex="0">
+                                    <button class="jp-next" tabindex="0" onclick="RemoveCurrentPlayingSongElements()">
 					<i class="ms_play_control"></i>
 				</button>
                                 </div>
@@ -2371,7 +2373,7 @@
                                 <div class="jp-toggles flex-item">
                                     <button class="jp-shuffle" tabindex="0" title="Shuffle">
 									<i class="ms_play_control"></i></button>
-									<button class="jp-repeat" tabindex="0" title="Repeat"><i class="ms_play_control"></i></button>
+									<button class="jp-repeat" tabindex="0" title="Repeat" onclick="ToggleRepeat()"><i class="ms_play_control" id="LoopSVG"></i></button>
                                 </div>
                                 <!--<div class="jp_quality_optn custom_select">
                                     <select>
@@ -2420,7 +2422,7 @@
                             </span>
                                 </div>
                                 <div class="form-group">
-                                    <input type="password" placeholder="Enter Password" class="form-control" id="RegisterPassword" required>
+                                    <input type="password" placeholder="Enter Password" class="form-control" id="RegisterPassword" required minlength="3">
                                     <span class="form_icon">
                             <i class="fa_icon form-lock" aria-hidden="true"></i>
                             </span>
@@ -2645,6 +2647,7 @@
     <script type="text/javascript" src="js/plugins/nice_select/jquery.nice-select.min.js"></script>
 	<script type="text/javascript" src="js/plugins/scroll/jquery.mCustomScrollbar.js"></script>
     <script type="text/javascript" src="js/custom.js"></script>
+    <script type="text/javascript" src="js/Login.js"></script>
 </body>
 
 </html>

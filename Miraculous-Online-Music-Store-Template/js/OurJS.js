@@ -1,8 +1,10 @@
 $(document).ready(function () {
+    window.myPlayListOtion = "";
     $("#RegisterForm").submit(Register);
     $("#LoginForm").submit(Login);
     TryLogin();
-    
+    // Saves whether we want our queue to loop
+    IsLooped = false;
     // מוחק את המידע מטופס ההרשמה והלוגין אם לחצו אסקייפ לסגירתו
     document.addEventListener('keydown', function(event) {
         // Check if the pressed key is the escape key
@@ -25,14 +27,41 @@ $(document).ready(function () {
       });
       // סוף הטפסים
 
-
-      /*$("#jquery_jplayer_1").bind($.jPlayer.event.setmedia, function (event) {
+      $("#jquery_jplayer_1").bind($.jPlayer.event.play, function (event) {
+        // Handle the song started playing event here
+        // console.log("Song started playing:", event.jPlayer.status.media);
+                    if (document.getElementsByClassName('ms_active_play').length > 0)
+                        document.getElementsByClassName('ms_active_play')[0].classList.remove('ms_active_play');
+                        let str = `<div class="ms_play_icon" id="deldel"><div class="ms_bars"><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div><div class="bar"></div></div></div>`;
+                        let del = document.getElementById('deldel');
+                        if (del)
+                            del.parentNode.removeChild(del);
+                    for (i of document.getElementsByClassName('ms_play_icon'))
+                        i.style.visibility='visible';
+        if (Top15) {
+            for (i in Top15) {
+                if (i == "15")
+                    break;
+                if (Top15[i].songName == event.jPlayer.status.media.title && Top15[i].performerName == event.jPlayer.status.media.artist) {
+                    let elem = document.getElementsByClassName('ms_weekly_box')[i];
+                    if (elem != undefined) {
+                        elem.querySelector('.ms_play_icon').style.visibility='hidden';
+                        elem.classList.add('ms_active_play');
+                        elem.querySelector('.w_tp_song_img').innerHTML += str;
+                    }
+                    break;
+                }
+            }
+        }
+      });
+      $("#jquery_jplayer_1").bind($.jPlayer.event.setmedia, function (event) {
         // Handle the song changing event here
-        console.log("Song changed:", event.jPlayer.status.media);
-      });*/
+        // console.log("Song changed:", event.jPlayer.status.media);
+        HideMoreOptions();
+      });
 
 });
-function TextDecod() {
+/*function TextDecod() {
     //const api = `https://api.deezer.com/search?q={7%20Rings}&secret_key=${DeezerSecretKey}`;
     const api = `${apiStart}/Users`;
     //console.log(api)
@@ -43,92 +72,7 @@ function TestCB(data) {
     //console.log(data.data[0].preview)
     var audio = new Audio(data.data[0].preview);
     audio.play();
-}
-function ECB(e) {
-    console.log(e)
-    //alert(e);
-    openPopup("ERROR", "red", e);
-}
-function Register() {
-    let password = document.getElementById("RegisterPassword").value;
-    let confirmPassword = document.getElementById("RegisterConfirmPassword").value;
-    if (password != confirmPassword) {
-        alert("Passwords aren't matching!");
-        return;
-    }
-    let email = document.getElementById("RegisterEmail").value;
-    let name = document.getElementById("RegisterName").value;
-    const api = `${apiStart}/Users`;
-    let User = {
-        email: email,
-        name: name,
-        password: password
-    };
-    ajaxCall("POST", api, JSON.stringify(User), RegisterSuccessCallback, RegisterErrorCallback);
-    return false;
-}
-function RegisterSuccessCallback(data) {
-    // TODO: change the alert
-    // console.log(data)
-    // alert(data.message);
-    document.getElementById("RegisterErrorMSG").innerHTML = "";
-}
-function RegisterErrorCallback(error) {
-    // TODO: change the alert
-    console.log(error)
-    // alert(error.responseJSON.message)
-    document.getElementById("RegisterErrorMSG").innerHTML = error.responseJSON.message;
-}
-function Login() {
-    let email = document.getElementById("LoginEmail").value;
-    let password = document.getElementById("LoginPassword").value;
-    if (email == "")
-        alert("Please enter your email");
-    if (password.length < 3)
-        alert("Please enter your password");
-    const api = `${apiStart}/Users/Login?email=${email}&password=${password}`;
-    ajaxCall("POST", api, "", LoginSuccessCallback, LoginErrorCallback);
-    return false;
-}
-function LoginSuccessCallback(data) {
-    let KeepSignedIn = document.getElementById("KeepMeSignedInCheckBox").checked;
-    if (KeepSignedIn)
-        localStorage['User'] = JSON.stringify(data);
-    else sessionStorage['User'] = JSON.stringify(data);
-    /*document.getElementById("LoginErrorMSG").innerHTML = "";
-
-    document.getElementById('LoginRegisterAccountHeader').innerHTML = `<a href="upload.html" class="ms_btn">upload</a>`
-    + `<a href="javascript:;" class="ms_admin_name">Hello ${data.name.split(' ')[0]} <span class="ms_pro_name">${GetFirstLettersOfName(data.name)}</span></a><ul class="pro_dropdown_menu"><li><a href="profile.html">Profile</a></li>` + 
-    `<li><a href="manage_acc.html" target="_blank">Pricing Plan</a></li><li><a href="blog.html" target="_blank">Blog</a></li><li><a href="#">Setting</a></li>` +
-    `<li><a href="#">Logout</a></li></ul>`;
-    $('#myModal1').modal('hide');*/
-    location.href = window.location.pathname.split('/').pop();
-}
-function LoginErrorCallback(error) {
-    document.getElementById("LoginErrorMSG").innerHTML = error.responseJSON.message;
-}
-function RemoveErrorMesseages() {
-    document.getElementById("RegisterErrorMSG").innerHTML = "";
-    document.getElementById("LoginErrorMSG").innerHTML = "";
-    document.getElementById("RegisterPassword").value = "";
-    document.getElementById("RegisterConfirmPassword").value = "";
-    document.getElementById("RegisterEmail").value = "";
-    document.getElementById("RegisterName").value = "";
-    document.getElementById("LoginEmail").value = "";
-    document.getElementById("LoginPassword").value = "";
-}
-function TryLogin() {
-    if (!IsLoggedIn()) return; // Returns if the user is not logged in
-    let data = localStorage['User'] == undefined || localStorage['User'] == "" ? JSON.parse(sessionStorage['User']) : JSON.parse(localStorage['User']);
-    /*document.getElementById('LoginRegisterAccountHeader').innerHTML = `<a href="upload.html" class="ms_btn">upload</a>`
-    + `<a href="javascript:;" class="ms_admin_name">Hello ${data.name.split(' ')[0]} <span class="ms_pro_name">${GetFirstLettersOfName(data.name)}</span></a><ul class="pro_dropdown_menu"><li><a href="profile.html">Profile</a></li>` + 
-    `<li><a href="manage_acc.html" target="_blank">Pricing Plan</a></li><li><a href="blog.html" target="_blank">Blog</a></li><li><a href="#">Setting</a></li>` +
-    `<li><a href="#">Logout</a></li></ul>`;*/
-    document.getElementById('LoginRegisterAccountHeader').innerHTML = `<a href="javascript:;" class="ms_admin_name" onclick="ToggleProfile()">Hello ${data.name.split(' ')[0]} <span class="ms_pro_name">${GetFirstLettersOfName(data.name)}</span></a><ul class="pro_dropdown_menu"><li><a href="profile.html">Profile</a></li>` + 
-    `<li><a href="manage_acc.html" target="_blank">Pricing Plan</a></li><li><a href="blog.html" target="_blank">Blog</a></li><li><a href="#">Setting</a></li>` +
-    `<li><a onclick="Logout()" href="#">Logout</a></li></ul>`;
-    document.getElementById('NeedsMSProfile').classList.add('ms_profile');
-}
+}*/
 function TestGetSong() {
     var audio = new Audio();
     audio.src = `${apiStart}/Users/GetSong?name=Test.mp3`; // Replace 'songname' with the actual song name
@@ -137,12 +81,17 @@ function TestGetSong() {
 }
 // Gets the top 15 songs to feature (by number of plays)
 function GetTop15() {
-    const api = `${apiStart}/Songs/GetTop15`;
+    var api = `${apiStart}/Songs/GetTop15`;
+    if (IsLoggedIn() && localStorage["User"] != null && localStorage["User"] != "")
+        api = `${apiStart}/Songs/GetTop15?UserID=${JSON.parse(localStorage["User"]).id}`;
+    else if (IsLoggedIn() && sessionStorage["User"] != null && sessionStorage["User"] != "")
+        api = `${apiStart}/Songs/GetTop15?UserID=${JSON.parse(sessionStorage["User"]).id}`;
     ajaxCall("GET", api, "", UpdateTop15SCB, ECB);
 }
 // Updates top 15 songs (by # of plays)
 function UpdateTop15SCB(data) {
-    //console.log(data);
+    Top15 = data;
+    // console.log(data);
     let x = document.getElementsByClassName('ms_weekly_box');
     for (i in x) {
         if (x[i] == "15")
@@ -153,8 +102,30 @@ function UpdateTop15SCB(data) {
         if (SongPlay != null)
             SongPlay.setAttribute("onclick", `PlaySong(this, ${data[i].songID})`);
         document.getElementById(`LyricsFeatured${i}`).setAttribute('onclick', `getLyrics(${data[i].songID})`);
+        document.getElementById(`FavoriteFeat${i}`).setAttribute('SongID', data[i].songID);
+        if (IsLoggedIn() && localStorage["User"] != null && localStorage["User"] != "") {
+            if (data[i].isInFav == 0)
+                document.getElementById(`FavoriteFeat${i}`).setAttribute('onclick', `AddSongToFavorites(${data[i].songID}, ${JSON.parse(localStorage["User"]).id}, this)`);
+            else {
+                document.getElementById(`FavoriteFeat${i}`).setAttribute('onclick', `DeleteSongFromFavorites(${data[i].songID}, ${JSON.parse(localStorage["User"]).id}, this)`);
+                document.getElementById(`FavoriteFeat${i}`).querySelector('a').innerHTML = `<span class="opt_icon"><span class="icon icon_fav"></span></span>Unfavorite`;
+            }
+        }
+        else if (IsLoggedIn() && sessionStorage["User"] != null && sessionStorage["User"] != "") {
+            if (data[i].isInFav == 0)
+                document.getElementById(`FavoriteFeat${i}`).setAttribute('onclick', `AddSongToFavorites(${data[i].songID}, ${JSON.parse(sessionStorage["User"]).id}, this)`);
+            else  {
+                document.getElementById(`FavoriteFeat${i}`).setAttribute('onclick', `DeleteSongFromFavorites(${data[i].songID}, ${JSON.parse(sessionStorage["User"]).id}, this)`);
+                document.getElementById(`FavoriteFeat${i}`).querySelector('a').innerHTML = `<span class="opt_icon"><span class="icon icon_fav"></span></span>Unfavorite`;
+            }
+        }
+        else
+            document.getElementById(`FavoriteFeat${i}`).onclick = () => { openPopup("ERROR", "red", "Log in to add songs to your favorites!") };
+        document.getElementById(`DownloadFeat${i}`).setAttribute('onclick', `Download(${data[i].songID}, "${data[i].songName} by ${data[i].performerName}.mp3")`);
+        document.getElementById(`AddToQFeat${i}`).setAttribute('onclick', `AddToQueue(${JSON.stringify(data[i])})`);
         x[i].querySelector('img').src = data[i].performerImage;
         names.querySelector('a').innerHTML = data[i].songName;
+        names.querySelector('a').setAttribute(`onclick`, `getLyrics(${data[i].songID})`);
         names.querySelector('p').innerHTML = data[i].performerName;
     }
     //console.log(x[0]);
@@ -163,7 +134,7 @@ function UpdateTop15SCB(data) {
 function PlaySong(elem, SongID) {
     if (SongID < 1)
         return;
-    if (document.getElementsByClassName('ms_active_play').length > 0)
+    /*if (document.getElementsByClassName('ms_active_play').length > 0)
         document.getElementsByClassName('ms_active_play')[0].classList.remove('ms_active_play');
     for (i of document.getElementsByClassName('ms_play_icon'))
         i.style.visibility='visible';
@@ -174,7 +145,7 @@ function PlaySong(elem, SongID) {
     let del = document.getElementById('deldel');
     if (del)
         del.parentNode.removeChild(del);
-    elem.parentNode.parentNode.querySelector('.w_tp_song_img').innerHTML += str;
+    elem.parentNode.parentNode.querySelector('.w_tp_song_img').innerHTML += str;*/
     
     
     // We need promise because we'd like to play the song instantly when it loads, and we need to give the server time to return the mp3 file.
@@ -247,66 +218,8 @@ function UpdateFeaturedArtists(data) {
             j.style.height = "281px";
         }
     }
-}
-function PlayArtist(PID) {
-    // console.log(PID)
-    const api = `${apiStart}/Songs/GetPerformerSongs/PerformerID/${PID}`;
-    ajaxCall("GET", api, "", PlayPerformerSongsSCB, ECB);
-    // TODO: play artist's first song and save other songs to the queue
-}
-// Plays all of the songs of a specific artist, also saves them to the queue.
-function PlayPerformerSongsSCB(data) {
-    // Randomize the queue
-    shuffle(data);
-    window.myPlaylist.playlist = [];
-    window.myPlaylist.original = [];
-    //console.log(data);
-    let song;
-    for (i in data) {
-        song = {
-            image: data[i].performerImage,	
-            title: data[i].songName,
-            artist: data[i].performerName,
-            mp3: `${apiStart}/Songs/GetSongByID/SongID/${data[i].songID}`,
-            oga: `${apiStart}/Songs/GetSongByID/SongID/${data[i].songID}`,
-            option : window.myPlayListOtion
-        };
-        window.myPlaylist.playlist.push(song);
-        window.myPlaylist.original.push(song);
-    }
-    window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
-    localStorage['Queue'] = JSON.stringify(window.myPlaylist.playlist);
-    PlayFirstInQueue();
-}
-// Plays the first song in the queue. Removes unnecessary html elements.
-function PlayFirstInQueue() {
-    let del = document.getElementById('deldel');
-    if (del)
-        del.parentNode.removeChild(del);
-    if (document.getElementsByClassName('ms_active_play').length > 0)
-    document.getElementsByClassName('ms_active_play')[0].classList.remove('ms_active_play');
-    for (i of document.getElementsByClassName('ms_play_icon'))
-        i.style.visibility = 'visible';
-    //console.log(window.myPlaylist.playlist);
-    window.addEventListener('load', function() {
-        window.requestAnimationFrame(playSong);
-    });
-    function playSong() {
-        return new Promise(function(resolve, reject) {
-            $(document).on($.jPlayer.event.canplay, function() {
-                $("#jquery_jplayer_1").jPlayer("play");
-                ShowAudioPlayer();
-                resolve();
-            });
-        });
-    }
-    playSong()
-        .then(function() {
-            localStorage["Queue"] = JSON.stringify(window.myPlaylist.playlist);
-        })
-        .catch(function(error) {
-            console.error("Error occurred:", error);
-        });
+    for (i of document.getElementsByClassName('FeaturedArtistsMore'))
+        i.style.display = 'none';
 }
 // Called to dynamically load the index page.
 function IndexLoaded() {
@@ -365,6 +278,14 @@ function ClearQueue() {
     window.myPlaylist.playlist=[];
     window.myPlaylist.original=[];
     window.myPlaylist.setPlaylist([]);
+    $("#jquery_jplayer_1").jPlayer("pause");
+    for (i of document.getElementsByClassName('ms_active_play'))
+        i.classList.remove('ms_active_play');
+    let del = document.getElementById('deldel');
+    if (del)
+        del.parentNode.removeChild(del);
+    for (i of document.getElementsByClassName('ms_play_icon'))
+        i.style.visibility='visible';
     HideAudioPlayer();
 }
 function GetMostPlayedTrack() {
@@ -394,6 +315,7 @@ function GetMostPlayedTrackSCB(data) {
                     window.myPlaylist.original = window.myPlaylist.playlist;
                     window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
                     localStorage['Queue'] = JSON.stringify(window.myPlaylist.playlist);
+                    HandleIndexPlayFirstInQueue();
                     PlayFirstInQueue();
                     break;
                 }
@@ -403,6 +325,7 @@ function GetMostPlayedTrackSCB(data) {
             window.myPlaylist.original.unshift(song);
             window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
             localStorage['Queue'] = JSON.stringify(window.myPlaylist.playlist);
+            HandleIndexPlayFirstInQueue();
             PlayFirstInQueue();
         }
     };
@@ -410,23 +333,18 @@ function GetMostPlayedTrackSCB(data) {
     // add the song but don't play immediately
     // if the song is already in the queue, return.
     document.getElementById('MostPlayedPAddToQueue').onclick = () => {
-        if (!IsSongInQueueByNameAndArtist(song.artist, song.title)) return;
+        if (IsSongInQueueByNameAndArtist(song.artist, song.title)) return;
         window.myPlaylist.playlist.push(song);
         window.myPlaylist.original.push(song);
+        window.myPlaylist.autoplay = false;
         window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
+        window.myPlaylist.autoplay = false;
+        //window.myPlaylist.autoplay = true;
         localStorage['Queue'] = JSON.stringify(window.myPlaylist.playlist);
     };
     document.getElementById('MostPlayedPGetLyrics').onclick = () => {
         getLyrics(data.songID);
     };
-}
-// returns true if the song is already in the queue.
-function IsSongInQueueByNameAndArtist(artist, title) {
-    if (!window.myPlaylist.playlist) return false;
-    for (i of window.myPlaylist.playlist)
-        if (i.title === title && i.artist === artist)
-            return true;
-    return false;
 }
 function PlayGenre(GenreID) {
     const api = `${apiStart}/Songs/GetGenreSongs/GenreID/${GenreID}`;
@@ -439,24 +357,6 @@ function PlayGenreSCB(data) {
     // Updates the queue and plays the first song
     PlayPerformerSongsSCB(data);
 }
-// shuffles the array (used to randomize the songs queue)
-function shuffle(array) {
-    let currentIndex = array.length,  randomIndex;
-  
-    // While there remain elements to shuffle.
-    while (currentIndex != 0) {
-  
-      // Pick a remaining element.
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex--;
-  
-      // And swap it with the current element.
-      [array[currentIndex], array[randomIndex]] = [
-        array[randomIndex], array[currentIndex]];
-    }
-  
-    return array;
-  }
   // Plays live radio station. RadioStations array is defined in RadioStations.js
   function PlayRadio(id) {
     if (id > RadioStations.length || id < 0) return;
@@ -465,32 +365,98 @@ function shuffle(array) {
     window.myPlaylist.original.unshift(RadioStations[id]);
     window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
     //localStorage['Queue'] = JSON.stringify(window.myPlaylist.playlist);
+    HandleIndexPlayFirstInQueue();
     PlayFirstInQueue();
   }
-  function HideAudioPlayer() {
-    document.getElementsByClassName('ms_player_wrapper')[0].style.visibility = 'hidden';
+  function AddSongToFavorites(SongID, UserID, elem) {
+    if (!IsLoggedIn()) {
+        openPopup("ERROR", "red", "You're not logged in!");
+        return;
+    }
+    tmpElem = elem;
+    const api = `${apiStart}/Users/PostUserFavorite/UserID/${UserID}/SongID/${SongID}`;
+    ajaxCall("POST", api, "", AddSongToFavoritesSCB, ECB);
   }
-  function ShowAudioPlayer() {
-    document.getElementsByClassName('ms_player_wrapper')[0].style.visibility = 'visible';
+  function DeleteSongFromFavorites(SongID, UserID, elem) {
+    tmpElem = elem;
+    const api = `${apiStart}/Users/DeleteUserFavorite/UserID/${UserID}/SongID/${SongID}`;
+    ajaxCall("DELETE", api, "", DeleteSongFromFavoritesSCB, ECB);
   }
+  function AddSongToFavoritesSCB(data) {
+    if (!data) openPopup("ERROR", "red", "This song is already in your favorites");
+    tmpElem.querySelector('a').innerHTML = `<span class="opt_icon"><span class="icon icon_fav"></span></span>Unfavorite`;
 
-  function openPopup(popupTitle, popupTitleColor, popupText) {
-    document.body.classList.add("no-scroll");
-    document.getElementById("popup").style.display = "block";
-    document.getElementById("PopupTitle").innerHTML = popupTitle;
-    document.getElementById("PopupTitle").style.color = popupTitleColor;
-    document.getElementById("PopupText").innerHTML = popupText;
+    let SongID = parseInt(tmpElem.getAttribute('SongID'));
+    if (IsLoggedIn() && localStorage["User"] != null && localStorage["User"] != "")
+        tmpElem.setAttribute('onclick', `DeleteSongFromFavorites(${SongID}, ${JSON.parse(localStorage["User"]).id}, this)`);
+    else if (IsLoggedIn() && sessionStorage["User"] != null && sessionStorage["User"] != "")
+        tmpElem.setAttribute('onclick', `DeleteSongFromFavorites(${SongID}, ${JSON.parse(sessionStorage["User"]).id}, this)`);
+    else
+        tmpElem.onclick = () => { openPopup("ERROR", "red", "Log in to add songs to your favorites!") };
+    //tmpElem.setAttribute('onclick', 'DeleteSongFromFavoritesSCB()');
+    // console.log(data);
+    // TODO: Add message?
   }
+  function DeleteSongFromFavoritesSCB(data) {
+    /*console.log("bye");
+    if(!data) return;
+    console.log("hi");*/
+    tmpElem.querySelector('a').innerHTML = `<span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites`;
 
-  function closePopup() {
-    document.body.classList.remove("no-scroll");
-    document.getElementById("popup").style.display = "none";
+    let SongID = parseInt(tmpElem.getAttribute('SongID'));
+    if (IsLoggedIn() && localStorage["User"] != null && localStorage["User"] != "")
+        tmpElem.setAttribute('onclick', `AddSongToFavorites(${SongID}, ${JSON.parse(localStorage["User"]).id}, this)`);
+    else if (IsLoggedIn() && sessionStorage["User"] != null && sessionStorage["User"] != "")
+        tmpElem.setAttribute('onclick', `AddSongToFavorites(${SongID}, ${JSON.parse(sessionStorage["User"]).id}, this)`);
+    else
+    tmpElem.onclick = () => { openPopup("ERROR", "red", "Log in to add songs to your favorites!") };
   }
-  function getLyrics(SongID) {
-    const api = `${apiStart}/Songs/GetSongLyrics/SongID/${SongID}`;
-    ajaxCall("GET", api, "", getLyricsSCB, (e) => { openPopup("ERROR", "red", "Couldn't retrieve song lyrics"); console.log(e); });
+  function RemoveCurrentPlayingSongElements() {
+    if (document.getElementsByClassName('ms_active_play').length > 0)
+        document.getElementsByClassName('ms_active_play')[0].classList.remove('ms_active_play');
+    for (i of document.getElementsByClassName('ms_play_icon'))
+        i.style.visibility='visible';
+    let del = document.getElementById('deldel');
+    if (del)
+        del.parentNode.removeChild(del);
   }
-  function getLyricsSCB(data) {
-    // console.log(data.lyrics);
-    openPopup(data.SongName, "white", data.Lyrics.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>'));
+  function HandleIndexPlayFirstInQueue() {
+    let del = document.getElementById('deldel');
+    if (del)
+        del.parentNode.removeChild(del);
+    if (document.getElementsByClassName('ms_active_play').length > 0)
+    document.getElementsByClassName('ms_active_play')[0].classList.remove('ms_active_play');
+    for (i of document.getElementsByClassName('ms_play_icon'))
+        i.style.visibility = 'visible';
+  }
+  function PlayArtist(PID) {
+      // console.log(PID)
+      const api = `${apiStart}/Songs/GetPerformerSongs/PerformerID/${PID}`;
+      ajaxCall("GET", api, "", PlayPerformerSongsSCB, ECB);
+      // TODO: play artist's first song and save other songs to the queue
+  }
+  // Plays all of the songs of a specific artist, also saves them to the queue.
+  function PlayPerformerSongsSCB(data) {
+      // Randomize the queue
+      shuffle(data);
+      window.myPlaylist.playlist = [];
+      window.myPlaylist.original = [];
+      //console.log(data);
+      let song;
+      for (i in data) {
+          song = {
+              image: data[i].performerImage,	
+              title: data[i].songName,
+              artist: data[i].performerName,
+              mp3: `${apiStart}/Songs/GetSongByID/SongID/${data[i].songID}`,
+              oga: `${apiStart}/Songs/GetSongByID/SongID/${data[i].songID}`,
+              option : window.myPlayListOtion
+          };
+          window.myPlaylist.playlist.push(song);
+          window.myPlaylist.original.push(song);
+      }
+      window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
+      localStorage['Queue'] = JSON.stringify(window.myPlaylist.playlist);
+      HandleIndexPlayFirstInQueue();
+      PlayFirstInQueue();
   }
