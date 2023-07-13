@@ -1,5 +1,8 @@
 $(document).ready(function() {
     $("#UpdateUserForm").submit(UpdateUser);
+    // לא מאפשרים לשמוע שירים בדף עדכון המידע על מנת שאנשים לא ישארו בו
+    // כי זו סכנת אבטחה (לדוגמה אם הולכים מהמחשב וישאירו דף זה פתוח...)
+    HideAudioPlayer();
 })
 function LoginHeader() {
     if (!IsLoggedIn()) {
@@ -9,7 +12,6 @@ function LoginHeader() {
         document.body.style.visibility = "visible";
         let data = localStorage['User'] == undefined || localStorage['User'] == "" ? JSON.parse(sessionStorage['User']) : JSON.parse(localStorage['User']);
         document.getElementById('LoginRegisterAccountHeader').innerHTML = `<a href="javascript:;" class="ms_admin_name" onclick="ToggleProfile()">Hello ${data.name.split(' ')[0]} <span class="ms_pro_name">${GetFirstLettersOfName(data.name)}</span></a><ul class="pro_dropdown_menu"><li><a href="profile.html">Profile</a></li>` + 
-        `<li><a href="manage_acc.html" target="_blank">Pricing Plan</a></li><li><a href="blog.html" target="_blank">Blog</a></li><li><a href="#">Setting</a></li>` +
         `<li><a onclick="Logout()" href="#">Logout</a></li></ul>`;
         document.getElementById('NeedsMSProfile').classList.add('ms_profile');
         document.getElementById('EmailPH').value = data.email;
@@ -37,7 +39,7 @@ function UpdateUser() {
     data.password = document.getElementById('PasswordPH').value;
     // console.log(data);
     ajaxCall("PUT", api, JSON.stringify(data), UpdateSuccessCallback, UpdateErrorCallback);
-    UpdateError("", "red");
+    //UpdateError("", "red");
     return false;
 }
 function UpdateSuccessCallback(msg) {
@@ -45,6 +47,8 @@ function UpdateSuccessCallback(msg) {
         localStorage['User'] = JSON.stringify(data);
     if (sessionStorage['User'] != undefined && sessionStorage['User'] != "")
         sessionStorage['User'] = JSON.stringify(data);
+    // console.log(msg.message)
+    UpdateError(msg.message, 'white');
     // console.log(data);
 }
 function UpdateErrorCallback(msg) {

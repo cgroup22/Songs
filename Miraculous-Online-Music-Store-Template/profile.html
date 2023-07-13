@@ -34,6 +34,35 @@
 </head>
 <body style="visibility:hidden;" onload="LoginHeader()">
     <!----Main Wrapper Start---->
+    <div class="ms_main_wrapper" id="NeedsMSProfile">
+        <div id="popup" class="popup">
+            <div class="popup-content">
+              <span class="close-button" onclick="closePopup()">&times;</span>
+              <h2 id="PopupTitle">This is a Popup</h2>
+              <p id="PopupText">Hello, this is some example content in the popup!</p>
+              <button class="PopupBTN" onclick="closePopup()">Close</button>
+            </div>
+        </div>
+        <div class="PlaylistPopup" id="CreatePlaylistPopup" style="display:none;">
+            <div class="playlist-popup-inner">
+                <h2 id="CNPTitle">Create New Playlist</h2>
+                <input type="text" id="playlist-name" placeholder="Enter playlist name">
+                <br>
+                <a href="javascript:void(0);"><button onclick="CreatePlaylistOK()" class="ms_btn" id="CreatePlaylistBTN">Create</button></a>
+                <a href="javascript:void(0);"><button onclick="CreatePlaylistCancel()" class="ms_btn" id="CreatePlaylistBTN">Cancel</button></a>
+            </div>
+        </div>
+        <div class="PlaylistPopup" id="AddToPlaylistPopup" style="display:none;">
+            <div class="playlist-popup-inner" id="CPLWindow">
+                <h2 id="CPTitle">Choose Playlist</h2>
+                <div id="AddToPlaylistInfo">
+                    <a href="javascript:void(0)" class="PlaylistOption">Test</a>
+                    <br>
+                </div>
+                <a href="javascript:void(0);"><button onclick="AddToPlaylistCancel()" class="ms_btn" id="CreatePlaylistBTN">Cancel</button></a>
+                <p id="AddedToPlaylistInfo">Added To X</p>
+            </div>
+        </div>
     <div class="ms_main_wrapper ms_profile" id="NeedsMSProfile">
         <!---Side Menu Start--->
                 <!---Side Menu Start--->
@@ -44,15 +73,15 @@
             <div class="ms_sidemenu_inner">
                 <div class="ms_logo_inner">
                     <div class="ms_logo">
-                        <a href="index-2.html"><img src="images/logo.png" alt="" class="img-fluid"/></a>
+                        <a href="index.html"><img src="images/logo.png" alt="" class="img-fluid"/></a>
                     </div>
                     <div class="ms_logo_open">
-                        <a href="index-2.html"><img src="images/open_logo.png" alt="" class="img-fluid"/></a>
+                        <a href="index.html"><img src="images/open_logo.png" alt="" class="img-fluid"/></a>
                     </div>
                 </div>
                 <div class="ms_nav_wrapper">
                     <ul>
-                        <li><a href="index-2.html" class="active" title="Discover">
+                        <li><a href="index.html" title="Discover">
 						<span class="nav_icon">
 							<span class="icon icon_discover"></span>
 						</span>
@@ -183,13 +212,12 @@
 			<div class="ms_header">
                 <div class="ms_top_left">
                     <div class="ms_top_search">
-                        <input type="text" class="form-control" placeholder="Search Music Here..">
-                        <span class="search_icon">
+                        <form id="SearchForm">
+                        <input type="text" class="form-control" placeholder="Search Music Here.." id="SearchBar">
+                        <span class="search_icon" onclick="SearchQuery()" id="SearchBTN">
 							<img src="images/svg/search.svg" alt="">
 						</span>
-                    </div>
-                    <div class="ms_top_trend">
-                        <span><a href="#"  class="ms_color">Trending Songs :</a></span> <span class="top_marquee"><a href="#">Dream your moments, Until I Met You, Gimme Some Courage, Dark Alley (+8 More)</a></span>
+                    </form>
                     </div>
                 </div>
                 <div class="ms_top_right">
@@ -199,9 +227,6 @@
 						</a>
 						<ul class="pro_dropdown_menu">
 							<li><a href="profile.html">Profile</a></li>
-							<li><a href="manage_acc.html" target="_blank">Pricing Plan</a></li>
-							<li><a href="blog.html" target="_blank">Blog</a></li>
-							<li><a href="#">Setting</a></li>
 							<li><a href="#">Logout</a></li>
 						</ul>
                     </div>
@@ -212,12 +237,12 @@
                 <h1>Edit Profile</h1>
                 <div class="ms_profile_box">
                     <form id="UpdateUserForm">
-                        <div class="ms_pro_img">
+                        <!--<div class="ms_pro_img">
                             <img src="images/pro_img.jpg" alt="" class="img-fluid">
                             <div class="pro_img_overlay">
                                 <i class="fa_icon edit_icon"></i>
                             </div>
-                        </div>
+                        </div>-->
                         <div class="ms_pro_form">
                             <div class="form-group">
                                 <label>Your Name *</label>
@@ -239,7 +264,7 @@
                                 <!--<a href="#" class="ms_btn">save</a>-->
                                 <input type="submit" class="ms_btn" value="Save" style="border:0;">
                                 <input type="button" class="ms_btn" id="verifyAccount" value="Verify account" onclick="VerifyRequest()" style="border:0; display: none; cursor: pointer;">
-                                <p id="LoginErrorMSG" style="padding-top: 11px;"></p>
+                                <p id="LoginErrorMSG" style="padding-top: 17px;"></p>
                             </div>
                         </div>
                     </form>
@@ -250,7 +275,7 @@
         <!----Footer Start---->
         <div class="ms_footer_wrapper">
             <div class="ms_footer_logo">
-                <a href="index-2.html"><img src="images/open_logo.png" alt=""></a>
+                <a href="index.html"><img src="images/open_logo.png" alt=""></a>
             </div>
             <div class="ms_footer_inner">
                 <div class="row">
@@ -433,15 +458,6 @@
                                     <button class="jp-shuffle" tabindex="0" title="Shuffle">
 				<i class="ms_play_control"></i></button>
 				<button class="jp-repeat" tabindex="0" title="Repeat"><i class="ms_play_control"></i></button>
-                                </div>
-                                <div class="jp_quality_optn custom_select">
-                                    <select>
-						<option>quality</option>
-						<option value="1">HD</option>
-						<option value="2">High</option>
-						<option value="3">medium</option>
-						<option value="4">low</option>
-					</select>
                                 </div>
                             </div>
                         </div>
