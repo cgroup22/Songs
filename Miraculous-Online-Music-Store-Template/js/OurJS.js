@@ -123,6 +123,7 @@ function UpdateTop15SCB(data) {
             document.getElementById(`FavoriteFeat${i}`).onclick = () => { openPopup("ERROR", "red", "Log in to add songs to your favorites!") };
         document.getElementById(`DownloadFeat${i}`).setAttribute('onclick', `Download(${data[i].songID}, "${data[i].songName} by ${data[i].performerName}.mp3")`);
         document.getElementById(`AddToQFeat${i}`).setAttribute('onclick', `AddToQueue(${JSON.stringify(data[i])})`);
+        document.getElementById(`AddToPlaylistFeat${i}`).setAttribute('onclick', `ATP(${data[i].songID})`);
         x[i].querySelector('img').src = data[i].performerImage;
         names.querySelector('a').innerHTML = data[i].songName;
         names.querySelector('a').setAttribute(`onclick`, `getLyrics(${data[i].songID})`);

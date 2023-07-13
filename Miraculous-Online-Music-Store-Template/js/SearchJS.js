@@ -29,6 +29,19 @@ function SearchLoaded() {
         //alert("Search something first");
         return;
     }
+    $("#jquery_jplayer_1").bind($.jPlayer.event.play, function (event) {
+        let tmpArr = [document.getElementById('SearchSongsContainer'), document.getElementById('SearchGenreContainer'), document.getElementById('SearchLyricsContainer')];
+        for (tmp of tmpArr)
+        for (i of tmp.children) {
+            if (!i.classList.contains('album_list_name')) {
+                if (i.querySelector('.sNames').innerHTML === window.myPlaylist.playlist[0].title) {
+                    i.classList.add('play_active_song');
+                }
+                else if (i.classList.contains('play_active_song'))
+                    i.classList.remove('play_active_song');
+            }
+        }
+      });
     $("#jquery_jplayer_1").bind($.jPlayer.event.setmedia, function (event) {
         HideMoreOptions();
       });
@@ -43,7 +56,7 @@ function Search(query) {
     if (IsLoggedIn() && localStorage["User"] != null && localStorage["User"] != "")
         UserID = JSON.parse(localStorage["User"]).id;
     else if (IsLoggedIn() && sessionStorage["User"] != null && sessionStorage["User"] != "")
-    UserID = JSON.parse(sessionStorage["User"]).id;
+        UserID = JSON.parse(sessionStorage["User"]).id;
     const api = `${apiStart}/Songs/Search/query/${query}/UserID/${UserID}`;
     ajaxCall("GET", api, "", SearchSCB, ECB);
 }
@@ -57,7 +70,7 @@ function SearchSCB(data) {
         if (data[i].songName.toLowerCase().includes(query.toLowerCase())) {
             str += `<ul>
         <li onclick='SearchAddToQueue(${i})'><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
-        <li onclick="getLyrics(${data[i].songID})"><a href="javascript:void(0)">${data[i].songName}</a></li>
+        <li onclick="getLyrics(${data[i].songID})"><a href="javascript:void(0)" class="sNames">${data[i].songName}</a></li>
         <li><a href="javascript:void(0)">${data[i].performerName}</a></li>` +
         //<li class="text-center"><a href="javascript:void(0)">Free</a></li>
         `<li class="text-center"><a href="javascript:void(0)">${data[i].length}</a></li>
@@ -71,7 +84,7 @@ function SearchSCB(data) {
             else str += `<li onclick="SearchDeleteSongFromFavorites(${data[i].songID}, this)" SongID="${data[i].songID}"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Unfavorite</a></li>`;
             str += `<li onclick="AddToQueueSearch(${i})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
             <li onclick="DownloadSearch(${i})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-            <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
+            <li onclick="ATP(${data[i].songID})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
             <li onclick="getLyrics(${data[i].songID})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
         </ul>
     </li>`+
@@ -101,7 +114,7 @@ function SearchSCB(data) {
         if (data[i].genreName.toLowerCase().includes(query.toLowerCase())) {
             GenreSearch += `<ul>
             <li onclick='SearchAddToQueue(${i})'><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
-            <li onclick="getLyrics(${data[i].songID})"><a href="javascript:void(0)">${data[i].songName}</a></li>
+            <li onclick="getLyrics(${data[i].songID})"><a href="javascript:void(0)" class="sNames">${data[i].songName}</a></li>
             <li><a href="javascript:void(0)">${data[i].performerName}</a></li>` +
             //<li class="text-center"><a href="javascript:void(0)">Free</a></li>
             `<li class="text-center"><a href="javascript:void(0)">${data[i].length}</a></li>
@@ -115,7 +128,7 @@ function SearchSCB(data) {
                 else GenreSearch += `<li onclick="SearchDeleteSongFromFavorites(${data[i].songID}, this)" SongID="${data[i].songID}"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Unfavorite</a></li>`;
                 GenreSearch += `<li onclick="AddToQueueSearch(${i})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                 <li onclick="DownloadSearch(${i})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-                <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
+                <li onclick="ATP(${data[i].songID})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                 <li onclick="getLyrics(${data[i].songID})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
             </ul>
         </li>`+
@@ -131,7 +144,7 @@ function SearchSCB(data) {
         if (data[i].isQueryInLyrics == 1) {
             ContainsQuery += `<ul>
             <li onclick='SearchAddToQueue(${i})'><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
-            <li onclick="getLyrics(${data[i].songID})"><a href="javascript:void(0)">${data[i].songName}</a></li>
+            <li onclick="getLyrics(${data[i].songID})"><a href="javascript:void(0)" class="sNames">${data[i].songName}</a></li>
             <li><a href="javascript:void(0)">${data[i].performerName}</a></li>` +
             //<li class="text-center"><a href="javascript:void(0)">Free</a></li>
             `<li class="text-center"><a href="javascript:void(0)">${data[i].length}</a></li>
@@ -145,7 +158,7 @@ function SearchSCB(data) {
             else ContainsQuery += `<li onclick="SearchDeleteSongFromFavorites(${data[i].songID}, this)" SongID="${data[i].songID}"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Unfavorite</a></li>`;
             ContainsQuery += `<li onclick="AddToQueueSearch(${i})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
             <li onclick="DownloadSearch(${i})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-            <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
+            <li onclick="ATP(${data[i].songID})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
             <li onclick="getLyrics(${data[i].songID})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
         </ul></li>`+
             //<li style="text-align:center;"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download</a></li>

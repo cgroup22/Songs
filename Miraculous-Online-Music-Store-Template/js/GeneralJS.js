@@ -2,6 +2,23 @@ const port = "44355";
 const apiStart = `https://localhost:${port}/api`;
 $(document).ready(function() {
     $("#SearchForm").submit(SearchQuery);
+    document.getElementsByClassName('nav_playlist')[0].children[0].style.display = "none";
+    document.getElementsByClassName('nav_playlist')[0].children[1].querySelector('a').href = "javascript:void(0);";
+    document.getElementsByClassName('nav_playlist')[0].children[1].querySelector('a').setAttribute('onclick', 'CreatePlaylist()');
+    RequestPlaylists();
+    $("#jquery_jplayer_1").bind($.jPlayer.event.setmedia, function (event) {
+        //console.log(document.getElementsByClassName('play_song_options')[0].children[0].children)
+        let updateElems = document.getElementsByClassName('play_song_options')[0].children[0].children;
+        let index = window.myPlaylist.current;
+        // console.log(window.myPlaylist.playlist[index])
+        let tmpArr = window.myPlaylist.playlist[index].mp3.split('/');
+        let SongID = tmpArr[tmpArr.length - 1];
+        updateElems[0].setAttribute('onclick', `Download(${SongID}, "${window.myPlaylist.playlist[index].title} by ${window.myPlaylist.playlist[index].artist}.mp3")`);
+        updateElems[1].setAttribute('onclick', `AddCurrentPlayingSongToFavorites(${SongID})`);
+        updateElems[2].setAttribute('onclick', `ATP(${SongID})`);
+        updateElems[3].setAttribute('onclick', `getLyrics(${SongID})`);
+        updateElems[3].querySelector('a').innerHTML = `<span class="song_optn_icon"><i class="ms_icon icon_share"></i></span>Lyrics`;
+    });
 });
 // Returns true if the user is logged in, false otherwise.
 function IsLoggedIn() {
@@ -186,13 +203,15 @@ function shuffle(array) {
         del.parentNode.removeChild(del);
     for (i of document.getElementsByClassName('ms_play_icon'))
         i.style.visibility='visible';
+    for (i of document.getElementsByClassName('play_active_song'))
+        i.classList.remove('play_active_song');
 }
 function getLyrics(SongID) {
   const api = `${apiStart}/Songs/GetSongLyrics/SongID/${SongID}`;
   ajaxCall("GET", api, "", getLyricsSCB, (e) => { openPopup("ERROR", "red", "Couldn't retrieve song lyrics"); console.log(e); });
 }
 function getLyricsSCB(data) {
-  // console.log(data.lyrics);
+  // console.log(data.Lyrics);
   openPopup(data.SongName, "white", data.Lyrics.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>'));
 }
 function Download(SongID, fileName) {
@@ -235,3 +254,154 @@ function TurnOffMoreOptions() {
         i.style.visibility = "hidden";
         i.style.opacity = "0"; }
 }
+function RequestPlaylists() {
+    let UserID = -1;
+    if (IsLoggedIn() && localStorage["User"] != null && localStorage["User"] != "")
+        UserID = JSON.parse(localStorage["User"]).id;
+    else if (IsLoggedIn() && sessionStorage["User"] != null && sessionStorage["User"] != "")
+        UserID = JSON.parse(sessionStorage["User"]).id;
+    if (undefined == UserID || isNaN(UserID) || null == UserID || UserID < 1) {
+        return;
+    }
+    const api = `${apiStart}/Playlists/GetUserPlaylists/UserID/${UserID}`;
+    ajaxCall("GET", api, "", RequestPlaylistsSCB, ECB);
+}
+function RequestPlaylistsSCB(data) {
+    // console.log(data);
+    UserPlaylists = data;
+    let str = ``;
+    let AddToPlaylistPopupInfo = ``;
+    for (i in data) {
+        str += `<li id="Playlist${data[i].id}" onclick="getPlaylist(${data[i].id})"><a href="javascript:void(0);" title="Featured Playlist">
+        <span class="nav_icon">
+            <span class="icon icon_fe_playlist"></span>
+        </span>
+        <span class="nav_text">
+            ${data[i].name}
+        </span>
+        </a>
+        </li>`;
+        AddToPlaylistPopupInfo += `<a href="javascript:void(0)" class="PlaylistOption" onclick="AddToPlaylistOK(${data[i].id})">${data[i].name}</a><br>`;
+    }
+    if (data.length == 0)
+        AddToPlaylistPopupInfo  = `You have no playlists!`;
+    document.getElementsByClassName('nav_playlist')[0].innerHTML += str;
+    document.getElementById('AddToPlaylistInfo').innerHTML = AddToPlaylistPopupInfo;
+}
+function getPlaylist(PlaylistID) {
+    console.log(PlaylistID);
+    sessionStorage['PlaylistID'] = PlaylistID;
+    window.location.href = "playlist.html";
+}
+// Returns the user id if logged in, -1 otherwise.
+function GetUserID() {
+    let userID = -1;
+    if (localStorage['User'] == undefined || localStorage['User'] == "") {
+        if (!(sessionStorage['User'] == undefined || sessionStorage['User'] == ""))
+            userID = JSON.parse(sessionStorage['User']).id;
+    }
+    else userID = JSON.parse(localStorage['User']).id;
+    return userID;
+}
+function CreatePlaylist() {
+    let UserID = GetUserID();
+    if (undefined == UserID || isNaN(UserID) || null == UserID || UserID < 1) {
+        openPopup("ERROR", 'red', 'Login first!');
+        return;
+    }
+    document.getElementById('CreatePlaylistPopup').style.display = 'flex';
+}
+function CreatePlaylistCancel() {
+    document.getElementById('CreatePlaylistPopup').style.display = 'none';
+}
+function CreatePlaylistOK() {
+    let val = document.getElementById('playlist-name').value;
+    let uID = GetUserID();
+    if (uID == null || uID < 1) return;
+    if (val == null || val == "") {
+        document.getElementById('playlist-name').style.border = '4px solid red';
+        return;
+    }
+    document.getElementById('playlist-name').style.border = '1px solid black';
+    let Playlist = {
+        "id": 0,
+        "name": val,
+        "userID": uID
+    };
+    const api = `${apiStart}/Playlists`;
+    ajaxCall("POST", api, JSON.stringify(Playlist), CreatePlaylistSCB, ECB);
+}
+function CreatePlaylistSCB(data) {
+    document.getElementById('CreatePlaylistPopup').style.display = 'none';
+    if (data.playlistID >= 1) {
+        sessionStorage['PlaylistID'] = data.playlistID;
+        window.location.href = 'playlist.html';
+    }
+}
+function AddToPlaylistCancel() {
+    document.getElementById('AddToPlaylistPopup').style.display = 'none';
+}
+function AddToPlaylistOK(pid) {
+    if (SongIDATP == undefined) return;
+    const api = `${apiStart}/Playlists/InsertSongToPlaylist`;
+    let SongInPlaylist = {
+        playlistID: pid,
+        songID: SongIDATP
+    };
+    ajaxCall("PUT", api, JSON.stringify(SongInPlaylist), AddToPlaylistSCB, AddToPlaylistECB);
+}
+function ATP(sid) {
+    if (!IsLoggedIn()) {
+        openPopup("ERROR", "red", "Login first!");
+        return;
+    }
+    document.getElementById('AddToPlaylistPopup').style.display = 'flex';
+    document.getElementById('AddedToPlaylistInfo').style.display = `none`;
+    SongIDATP = sid;
+}
+function AddToPlaylistSCB() {
+    let elem = document.getElementById('AddedToPlaylistInfo');
+    elem.innerHTML = `Added`;
+    elem.style.display = `block`;
+    elem.style.color = 'green';
+}
+function AddToPlaylistECB(e) {
+    let elem = document.getElementById('AddedToPlaylistInfo');
+    elem.innerHTML = e.responseJSON.message;
+    elem.style.display = `block`;
+    elem.style.color = 'red';
+}
+function AddCurrentPlayingSongToFavorites(SongID) {
+    if (!IsLoggedIn()) {
+        openPopup("ERROR", "red", "You're not logged in!");
+        return;
+    }
+    let UserID = GetUserID();
+    const api = `${apiStart}/Users/PostUserFavorite/UserID/${UserID}/SongID/${SongID}`;
+    ajaxCall("POST", api, "", AddCurrentPlayingSongToFavoritesSCB, ECB);
+  }
+  function AddCurrentPlayingSongToFavoritesSCB() {
+    let elem = document.getElementsByClassName('play_song_options')[0].children[0].children[1];
+    elem.querySelector('a').innerHTML = `<span class="song_optn_icon"><i class="ms_icon icon_fav"></i></span>Unfavourite`;
+    elem.setAttribute('onclick', 'DeleteCurrentPlayingSongFromFavorites()');
+  }
+  function DeleteCurrentPlayingSongFromFavorites() {
+    if (!IsLoggedIn()) {
+        openPopup("ERROR", "red", "You're not logged in!");
+        return;
+    }
+    let UserID = GetUserID();
+    let index = window.myPlaylist.current;
+    let tmpArr = window.myPlaylist.playlist[index].mp3.split('/');
+    let SongID = tmpArr[tmpArr.length - 1];
+    const api = `${apiStart}/Users/DeleteUserFavorite/UserID/${UserID}/SongID/${SongID}`;
+    ajaxCall("DELETE", api, "", DeleteCurrentPlayingSongFromFavoritesSCB, ECB);
+  }
+  function DeleteCurrentPlayingSongFromFavoritesSCB() {
+    let index = window.myPlaylist.current;
+    let tmpArr = window.myPlaylist.playlist[index].mp3.split('/');
+    let SongID = tmpArr[tmpArr.length - 1];
+    let elem = document.getElementsByClassName('play_song_options')[0].children[0].children[1];
+    elem.querySelector('a').innerHTML = `<span class="song_optn_icon"><i class="ms_icon icon_fav"></i></span>Add To Favourites`;
+    elem.setAttribute('onclick', `AddCurrentPlayingSongToFavorites(${SongID})`);
+  }

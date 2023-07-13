@@ -50,7 +50,27 @@
               <p id="PopupText">Hello, this is some example content in the popup!</p>
               <button class="PopupBTN" onclick="closePopup()">Close</button>
             </div>
-          </div>
+        </div>
+        <div class="PlaylistPopup" id="CreatePlaylistPopup" style="display:none;">
+            <div class="playlist-popup-inner">
+                <h2 id="CNPTitle">Create New Playlist</h2>
+                <input type="text" id="playlist-name" placeholder="Enter playlist name">
+                <br>
+                <a href="javascript:void(0);"><button onclick="CreatePlaylistOK()" class="ms_btn" id="CreatePlaylistBTN">Create</button></a>
+                <a href="javascript:void(0);"><button onclick="CreatePlaylistCancel()" class="ms_btn" id="CreatePlaylistBTN">Cancel</button></a>
+            </div>
+        </div>
+        <div class="PlaylistPopup" id="AddToPlaylistPopup" style="display:none;">
+            <div class="playlist-popup-inner" id="CPLWindow">
+                <h2 id="CPTitle">Choose Playlist</h2>
+                <div id="AddToPlaylistInfo">
+                    <a href="javascript:void(0)" class="PlaylistOption">Test</a>
+                    <br>
+                </div>
+                <a href="javascript:void(0);"><button onclick="AddToPlaylistCancel()" class="ms_btn" id="CreatePlaylistBTN">Cancel</button></a>
+                <p id="AddedToPlaylistInfo">Added To X</p>
+            </div>
+        </div>
         <!---Side Menu Start--->
         <div class="ms_sidemenu_wrapper">
             <div class="ms_nav_close">
@@ -566,7 +586,7 @@
                                     <li id="FavoriteFeat0"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                     <li id="AddToQFeat0"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                     <li id="DownloadFeat0"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
+                                    <li id="AddToPlaylistFeat0"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured0"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
                             </div>
@@ -601,7 +621,7 @@
                                     <li id="FavoriteFeat1"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                     <li id="AddToQFeat1"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                     <li id="DownloadFeat1"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
+                                    <li id="AddToPlaylistFeat1"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured1"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
                             </div>
@@ -636,7 +656,7 @@
                                     <li id="FavoriteFeat2"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                     <li id="AddToQFeat2"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                     <li id="DownloadFeat2"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
+                                    <li id="AddToPlaylistFeat2"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured2"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
                             </div>
@@ -671,7 +691,7 @@
                                     <li id="FavoriteFeat3"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                     <li id="AddToQFeat3"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                     <li id="DownloadFeat3"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
+                                    <li id="AddToPlaylistFeat3"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured3"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
                             </div>
@@ -706,7 +726,7 @@
                                     <li id="FavoriteFeat4"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                     <li id="AddToQFeat4"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                     <li id="DownloadFeat4"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
+                                    <li id="AddToPlaylistFeat4"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured4"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
                             </div>
@@ -742,7 +762,7 @@
                                     <li id="FavoriteFeat5"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                     <li id="AddToQFeat5"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                     <li id="DownloadFeat5"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
+                                    <li id="AddToPlaylistFeat5"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured5"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
                             </div>
@@ -777,7 +797,7 @@
                                     <li id="FavoriteFeat6"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                     <li id="AddToQFeat6"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                     <li id="DownloadFeat6"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
+                                    <li id="AddToPlaylistFeat6"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured6"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
                             </div>
@@ -822,7 +842,7 @@
                                     <li id="FavoriteFeat7"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                     <li id="AddToQFeat7"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                     <li id="DownloadFeat7"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
+                                    <li id="AddToPlaylistFeat7"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured7"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
                             </div>
@@ -857,7 +877,7 @@
                                     <li id="FavoriteFeat8"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                     <li id="AddToQFeat8"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                     <li id="DownloadFeat8"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
+                                    <li id="AddToPlaylistFeat8"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured8"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
                             </div>
@@ -892,7 +912,7 @@
                                     <li id="FavoriteFeat9"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                     <li id="AddToQFeat9"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                     <li id="DownloadFeat9"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
+                                    <li id="AddToPlaylistFeat9"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured9"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
                             </div>
@@ -928,7 +948,7 @@
                                     <li id="FavoriteFeat10"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                     <li id="AddToQFeat10"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                     <li id="DownloadFeat10"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
+                                    <li id="AddToPlaylistFeat10"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured10"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
                             </div>
@@ -963,7 +983,7 @@
                                     <li id="FavoriteFeat11"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                     <li id="AddToQFeat11"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                     <li id="DownloadFeat11"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
+                                    <li id="AddToPlaylistFeat11"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured11"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
                             </div>
@@ -998,7 +1018,7 @@
                                     <li id="FavoriteFeat12"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                     <li id="AddToQFeat12"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                     <li id="DownloadFeat12"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
+                                    <li id="AddToPlaylistFeat12"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured12"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
                             </div>
@@ -1033,7 +1053,7 @@
                                     <li id="FavoriteFeat13"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                     <li id="AddToQFeat13"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                     <li id="DownloadFeat13"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
+                                    <li id="AddToPlaylistFeat13"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured13"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
                             </div>
@@ -1068,7 +1088,7 @@
                                     <li id="FavoriteFeat14"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
                                     <li id="AddToQFeat14"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                                     <li id="DownloadFeat14"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-                                    <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
+                                    <li id="AddToPlaylistFeat14"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                                     <li id="LyricsFeatured14"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
                                 </ul>
                             </div>

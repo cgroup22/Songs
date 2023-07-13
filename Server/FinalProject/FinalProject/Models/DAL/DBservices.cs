@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Collections;
 using System.Xml.Linq;
+using System.Security.Cryptography;
 //using SendGrid;
 
 /// <summary>
@@ -408,6 +409,177 @@ public class DBservices
                 favorites.Add(res);
             }
             return favorites;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
+    public List<object> GetPlaylistSongs(int PlaylistID)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@PlaylistID", PlaylistID);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetSongsInPlaylist", con, paramDic);             // create the command
+
+        List<object> playlistSongs = new List<object>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                int SID = Convert.ToInt32(dataReader["SongID"]);
+                string name = dataReader["SongName"].ToString();
+                string SLength = dataReader["SongLength"].ToString();
+                if (SLength != null && SLength.Contains(' '))
+                    SLength = SLength.Substring(0, SLength.IndexOf(' '));
+                string PName = dataReader["PerformerName"].ToString();
+                string PImage = dataReader["PerformerImage"].ToString();
+                object res = new
+                {
+                    SongID = SID,
+                    SongName = name,
+                    Length = SLength,
+                    PerformerName = PName,
+                    PerformerImage = PImage
+                };
+                playlistSongs.Add(res);
+            }
+            return playlistSongs;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
+    public object GetPlaylistName(int PlaylistID)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@PlaylistID", PlaylistID);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetPlaylistName", con, paramDic);             // create the command
+
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                object res = new
+                {
+                    PlaylistName = dataReader["PlaylistName"].ToString()
+                };
+                return res;
+            }
+            throw new Exception("Playlist not found");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
+    public List<Playlist> GetUserPlaylists(int UserID)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@UserID", UserID);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetPlaylists", con, paramDic);             // create the command
+
+        List<Playlist> playlists = new List<Playlist>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                int PID = Convert.ToInt32(dataReader["PlaylistID"]);
+                string name = dataReader["PlaylistName"].ToString();
+                Playlist res = new Playlist(PID, name);
+                playlists.Add(res);
+            }
+            return playlists;
         }
         catch (Exception ex)
         {
@@ -830,6 +1002,145 @@ public class DBservices
         {
             // int numEffected = cmd.ExecuteNonQuery(); // execute the command
             int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+    public object Insert(Playlist p)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@UserID", p.UserID);
+        paramDic.Add("@PlaylistName", p.Name);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_CreateUserPlaylist", con, paramDic);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            // int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
+            return GetPlaylistIdentity();
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+    public object GetPlaylistIdentity()
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetPlaylistIDidentity", con, null);             // create the command
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                object res = new
+                {
+                    PlaylistID = Convert.ToInt32(dataReader["CurrentIdentity"])
+                };
+                return res;
+            }
+            throw new Exception("SERVER ERROR");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+    public int InsertSongToPlaylist(SongInPlaylist s)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@PlaylistID", s.PlaylistID);
+        paramDic.Add("@SongID", s.SongID);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_InsertSongToPlaylist", con, paramDic);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            // int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
             return numEffected;
         }
         catch (Exception ex)
@@ -1486,6 +1797,92 @@ public class DBservices
 
 
         cmd = CreateCommandWithStoredProcedure("Proj_SP_RemoveFromFavorites", con, paramDic);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            // int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+    public int DeleteSongFromPlaylist(int PlaylistID, int SongID)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@PlaylistID", PlaylistID);
+        paramDic.Add("@SongID", SongID);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_DeleteSongFromPlaylist", con, paramDic);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            // int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+    public int DeleteUserPlaylist(int UserID, int PlaylistID)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@PlaylistID", PlaylistID);
+        paramDic.Add("@UserID", UserID);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_DeleteUserPlaylist", con, paramDic);             // create the command
 
         try
         {

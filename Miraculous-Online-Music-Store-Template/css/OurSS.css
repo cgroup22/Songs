@@ -108,3 +108,48 @@ input[type="submit"] {
 #SearchBTN {
     border: 0;
 }
+/* New playlist popup styling */
+.PlaylistPopup {
+  position: fixed;
+  z-index: 2000;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(114, 74, 213, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.playlist-popup-inner {
+  background-color: white;
+  padding: 20px;
+  border-radius: 5px;
+  text-align: center;
+}
+#CNPTitle, #CPTitle {
+  font-size: 30px;
+}
+#CreatePlaylistBTN {
+  border:0;
+  cursor:pointer;
+  margin-top:8px;
+}
+#playlist-name {
+  border: 1px solid black;
+  border-radius: 4%;
+}
+.PlaylistOption {
+  font-size: 18px;
+  color:black;
+}
+#AddedToPlaylistInfo {
+  margin-top: 6px;
+  color:green;
+  font-size: 18px;
+  display:none;
+}
+#CPLWindow {
+  width: 25%;
+}

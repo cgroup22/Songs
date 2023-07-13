@@ -1,3 +1,29 @@
+// Called when the favorites page is loaded
+function FavLoaded() {
+    // Saves whether we want our queue to loop
+    IsLooped = false;
+    FavoriteTryLogin();
+    UpdateFavorites();
+    CheckAudioPlayer();
+
+    // Takes care of updating html elements on play and adding/removing songs from the queue.
+    $("#jquery_jplayer_1").bind($.jPlayer.event.play, function (event) {
+        let tmp = document.getElementById('FavoritesContainer');
+        let index = window.myPlaylist.current;
+        for (i of tmp.children) {
+            if (!i.classList.contains('album_list_name')) {
+                if (i.querySelector('.sNames').innerHTML === window.myPlaylist.playlist[index].title) {
+                    i.classList.add('play_active_song');
+                }
+                else if (i.classList.contains('play_active_song'))
+                    i.classList.remove('play_active_song');
+            }
+        }
+      });
+      $("#jquery_jplayer_1").bind($.jPlayer.event.setmedia, function (event) {
+        HideMoreOptions();
+      });
+}
 function FavoriteTryLogin() {
     if (!IsLoggedIn()) {
         // TODO
@@ -42,20 +68,20 @@ function UpdateFavSongs() {
                 <img src="images/svg/close.svg" alt=""></span></a></li>
     </ul>`;*/
     str += `<ul>
-        <li onclick='FavoritePlaySong(${i})'><a href="#"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
-        <li><a href="#">${FavoriteSongs[i].songName}</a></li>
-        <li><a href="#">${FavoriteSongs[i].performerName}</a></li>` +
+        <li onclick='FavoritePlaySong(${i})'><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
+        <li><a href="javascript:void(0)" class="sNames">${FavoriteSongs[i].songName}</a></li>
+        <li><a href="javascript:void(0)">${FavoriteSongs[i].performerName}</a></li>` +
         //<li class="text-center"><a href="javascript:void(0)">Free</a></li>
         `<li class="text-center"><a href="javascript:void(0)">${FavoriteSongs[i].length}</a></li>
         <li class="text-center ms_more_icon"><a href="javascript:;" onclick="ToggleMore(this)"><span class="ms_icon1 ms_active_icon"></span></a>
             <ul class="more_option SongMO" style="visibility:hidden;">` +
             `<li onclick="AddToQueueFav(${i})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
                 <li onclick="DownloadFav(${i})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-                <li><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
+                <li onclick="ATP(${FavoriteSongs[i].songID})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                 <li onclick="getLyrics(${FavoriteSongs[i].songID})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
             </ul>`+
         //<li style="text-align:center;"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download</a></li>
-        `<li class="text-center"><a href="#"><span class="ms_close" onclick="RemoveFromFavorites(${FavoriteSongs[i].songID})">
+        `<li class="text-center"><a href="javascript:void(0)"><span class="ms_close" onclick="RemoveFromFavorites(${FavoriteSongs[i].songID})">
                 <img src="images/svg/close.svg" alt=""></span></a></li>
     </ul>`;
         counter++;
@@ -105,13 +131,6 @@ function FavoritePlaySong(id) {
 }
 function AddToQueueFav(i) {
     AddToQueue(FavoriteSongs[i]);
-}
-function FavLoaded() {
-    // Saves whether we want our queue to loop
-    IsLooped = false;
-    FavoriteTryLogin();
-    UpdateFavorites();
-    CheckAudioPlayer();
 }
 function UnshiftToQueueAndPlay(Song) {
     let songToAdd = {

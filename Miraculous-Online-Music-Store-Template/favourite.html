@@ -56,6 +56,26 @@
               <button class="PopupBTN" onclick="closePopup()">Close</button>
             </div>
           </div>
+          <div class="PlaylistPopup" id="CreatePlaylistPopup" style="display:none;">
+              <div class="playlist-popup-inner">
+                  <h2 id="CNPTitle">Create New Playlist</h2>
+                  <input type="text" id="playlist-name" placeholder="Enter playlist name">
+                  <br>
+                  <a href="javascript:void(0);"><button onclick="CreatePlaylistOK()" class="ms_btn" id="CreatePlaylistBTN">Create</button></a>
+                  <a href="javascript:void(0);"><button onclick="CreatePlaylistCancel()" class="ms_btn" id="CreatePlaylistBTN">Cancel</button></a>
+              </div>
+          </div>
+          <div class="PlaylistPopup" id="AddToPlaylistPopup" style="display:none;">
+              <div class="playlist-popup-inner" id="CPLWindow">
+                  <h2 id="CPTitle">Choose Playlist</h2>
+                  <div id="AddToPlaylistInfo">
+                      <a href="javascript:void(0)" class="PlaylistOption">Test</a>
+                      <br>
+                  </div>
+                  <a href="javascript:void(0);"><button onclick="AddToPlaylistCancel()" class="ms_btn" id="CreatePlaylistBTN">Cancel</button></a>
+                  <p id="AddedToPlaylistInfo">Added To X</p>
+              </div>
+          </div>
         <!---Header--->
         <div class="ms_header">
             <div class="ms_top_left">
@@ -564,7 +584,7 @@
             <div class="ms_footer_logo">
                 <a href="index-2.html"><img src="images/open_logo.png" alt=""></a>
             </div>
-            <div class="ms_footer_inner" style="display:none;">
+            <div class="ms_footer_inner">
                 <div class="row">
                     <div class="col-lg-3 col-md-6">
                         <div class="footer_box">
