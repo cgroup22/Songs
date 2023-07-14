@@ -57,7 +57,7 @@ function UpdatePlaylistHTML() {
     str += `<ul>
         <li onclick='PlaylistPlaySong(${i})'><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
         <li><a href="javascript:void(0)" class="sNames">${PlaylistSongs[i].songName}</a></li>
-        <li><a href="javascript:void(0)">${PlaylistSongs[i].performerName}</a></li>` +
+        <li onclick="MoveToArtist(${PlaylistSongs[i].performerID})"><a href="javascript:void(0)">${PlaylistSongs[i].performerName}</a></li>` +
         `<li class="text-center"><a href="javascript:void(0)">${PlaylistSongs[i].length}</a></li>
         <li class="text-center ms_more_icon"><a href="javascript:;" onclick="ToggleMore(this)"><span class="ms_icon1 ms_active_icon"></span></a>
             <ul class="more_option SongMO" style="visibility:hidden;">` +

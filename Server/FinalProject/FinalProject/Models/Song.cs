@@ -77,10 +77,10 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.GetTop15(UserID);
         }
-        public static List<object> GetPerformerSongs(int PID)
+        public static List<object> GetPerformerSongs(int PID, int UserID)
         {
             DBservices db = new DBservices();
-            return db.GetPerformerSongs(PID);
+            return db.GetPerformerSongs(PID, UserID);
         }
         public static string GetSongLyrics(int SID)
         {

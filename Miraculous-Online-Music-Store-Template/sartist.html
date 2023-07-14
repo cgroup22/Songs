@@ -8,7 +8,7 @@
 <!-- Begin Head -->
 
 <head>
-    <title>Search Results</title>
+    <title>Artist Information</title>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta name="description" content="Music">
@@ -28,7 +28,7 @@
     <link rel="shortcut icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" type="text/css" href="css/OurSS.css">
 </head>
-<body onload="SearchLoaded()">
+<body onload="ArtLoaded()">
 	<!----Loader---->
 	<div class="ms_inner_loader">
 		<div class="ms_loader">
@@ -57,33 +57,33 @@
             </div>
           </div>
           <div class="PlaylistPopup" id="CreatePlaylistPopup" style="display:none;">
-            <div class="playlist-popup-inner">
-                <h2 id="CNPTitle">Create New Playlist</h2>
-                <input type="text" id="playlist-name" placeholder="Enter playlist name">
-                <br>
-                <a href="javascript:void(0);"><button onclick="CreatePlaylistOK()" class="ms_btn" id="CreatePlaylistBTN">Create</button></a>
-                <a href="javascript:void(0);"><button onclick="CreatePlaylistCancel()" class="ms_btn" id="CreatePlaylistBTN">Cancel</button></a>
-            </div>
-        </div>
-        <div class="PlaylistPopup" id="AddToPlaylistPopup" style="display:none;">
-            <div class="playlist-popup-inner" id="CPLWindow">
-                <h2 id="CPTitle">Choose Playlist</h2>
-                <div id="AddToPlaylistInfo">
-                    <a href="javascript:void(0)" class="PlaylistOption">Test</a>
-                    <br>
-                </div>
-                <a href="javascript:void(0);"><button onclick="AddToPlaylistCancel()" class="ms_btn" id="CreatePlaylistBTN">Cancel</button></a>
-                <p id="AddedToPlaylistInfo">Added To X</p>
-            </div>
-        </div>
+              <div class="playlist-popup-inner">
+                  <h2 id="CNPTitle">Create New Playlist</h2>
+                  <input type="text" id="playlist-name" placeholder="Enter playlist name">
+                  <br>
+                  <a href="javascript:void(0);"><button onclick="CreatePlaylistOK()" class="ms_btn" id="CreatePlaylistBTN">Create</button></a>
+                  <a href="javascript:void(0);"><button onclick="CreatePlaylistCancel()" class="ms_btn" id="CreatePlaylistBTN">Cancel</button></a>
+              </div>
+          </div>
+          <div class="PlaylistPopup" id="AddToPlaylistPopup" style="display:none;">
+              <div class="playlist-popup-inner" id="CPLWindow">
+                  <h2 id="CPTitle">Choose Playlist</h2>
+                  <div id="AddToPlaylistInfo">
+                      <a href="javascript:void(0)" class="PlaylistOption">Test</a>
+                      <br>
+                  </div>
+                  <a href="javascript:void(0);"><button onclick="AddToPlaylistCancel()" class="ms_btn" id="CreatePlaylistBTN">Cancel</button></a>
+                  <p id="AddedToPlaylistInfo">Added To X</p>
+              </div>
+          </div>
         <!---Header--->
         <div class="ms_header">
             <div class="ms_top_left">
                 <div class="ms_top_search">
                     <form id="SearchForm">
-                        <input type="text" class="form-control" placeholder="Search Music Here.." id="SearchBar">
-                        <button class="search_icon" onclick="SearchQuery()" id="SearchBTN">
-						    <img src="images/svg/search.svg" alt="">
+                    <input type="text" class="form-control" placeholder="Search Music Here.." id="SearchBar">
+                    <button class="search_icon" onclick="SearchQuery()" id="SearchBTN">
+							<img src="images/svg/search.svg" alt="">
 						</button>
                     </form>
                 </div>
@@ -240,25 +240,30 @@
         <!----Album Single Section Start---->
         <!---Main Content Start--->
         <div class="ms_content_wrapper padder_top80">
+            <div class="ms_heading" style="text-align:center; margin-top: 15px;">
+                <h1 id="ArtistName">Ariana Grande</h1>
+            </div>
+            <div id="TopArtistPage" class="ms_rcnt_box_img">
+                <img src="https://ichef.bbci.co.uk/news/976/cpsprodpb/17638/production/_124800859_gettyimages-817514614.jpg.webp" id="ArtistImage">
+                <p id="ArtistSummary">Summary</p>
+            </div><br>
+            <p id="TotalStreams" style="display:none;">Total Streams: </p>
             <!----Free Download Css Start---->
             <div class="ms_free_download ms_purchase_wrapper">
                 <div class="ms_heading">
-                    <h1 id="ResultsTitle">Results For ""</h1>
-                </div>
-                <div class="ms_heading">
-                    <h1>Songs</h1>
+                    <h1 id="PageTitle">Songs</h1>
                 </div>
 				<div class="album_inner_list">
-					<div class="album_list_wrapper" id="SearchSongsContainer">
+					<div class="album_list_wrapper" id="FavoritesContainer">
 						<ul class="album_list_name">
 							<li>#</li>
 							<li>Song Title</li>
 							<li>Artist</li>
 							<!--<li class="text-center">price</li>-->
 							<li class="text-center">Duration</li>
-							<li class="text-center">More</li>
+							<li class="text-center">Add To Queue</li>
 							<!--<li class="text-center">Download</li>-->
-							<li class="text-center">Streams</li>
+							<!--<li class="text-center">remove</li>-->
 						</ul>
 						<!--<ul>
 							<li><a href="#"><span class="play_no">01</span><span class="play_hover"></span></a></li>
@@ -293,85 +298,6 @@
 						<!--<div class="ms_view_more">
 							<a href="#" class="ms_btn">view more</a>
 						</div>-->
-					</div>
-				</div>
-                <div class="ms_heading" style="margin-top:50px;">
-                    <h1>Artists</h1>
-                </div>
-				<div class="album_inner_list">
-					<div class="album_list_wrapper" id="SearchArtistsContainer">
-						<ul class="album_list_name">
-							<li>#</li>
-							<li>Name</li>
-							<!--<li class="text-center">price</li>-->
-							<li class="text-center">Add To Queue</li>
-							<!--<li class="text-center">Download</li>-->
-						</ul>
-						<!--<ul>
-							<li><a href="#"><span class="play_no">01</span><span class="play_hover"></span></a></li>
-							<li><a href="#">Bloodlust</a></li>
-							<li><a href="#">Dream Your Moments</a></li>
-							<li class="text-center"><a href="javascript:void(0)">Free</a></li>
-							<li class="text-center"><a href="javascript:void(0)">5:26</a></li>
-							<li class="text-center"><a href="javascript:void(0)"><span class="ms_icon1 ms_fav_icon"></span></a></li>
-							<li class="text-center ms_more_icon"><a href="javascript:;"><span class="ms_icon1 ms_active_icon"></span></a>
-								<ul class="more_option">
-									<li><a href="#"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
-									<li><a href="#"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
-									<li><a href="#"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-									<li><a href="#"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
-									<li><a href="#"><span class="opt_icon"><span class="icon icon_share"></span></span>Share</a></li>
-								</ul>
-							</li>
-							<li class="text-center"><a href="#"><span class="ms_close">
-									<img src="images/svg/close.svg" alt=""></span></a></li>
-						</ul>
-                        <ul>
-							<li><a href="#"><span class="play_no">01</span><span class="play_hover"></span></a></li>
-							<li><a href="#">Bloodlust</a></li>
-							<li><a href="#">Dream Your Moments</a></li>
-							<li class="text-center"><a href="javascript:void(0)">Free</a></li>
-							<li class="text-center"><a href="javascript:void(0)">5:26</a></li>
-                            <li style="text-align:center;"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add</a></li>
-							<li style="text-align:center;"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download</a></li>
-							<li class="text-center"><a href="#"><span class="ms_close">
-									<img src="images/svg/close.svg" alt=""></span></a></li>
-						</ul>-->
-						<!--<div class="ms_view_more">
-							<a href="#" class="ms_btn">view more</a>
-						</div>-->
-					</div>
-				</div>
-                <div class="ms_heading" style="margin-top:50px;">
-                    <h1>By Genre</h1>
-                </div>
-				<div class="album_inner_list">
-					<div class="album_list_wrapper" id="SearchGenreContainer">
-						<ul class="album_list_name">
-							<li>#</li>
-							<li>Song Title</li>
-							<li>Artist</li>
-							<li class="text-center">Duration</li>
-							<li class="text-center">Add To Queue</li>
-							<li class="text-center">Genre</li>
-						</ul>
-					</div>
-				</div>
-                <div class="ms_heading" style="margin-top:50px;">
-                    <h1 id="SongContains">Songs That Contains ""</h1>
-                </div>
-				<div class="album_inner_list">
-					<div class="album_list_wrapper" id="SearchLyricsContainer">
-						<ul class="album_list_name">
-							<li>#</li>
-							<li>Song Title</li>
-							<li>Artist</li>
-							<!--<li class="text-center">price</li>-->
-							<li class="text-center">Duration</li>
-							<li class="text-center">Add To Queue</li>
-							<!--<li class="text-center">Download</li>-->
-							<li class="text-center">Streams</li>
-						</ul>
 					</div>
 				</div>
             </div>
@@ -666,7 +592,7 @@
             <div class="ms_footer_logo">
                 <a href="index.html"><img src="images/open_logo.png" alt=""></a>
             </div>
-            <div class="ms_footer_inner" style="display:none;">
+            <div class="ms_footer_inner">
                 <div class="row">
                     <div class="col-lg-3 col-md-6">
                         <div class="footer_box">
@@ -871,37 +797,37 @@
                             <img src="images/register_img.png" alt="" class="img-fluid" />
                         </div>
                         <form id="RegisterForm">
-                        <div class="ms_register_form">
-                            <h2>Register / Sign Up</h2>
-                            <div class="form-group">
-                                <input type="text" placeholder="Enter Your Name" class="form-control" id="RegisterName" required>
-                                <span class="form_icon">
-							<i class="fa_icon form-user" aria-hidden="true"></i>
-							</span>
+                            <div class="ms_register_form">
+                                <h2>Register / Sign Up</h2>
+                                <div class="form-group">
+                                    <input type="text" placeholder="Enter Your Name" class="form-control" id="RegisterName" required>
+                                    <span class="form_icon">
+                                <i class="fa_icon form-user" aria-hidden="true"></i>
+                                </span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" placeholder="Enter Your Email" class="form-control" id="RegisterEmail" required>
+                                    <span class="form_icon">
+                                <i class="fa_icon form-envelope" aria-hidden="true"></i>
+                            </span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" placeholder="Enter Password" class="form-control" id="RegisterPassword" required minlength="3">
+                                    <span class="form_icon">
+                            <i class="fa_icon form-lock" aria-hidden="true"></i>
+                            </span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" placeholder="Confirm Password" class="form-control" id="RegisterConfirmPassword" required minlength="3">
+                                    <span class="form_icon">
+                            <i class=" fa_icon form-lock" aria-hidden="true"></i>
+                            </span>
+                                </div>
+                                <input type="submit" class="ms_btn" value="register now">
+                                <p>Already Have An Account? <a href="#myModal1" data-toggle="modal" class="ms_modal hideCurrentModel">login here</a></p>
+                                <p id="RegisterErrorMSG"></p>
                             </div>
-                            <div class="form-group">
-                                <input type="text" placeholder="Enter Your Email" class="form-control" id="RegisterEmail" required>
-                                <span class="form_icon">
-							<i class="fa_icon form-envelope" aria-hidden="true"></i>
-						</span>
-                            </div>
-                            <div class="form-group">
-                                <input type="password" placeholder="Enter Password" class="form-control" id="RegisterPassword" required minlength="3">
-                                <span class="form_icon">
-						<i class="fa_icon form-lock" aria-hidden="true"></i>
-						</span>
-                            </div>
-                            <div class="form-group">
-                                <input type="password" placeholder="Confirm Password" class="form-control" id="RegisterConfirmPassword" required minlength="3">
-                                <span class="form_icon">
-						<i class=" fa_icon form-lock" aria-hidden="true"></i>
-						</span>
-                            </div>
-                            <input type="submit" class="ms_btn" value="register now">
-                            <p>Already Have An Account? <a href="#myModal1" data-toggle="modal" class="ms_modal hideCurrentModel">login here</a></p>
-                            <p id="RegisterErrorMSG"></p>
-                        </div>
-                    </form>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -919,34 +845,34 @@
                             <img src="images/register_img.png" alt="" class="img-fluid" />
                         </div>
                         <form id="LoginForm">
-                        <div class="ms_register_form">
-                            <h2>login / Sign in</h2>
-                            <div class="form-group">
-                                <input type="text" placeholder="Enter Your Email" class="form-control" id="LoginEmail" required>
-                                <span class="form_icon">
-							<i class="fa_icon form-envelope" aria-hidden="true"></i>
-						</span>
+                            <div class="ms_register_form">
+                                <h2>login / Sign in</h2>
+                                <div class="form-group">
+                                    <input type="text" placeholder="Enter Your Email" class="form-control" id="LoginEmail" required>
+                                    <span class="form_icon">
+                                <i class="fa_icon form-envelope" aria-hidden="true"></i>
+                            </span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" placeholder="Enter Password" id="LoginPassword" class="form-control" required minlength="3">
+                                    <span class="form_icon">
+                            <i class="fa_icon form-lock" aria-hidden="true"></i>
+                            </span>
+                                </div>
+                                <div class="remember_checkbox">
+                                    <label>Keep me signed in
+                                <input type="checkbox" id="KeepMeSignedInCheckBox">
+                                <span class="checkmark"></span>
+                            </label>
+                                </div>
+                                <input type="submit" href="profile.html" class="ms_btn" target="_blank" value="login now">
+                                <div class="popup_forgot">
+                                    <a href="#">Forgot Password?</a>
+                                </div>
+                                <p>Don't Have An Account? <a href="#myModal" data-toggle="modal" class="ms_modal1 hideCurrentModel">register here</a></p>
+                                <p id="LoginErrorMSG"></p>
                             </div>
-                            <div class="form-group">
-                                <input type="password" placeholder="Enter Password" id="LoginPassword" class="form-control" required minlength="3">
-                                <span class="form_icon">
-						<i class="fa_icon form-lock" aria-hidden="true"></i>
-						</span>
-                            </div>
-                            <div class="remember_checkbox">
-                                <label>Keep me signed in
-							<input type="checkbox" id="KeepMeSignedInCheckBox">
-							<span class="checkmark"></span>
-						</label>
-                            </div>
-                            <input type="submit" href="profile.html" class="ms_btn" target="_blank" value="login now">
-                            <div class="popup_forgot">
-                                <a href="#">Forgot Password?</a>
-                            </div>
-                            <p>Don't Have An Account? <a href="#myModal" data-toggle="modal" class="ms_modal1 hideCurrentModel">register here</a></p>
-                            <p id="LoginErrorMSG"></p>
-                        </div>
-                        </form>
+                            </form>
                     </div>
                 </div>
             </div>
@@ -1111,9 +1037,8 @@
     <script type="text/javascript" src="js/custom.js"></script>
     <script src="js/ajaxCalls.js"></script>
     <script type="text/javascript" src="js/GeneralJS.js"></script>
-    <script type="text/javascript" src="js/FavoritesJS.js"></script>
-    <script type="text/javascript" src="js/SearchJS.js"></script>
     <script type="text/javascript" src="js/Login.js"></script>
+    <script type="text/javascript" src="js/sartist.js"></script>
 </body>
 
 </html>

@@ -142,6 +142,59 @@ public class DBservices
             }
         }
     }
+    public object GetTotalStreamsOfArtist(int PerformerID)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@PerformerID", PerformerID);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetTotalStreamsOfArtist", con, paramDic);             // create the command
+
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                object res = new
+                {
+                    TotalPlays = Convert.ToInt32(dataReader["TotalPlays"])
+                };
+                return res;
+            }
+            throw new ArgumentException("Performer doesn't exist");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
     // User clicked verify, checks the token and timestamp.
     public int ValidateUser(string email, string token)
     {
@@ -273,6 +326,7 @@ public class DBservices
             while (dataReader.Read())
             {
                 int SongID = Convert.ToInt32(dataReader["SongID"]);
+                int PerformerID = Convert.ToInt32(dataReader["PerformerID"]);
                 string SName = dataReader["SongName"].ToString();
                 string PName = dataReader["PerformerName"].ToString();
                 string PImage = dataReader["PerformerImage"].ToString();
@@ -282,7 +336,7 @@ public class DBservices
                 if (SLength != null && SLength.Contains(' '))
                     SLength = SLength.Substring(0, SLength.IndexOf(' '));
                 int InFav = Convert.ToInt32(dataReader["InFav"]);
-                object s = new { SongID = SongID, SongName = SName, PerformerName = PName,
+                object s = new { SongID = SongID, SongName = SName, PerformerName = PName, PerformerID = PerformerID,
                 PerformerImage = PImage, NumOfPlays = NumOfPlays, GenreName = GName, SongLength = SLength, IsInFav = InFav };
                 songs.Add(s);
             }
@@ -392,6 +446,7 @@ public class DBservices
             while (dataReader.Read())
             {
                 int SID = Convert.ToInt32(dataReader["SongID"]);
+                int PID = Convert.ToInt32(dataReader["PerformerID"]);
                 string name = dataReader["SongName"].ToString();
                 string SLength = dataReader["SongLength"].ToString();
                 if (SLength != null && SLength.Contains(' '))
@@ -404,7 +459,8 @@ public class DBservices
                     SongName = name,
                     Length = SLength,
                     PerformerName = PName,
-                    PerformerImage = PImage
+                    PerformerImage = PImage,
+                    PerformerID = PID
                 };
                 favorites.Add(res);
             }
@@ -463,13 +519,15 @@ public class DBservices
                     SLength = SLength.Substring(0, SLength.IndexOf(' '));
                 string PName = dataReader["PerformerName"].ToString();
                 string PImage = dataReader["PerformerImage"].ToString();
+                int PEID = Convert.ToInt32(dataReader["PerformerID"]);
                 object res = new
                 {
                     SongID = SID,
                     SongName = name,
                     Length = SLength,
                     PerformerName = PName,
-                    PerformerImage = PImage
+                    PerformerImage = PImage,
+                    PerformerID = PEID
                 };
                 playlistSongs.Add(res);
             }
@@ -732,7 +790,7 @@ public class DBservices
 
     }
 
-    public List<object> GetPerformerSongs(int PID)
+    public List<object> GetPerformerSongs(int PID, int UserID)
     {
 
         SqlConnection con;
@@ -750,6 +808,7 @@ public class DBservices
 
         Dictionary<string, object> paramDic = new Dictionary<string, object>();
         paramDic.Add("@PerformerID", PID);
+        paramDic.Add("@UserID", UserID);
         cmd = CreateCommandWithStoredProcedure("Proj_SP_GetPerformerSongs", con, paramDic);             // create the command
 
 
@@ -765,12 +824,18 @@ public class DBservices
                 string PName = dataReader["PerformerName"].ToString();
                 string PImage = dataReader["PerformerImage"].ToString();
                 string SName = dataReader["SongName"].ToString();
+                string SLength = dataReader["SongLength"].ToString();
+                if (SLength != null && SLength.Contains(' '))
+                    SLength = SLength.Substring(0, SLength.IndexOf(' '));
+                int IsInFav = Convert.ToInt32(dataReader["InFav"]);
                 object s = new
                 {
                     SongID = SID,
                     PerformerName = PName,
                     PerformerImage = PImage,
-                    SongName = SName
+                    SongName = SName,
+                    SongLength = SLength,
+                    IsInFavorites = IsInFav
                 };
                 songs.Add(s);
             }

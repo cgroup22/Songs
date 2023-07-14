@@ -59,12 +59,12 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "Server error " + e.Message });
             }
         }
-        [HttpGet("GetPerformerSongs/PerformerID/{PerformerID}")]
-        public IActionResult GetPerformerSongs(int PerformerID)
+        [HttpGet("GetPerformerSongs/PerformerID/{PerformerID}/UserID/{UserID}")]
+        public IActionResult GetPerformerSongs(int PerformerID, int UserID)
         {
             try
             {
-                return Ok(Song.GetPerformerSongs(PerformerID));
+                return Ok(Song.GetPerformerSongs(PerformerID, UserID));
             }
             catch (Exception e)
             {

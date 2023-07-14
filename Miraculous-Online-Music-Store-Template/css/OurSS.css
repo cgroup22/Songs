@@ -153,3 +153,22 @@ input[type="submit"] {
 #CPLWindow {
   width: 25%;
 }
+#TopArtistPage {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+#ArtistSummary, #TotalStreams {
+  color:white;
+}
+#ArtistImage {
+  margin-right: 10px;
+  width: 20%;
+  height: 20%;
+}
+.ms_heading h1:after {
+  left: -20px;
+}
+#TotalStreams {
+  text-align:left;
+}

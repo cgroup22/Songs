@@ -69,8 +69,8 @@ function UpdateFavSongs() {
     </ul>`;*/
     str += `<ul>
         <li onclick='FavoritePlaySong(${i})'><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
-        <li><a href="javascript:void(0)" class="sNames">${FavoriteSongs[i].songName}</a></li>
-        <li><a href="javascript:void(0)">${FavoriteSongs[i].performerName}</a></li>` +
+        <li onclick="getLyrics(${FavoriteSongs[i].songID})"><a href="javascript:void(0)" class="sNames">${FavoriteSongs[i].songName}</a></li>
+        <li onclick="MoveToArtist(${FavoriteSongs[i].performerID})"><a href="javascript:void(0)">${FavoriteSongs[i].performerName}</a></li>` +
         //<li class="text-center"><a href="javascript:void(0)">Free</a></li>
         `<li class="text-center"><a href="javascript:void(0)">${FavoriteSongs[i].length}</a></li>
         <li class="text-center ms_more_icon"><a href="javascript:;" onclick="ToggleMore(this)"><span class="ms_icon1 ms_active_icon"></span></a>
@@ -131,33 +131,6 @@ function FavoritePlaySong(id) {
 }
 function AddToQueueFav(i) {
     AddToQueue(FavoriteSongs[i]);
-}
-function UnshiftToQueueAndPlay(Song) {
-    let songToAdd = {
-        image: Song.performerImage,
-        title: Song.songName,
-        artist: Song.performerName,
-        mp3: `${apiStart}/Songs/GetSongByID/SongID/${Song.songID}`,
-        oga: `${apiStart}/Songs/GetSongByID/SongID/${Song.songID}`,
-		option : window.myPlayListOtion
-    };
-    if(IsSongInQueueByNameAndArtist(Song.performerName, Song.songName)) {
-        for (i in window.myPlaylist.playlist) {
-            if (window.myPlaylist.playlist[i].title === songToAdd.title && window.myPlaylist.playlist[i].artist == songToAdd.artist) {
-                window.myPlaylist.playlist.splice(parseInt(i), 1);
-                window.myPlaylist.playlist.unshift(songToAdd);
-                window.myPlaylist.original = window.myPlaylist.playlist;
-                window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
-                PlayFirstInQueue();
-                break;
-            }
-        }
-    } else {
-        window.myPlaylist.playlist.unshift(songToAdd);
-        window.myPlaylist.original.unshift(songToAdd);
-        window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
-        PlayFirstInQueue();
-    }
 }
 function DownloadFav(i) {
     Download(FavoriteSongs[i].songID, FavoriteSongs[i].songName + " by " + FavoriteSongs[i].performerName + ".mp3");

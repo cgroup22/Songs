@@ -405,3 +405,48 @@ function AddCurrentPlayingSongToFavorites(SongID) {
     elem.querySelector('a').innerHTML = `<span class="song_optn_icon"><i class="ms_icon icon_fav"></i></span>Add To Favourites`;
     elem.setAttribute('onclick', `AddCurrentPlayingSongToFavorites(${SongID})`);
   }
+  function LoginToFavorite() {
+    openPopup("ERROR", "red", "Log in to add songs to your favorites!");
+  }
+  function MoveToArtist(id) {
+    if (typeof id != "number" || id < 1) return;
+    let Artist = {
+        id: id
+    };
+    sessionStorage['Artist'] = JSON.stringify(Artist);
+    window.location.href = 'sartist.html';
+}
+function UnshiftToQueueAndPlay(Song) {
+    let songToAdd = {
+        image: Song.performerImage,
+        title: Song.songName,
+        artist: Song.performerName,
+        mp3: `${apiStart}/Songs/GetSongByID/SongID/${Song.songID}`,
+        oga: `${apiStart}/Songs/GetSongByID/SongID/${Song.songID}`,
+		option : window.myPlayListOtion
+    };
+    if(IsSongInQueueByNameAndArtist(Song.performerName, Song.songName)) {
+        for (i in window.myPlaylist.playlist) {
+            if (window.myPlaylist.playlist[i].title === songToAdd.title && window.myPlaylist.playlist[i].artist == songToAdd.artist) {
+                window.myPlaylist.playlist.splice(parseInt(i), 1);
+                window.myPlaylist.playlist.unshift(songToAdd);
+                window.myPlaylist.original = window.myPlaylist.playlist;
+                window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
+                PlayFirstInQueue();
+                break;
+            }
+        }
+    } else {
+        window.myPlaylist.playlist.unshift(songToAdd);
+        window.myPlaylist.original.unshift(songToAdd);
+        window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
+        PlayFirstInQueue();
+    }
+}
+function MoveToFavorites() {
+    if (!IsLoggedIn()) {
+        openPopup('ERROR', 'red', 'Login first!');
+        return;
+    }
+    window.location.href = 'favourite.html';
+}

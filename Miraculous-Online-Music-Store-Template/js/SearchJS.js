@@ -71,7 +71,7 @@ function SearchSCB(data) {
             str += `<ul>
         <li onclick='SearchAddToQueue(${i})'><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
         <li onclick="getLyrics(${data[i].songID})"><a href="javascript:void(0)" class="sNames">${data[i].songName}</a></li>
-        <li><a href="javascript:void(0)">${data[i].performerName}</a></li>` +
+        <li onclick="MoveToArtist(${data[i].performerID})"><a href="javascript:void(0)">${data[i].performerName}</a></li>` +
         //<li class="text-center"><a href="javascript:void(0)">Free</a></li>
         `<li class="text-center"><a href="javascript:void(0)">${data[i].length}</a></li>
         `+`<li class="text-center ms_more_icon"><a href="javascript:;" onclick="ToggleMore(this)"><span class="ms_icon1 ms_active_icon"></span></a>
@@ -101,8 +101,8 @@ function SearchSCB(data) {
         if (data[i].performerName.toLowerCase().includes(query.toLowerCase()) && !Artists.includes(data[i].performerName.toLowerCase())) {
             Artists.unshift(data[i].performerName.toLowerCase());
             ArtistsSTR += `<ul>
-            <li onclick='PlayArtistFromSearch(${data[i].performerID})'><a href="#"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
-            <li><a href="javascript:void(0)">${data[i].performerName}</a></li><li style="text-align:center;" onclick="AddArtistToQueue(${data[i].performerID})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add</a></li>
+            <li onclick='PlayArtistFromSearch(${data[i].performerID})'><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
+            <li onclick="MoveToArtist(${data[i].performerID})"><a href="javascript:void(0)">${data[i].performerName}</a></li><li style="text-align:center;" onclick="AddArtistToQueue(${data[i].performerID})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add</a></li>
             </ul>`;
             counter++;
         }
@@ -115,7 +115,7 @@ function SearchSCB(data) {
             GenreSearch += `<ul>
             <li onclick='SearchAddToQueue(${i})'><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
             <li onclick="getLyrics(${data[i].songID})"><a href="javascript:void(0)" class="sNames">${data[i].songName}</a></li>
-            <li><a href="javascript:void(0)">${data[i].performerName}</a></li>` +
+            <li onclick="MoveToArtist(${data[i].performerID})"><a href="javascript:void(0)">${data[i].performerName}</a></li>` +
             //<li class="text-center"><a href="javascript:void(0)">Free</a></li>
             `<li class="text-center"><a href="javascript:void(0)">${data[i].length}</a></li>
             `+`<li class="text-center ms_more_icon"><a href="javascript:;" onclick="ToggleMore(this)"><span class="ms_icon1 ms_active_icon"></span></a>
@@ -145,7 +145,7 @@ function SearchSCB(data) {
             ContainsQuery += `<ul>
             <li onclick='SearchAddToQueue(${i})'><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
             <li onclick="getLyrics(${data[i].songID})"><a href="javascript:void(0)" class="sNames">${data[i].songName}</a></li>
-            <li><a href="javascript:void(0)">${data[i].performerName}</a></li>` +
+            <li onclick="MoveToArtist(${data[i].performerID})"><a href="javascript:void(0)">${data[i].performerName}</a></li>` +
             //<li class="text-center"><a href="javascript:void(0)">Free</a></li>
             `<li class="text-center"><a href="javascript:void(0)">${data[i].length}</a></li>
             <li class="text-center ms_more_icon"><a href="javascript:;" onclick="ToggleMore(this)"><span class="ms_icon1 ms_active_icon"></span></a>
@@ -175,7 +175,8 @@ function AddToQueueSearch(i) {
     AddToQueue(SearchedResults[i]);
 }
 function PlayArtistFromSearch(PID) {
-    const api = `${apiStart}/Songs/GetPerformerSongs/PerformerID/${PID}`;
+    let UserID = GetUserID();
+    const api = `${apiStart}/Songs/GetPerformerSongs/PerformerID/${PID}/UserID/${UserID}`;
     ajaxCall("GET", api, "", SearchPlayPerformerSongsSCB, ECB);
 }
 // Plays all of the songs of a specific artist, also saves them to the queue.
@@ -203,7 +204,8 @@ function SearchPlayPerformerSongsSCB(data) {
     PlayFirstInQueue();
 }
 function AddArtistToQueue(PID) {
-    const api = `${apiStart}/Songs/GetPerformerSongs/PerformerID/${PID}`;
+    let UserID = GetUserID();
+    const api = `${apiStart}/Songs/GetPerformerSongs/PerformerID/${PID}/UserID/${UserID}`;
     ajaxCall("GET", api, "", SearchAddArtistToQueueSCB, ECB);
 }
 // Plays all of the songs of a specific artist, also saves them to the queue.
@@ -249,9 +251,6 @@ function SearchAddSongToFavorites(SongID, elem) {
     tmpElem.querySelector('a').innerHTML = `<span class="opt_icon"><span class="icon icon_fav"></span></span>Unfavorite`;
     // console.log(tmpElem)
     tmpElem.setAttribute('onclick', `SearchDeleteSongFromFavorites(${tmpElem.getAttribute('SongID')}, this)`);
-  }
-  function LoginToFavorite() {
-    openPopup("ERROR", "red", "Log in to add songs to your favorites!");
   }
   function SearchDeleteSongFromFavorites(id, elem) {
     let UserID = -1;

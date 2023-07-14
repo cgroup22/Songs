@@ -128,6 +128,7 @@ function UpdateTop15SCB(data) {
         names.querySelector('a').innerHTML = data[i].songName;
         names.querySelector('a').setAttribute(`onclick`, `getLyrics(${data[i].songID})`);
         names.querySelector('p').innerHTML = data[i].performerName;
+        names.querySelector('p').setAttribute('onclick', `MoveToArtist(${data[i].performerID})`);
     }
     //console.log(x[0]);
 }
@@ -432,7 +433,8 @@ function PlayGenreSCB(data) {
   }
   function PlayArtist(PID) {
       // console.log(PID)
-      const api = `${apiStart}/Songs/GetPerformerSongs/PerformerID/${PID}`;
+      let UserID = GetUserID();
+      const api = `${apiStart}/Songs/GetPerformerSongs/PerformerID/${PID}/UserID/${UserID}`;
       ajaxCall("GET", api, "", PlayPerformerSongsSCB, ECB);
       // TODO: play artist's first song and save other songs to the queue
   }
