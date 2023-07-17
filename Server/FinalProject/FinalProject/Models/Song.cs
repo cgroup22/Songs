@@ -113,5 +113,15 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.Search(query, UserID);
         }
+        public static Dictionary<string, object> GetRandomSong()
+        {
+            DBservices db = new DBservices();
+            return db.GetRandomSong();
+        }
+        public static List<string> Get3RandomReleaseYear(int ReleaseYearToIgnore)
+        {
+            DBservices db = new DBservices();
+            return db.Get3RandomReleaseYear(ReleaseYearToIgnore);
+        }
     }
 }

@@ -172,3 +172,8 @@ input[type="submit"] {
 #TotalStreams {
   text-align:left;
 }
+#TakeQuizBTN {
+  color:white;
+  padding:3px;
+  width:150px;
+}

@@ -96,6 +96,7 @@ function UpdateArtist() {
 }
 function UpdateArtistSCB(data) {
     if (data.length == 0) return;
+    document.title = `${data[0].performerName}'s Information`;
     GetArtistInfoFromLastFM(data[0].performerName);
     document.getElementById('ArtistName').innerHTML = data[0].performerName;
     document.getElementById('TopArtistPage').querySelector('img').src = data[0].performerImage;
@@ -124,7 +125,7 @@ function UpdateArtistSongs() {
             str += `<li onclick="ArtistAddSongToFavorites(${ArtistSongs[i].songID}, this)" class="text-center"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>`;
         }
         else if (IsLoggedIn() && ArtistSongs[i].isInFavorites == 1) // Unfavorite
-            str += `<li onclick="ArtistDeleteSongFromFavorites(${ArtistSongs[i].songID}, this)"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Unfavorite</a></li>`;
+            str += `<li onclick="ArtistDeleteSongFromFavorites(${ArtistSongs[i].songID}, this)" class="text-center"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Unfavorite</a></li>`;
         else str += `<li onclick="LoginToFavorite()" class="text-center"><a href="javascript:void(0)"><span class="opt_icon text-center"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>`;
         //<li style="text-align:center;"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download</a></li>
         //`<li class="text-center"><a href="javascript:void(0)"><span class="ms_close" onclick="RemoveFromFavorites(${ArtistSongs[i].songID})">
@@ -202,6 +203,7 @@ function ArtistAddSongToFavorites(SongID, elem) {
     tmpElem.setAttribute('onclick', `ArtistDeleteSongFromFavorites(${tmpElem.getAttribute('SongID')}, this)`);
   }
   function ArtistDeleteSongFromFavorites(id, elem) {
+    elem.setAttribute('SongID', id);
     let UserID = -1;
     if (IsLoggedIn() && localStorage["User"] != null && localStorage["User"] != "")
         UserID = JSON.parse(localStorage["User"]).id;

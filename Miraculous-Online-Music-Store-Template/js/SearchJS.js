@@ -31,10 +31,12 @@ function SearchLoaded() {
     }
     $("#jquery_jplayer_1").bind($.jPlayer.event.play, function (event) {
         let tmpArr = [document.getElementById('SearchSongsContainer'), document.getElementById('SearchGenreContainer'), document.getElementById('SearchLyricsContainer')];
+        let index = window.myPlaylist.current;
         for (tmp of tmpArr)
         for (i of tmp.children) {
+            //console.log(i)
             if (!i.classList.contains('album_list_name')) {
-                if (i.querySelector('.sNames').innerHTML === window.myPlaylist.playlist[0].title) {
+                if (i.querySelector('.sNames').innerHTML === window.myPlaylist.playlist[index].title) {
                     i.classList.add('play_active_song');
                 }
                 else if (i.classList.contains('play_active_song'))

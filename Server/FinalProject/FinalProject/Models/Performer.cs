@@ -42,5 +42,21 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.GetTotalStreamsOfArtist(PerformerID);
         }
+
+        public static List<string> Get3RandomPerformers(int PerformerID)
+        {
+            DBservices db = new DBservices();
+            return db.Get3RandomArtists(PerformerID);
+        }
+        public static string GetRandomBand()
+        {
+            DBservices db = new DBservices();
+            return db.GetRandomBand();
+        }
+        public static List<string> Get3RandomSingleArtists()
+        {
+            DBservices db = new DBservices();
+            return db.Get3RandomSingleArtists();
+        }
     }
 }

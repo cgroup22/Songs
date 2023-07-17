@@ -450,3 +450,10 @@ function MoveToFavorites() {
     }
     window.location.href = 'favourite.html';
 }
+function TakeAQuiz() {
+    if (!IsLoggedIn()) {
+        openPopup("ERROR", "red", "Login first");
+        return;
+    }
+    window.location.href = 'quiz.html';
+}

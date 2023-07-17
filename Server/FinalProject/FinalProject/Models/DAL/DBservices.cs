@@ -195,6 +195,62 @@ public class DBservices
             }
         }
     }
+    public Dictionary<string, object> GetRandomSong()
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetRandomSong", con, null);             // create the command
+
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                Dictionary<string, object> res = new Dictionary<string, object>();
+                res.Add("SongID", Convert.ToInt32(dataReader["SongID"]));
+                res.Add("SongName", dataReader["SongName"].ToString());
+                res.Add("SongLyrics", dataReader["SongLyrics"].ToString());
+                res.Add("GenreID", Convert.ToInt32(dataReader["GenreID"]));
+                res.Add("ReleaseYear", Convert.ToInt32(dataReader["ReleaseYear"]));
+                res.Add("PerformerID", Convert.ToInt32(dataReader["PerformerID"]));
+                res.Add("NumOfPlays", Convert.ToInt32(dataReader["NumOfPlays"]));
+                res.Add("SongLength", dataReader["SongLength"].ToString());
+                res.Add("PerformerName", dataReader["PerformerName"].ToString());
+                res.Add("GenreName", dataReader["GenreName"].ToString());
+                return res;
+            }
+            throw new ArgumentException("DB ERROR - NOTHING WAS RETURNED!");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
     // User clicked verify, checks the token and timestamp.
     public int ValidateUser(string email, string token)
     {
@@ -920,6 +976,7 @@ public class DBservices
         }
 
     }
+    
 
     public object GetMostPlayedTrack()
     {
@@ -1068,6 +1125,111 @@ public class DBservices
             // int numEffected = cmd.ExecuteNonQuery(); // execute the command
             int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
             return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+    public int PutUserAnswer(int QuestionID, int answer)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@QuestionID", QuestionID);
+        paramDic.Add("@answer", answer);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_PostUserAnswer", con, paramDic);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            // int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+    public int Insert(Question q, int quizID)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@content", q.Content);
+        paramDic.Add("@answer1", q.getAnswers()[0]);
+        paramDic.Add("@answer2", q.getAnswers()[1]);
+        paramDic.Add("@answer3", q.getAnswers()[2]);
+        paramDic.Add("@answer4", q.getAnswers()[3]);
+        paramDic.Add("@correctAnswer", q.CorrectAnswer);
+        paramDic.Add("@QuizID", quizID);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_InsertQuestion", con, paramDic);             // create the command
+        int questionID = 0;
+        try
+        {
+            // Add output parameter for QuizID
+            SqlParameter questionIdParameter = new SqlParameter("@QuestionID", SqlDbType.Int);
+            questionIdParameter.Direction = ParameterDirection.Output;
+            cmd.Parameters.Add(questionIdParameter);
+
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+
+            // Retrieve the QuizID value from the output parameter
+            if (cmd.Parameters["@QuestionID"].Value != DBNull.Value)
+            {
+                questionID = Convert.ToInt32(cmd.Parameters["@QuestionID"].Value);
+            }
+
+            return questionID;
         }
         catch (Exception ex)
         {
@@ -1600,6 +1762,245 @@ public class DBservices
         }
 
     }
+    public List<string> Get3RandomArtists(int ArtistToNotInclude)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@ArtistToNotInclude", ArtistToNotInclude);
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_Get3RandomArtists", con, paramDic);             // create the command
+
+
+        List<string> artists = new List<string>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                artists.Add(dataReader["PerformerName"].ToString());
+            }
+            return artists;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
+    public List<string> Get3RandomSingleArtists()
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_Get3RandomSingleArtists", con, null);             // create the command
+
+
+        List<string> artists = new List<string>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                artists.Add(dataReader["PerformerName"].ToString());
+            }
+            return artists;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+    public string GetRandomBand()
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetRandomBand", con, null);             // create the command
+
+
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                return dataReader["PerformerName"].ToString();
+            }
+            throw new Exception("ERROR");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+    public List<string> Get3RandomReleaseYear(int ReleaseYearToIgnore)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@ReleaseYearToIgnore", ReleaseYearToIgnore);
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_Get3RandomReleaseYears", con, paramDic);             // create the command
+
+
+        List<string> years = new List<string>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                years.Add(dataReader["ReleaseYear"].ToString());
+            }
+            return years;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+    public List<string> Get3RandomGenres(string GenreToIgnore)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@GenreToIgnore", GenreToIgnore);
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_Get3RandomGenres", con, paramDic);             // create the command
+
+
+        List<string> genres = new List<string>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                genres.Add(dataReader["GenreName"].ToString());
+            }
+            return genres;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
     // User login
     public User Login(string email, string password)
     {
@@ -1732,6 +2133,60 @@ public class DBservices
 
         return cmd;
     }
+    public int Insert(Quiz q)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        int quizId = 0; // Variable to store the QuizID value
+
+        try
+        {
+            Dictionary<string, object> paramDic = new Dictionary<string, object>();
+            paramDic.Add("@UserID", q.UserID);
+
+            cmd = CreateCommandWithStoredProcedure("Proj_SP_InsertQuiz", con, paramDic); // create the command
+
+            // Add output parameter for QuizID
+            SqlParameter quizIdParameter = new SqlParameter("@QuizID", SqlDbType.Int);
+            quizIdParameter.Direction = ParameterDirection.Output;
+            cmd.Parameters.Add(quizIdParameter);
+
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+
+            // Retrieve the QuizID value from the output parameter
+            if (cmd.Parameters["@QuizID"].Value != DBNull.Value)
+            {
+                quizId = Convert.ToInt32(cmd.Parameters["@QuizID"].Value);
+            }
+
+            return quizId;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
     // TEMP
     public int InsertSong(Song SongToInsert, byte[] fileData)
     {

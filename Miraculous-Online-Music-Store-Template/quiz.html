@@ -8,7 +8,7 @@
 <!-- Begin Head -->
 
 <head>
-    <title>Favorite Songs</title>
+    <title>Quiz</title>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta name="description" content="Music">
@@ -27,6 +27,7 @@
     <!-- Favicon Link -->
     <link rel="shortcut icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" type="text/css" href="css/OurSS.css">
+    <link rel="stylesheet" type="text/css" href="css/QuizCSS.css">
 </head>
 <body onload="FavLoaded()">
 	<!----Loader---->
@@ -86,10 +87,6 @@
 							<img src="images/svg/search.svg" alt="">
 						</button>
                     </form>
-                </div>
-                <div class="ms_top_trend">
-                    <!--<span><a href="#"  class="ms_color">Trending Songs :</a></span> <span class="top_marquee"><a href="#">Dream your moments, Until I Met You, Gimme Some Courage, Dark Alley (+8 More)</a></span>-->
-                    <a class="ms_btn" id="TakeQuizBTN" href="javascript:void(0)" onclick="TakeAQuiz()">Take A Quiz</a>
                 </div>
             </div>
             <div class="ms_top_right">
@@ -245,7 +242,44 @@
         <!---Main Content Start--->
         <div class="ms_content_wrapper padder_top80">
             <!----Free Download Css Start---->
-            <div class="ms_free_download ms_purchase_wrapper">
+            <h1 class="blueTitle" id="QuizTitle">Quiz</h1>
+            <div id="timer">03:00</div>
+            <div id="QuizEndScreen" style="display:none;">
+                
+            </div>
+
+            <div id="QuestionDiv">
+  <form id="QuizForm">
+    <h2 class="blueTitle" id="QuestionTitle">Question 1:</h2>
+    <p id="QuestionContent">What is the capital of France?</p>
+
+    <div class="answer-group">
+      <div class="answer-option">
+        <input type="radio" name="q1" value="0" id="a">
+        <label for="0" id="Answer0">a) Paris</label><br>
+      </div>
+      <div class="answer-option">
+        <input type="radio" name="q1" value="1" id="b">
+        <label for="1" id="Answer1">b) London</label><br>
+      </div>
+    </div>
+
+    <div class="answer-group">
+      <div class="answer-option">
+        <input type="radio" name="q1" value="2" id="c">
+        <label for="2" id="Answer2">c) Rome</label><br>
+      </div>
+      <div class="answer-option">
+        <input type="radio" name="q1" value="3" id="d">
+        <label for="3" id="Answer3">d) Madrid</label><br>
+      </div>
+    </div>
+
+    <br>
+    <button type="submit" id="SubmitBTN">Submit</button>
+  </form>
+  </div>
+            <div class="ms_free_download ms_purchase_wrapper" style="display:none">
                 <div class="ms_heading">
                     <h1>Your Favourites</h1>
                 </div>
@@ -1027,7 +1061,7 @@
     <script type="text/javascript" src="js/custom.js"></script>
     <script src="js/ajaxCalls.js"></script>
     <script type="text/javascript" src="js/GeneralJS.js"></script>
-    <script type="text/javascript" src="js/FavoritesJS.js"></script>
+    <script type="text/javascript" src="js/QuizJS.js"></script>
 </body>
 
 </html>
