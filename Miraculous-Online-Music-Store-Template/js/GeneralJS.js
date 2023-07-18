@@ -212,7 +212,23 @@ function getLyrics(SongID) {
 }
 function getLyricsSCB(data) {
   // console.log(data.Lyrics);
-  openPopup(data.SongName, "white", data.Lyrics.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>'));
+  //openPopup(data.SongName, "white", data.Lyrics.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>'));
+  const overlay = document.getElementById('lyrics-overlay');
+  const closeButton = document.getElementById('close-button');
+  const lyricsText = document.getElementById('lyrics-text');
+  const body = document.body;
+
+  document.getElementById("songLyrics").textContent = data.SongName;
+  document.getElementById("songLyrics").style.marginBottom = "20px";
+  lyricsText.innerHTML = data.Lyrics.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>');
+  overlay.style.display = 'flex';
+
+
+
+  closeButton.addEventListener('click', function () {
+    overlay.style.display = 'none';
+
+  });
 }
 function Download(SongID, fileName) {
     if (!IsLoggedIn()) {
