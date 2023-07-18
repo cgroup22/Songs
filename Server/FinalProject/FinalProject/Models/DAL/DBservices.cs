@@ -1431,6 +1431,60 @@ public class DBservices
 
     }
 
+    public List<User> LoadUserInformation()
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_LoadUserInformation", con, null);             // create the command
+
+
+        List<User> userList = new List<User>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                User u = new User();
+                u.Id = Convert.ToInt32(dataReader["UserID"]);
+                u.Email = dataReader["UserEmail"].ToString();
+                u.Name = dataReader["UserName"].ToString();
+                u.RegistrationDate = Convert.ToDateTime(dataReader["registrationDate"]);
+                userList.Add(u);
+            }
+            return userList;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
     /*public int Insert(Band b)
     {
 

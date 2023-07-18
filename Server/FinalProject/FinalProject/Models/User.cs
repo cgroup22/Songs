@@ -17,12 +17,14 @@ namespace FinalProject.Models
         private string name;
         private string password;
         private bool isVerified;
+        private DateTime registrationDate;
 
         public int Id { get => id; set => id = value; }
         public string Email { get => email; set => email = value; }
         public string Name { get => name; set => name = value; }
         public string Password { get => password; set => password = value; }
         public bool IsVerified { get => isVerified; set => isVerified = value; }
+        public DateTime RegistrationDate { get => registrationDate; set => registrationDate = value; }
 
         // Used for user login
         public static User Login(string email, string password)
@@ -341,6 +343,12 @@ namespace FinalProject.Models
                 throw new ArgumentException("Song doesn't exist");
             DBservices db = new DBservices();
             return db.DeleteFromFavorites(UserID, SongID) > 0;
+        }
+
+        public static List<User> LoadUserInformation()
+        {
+            DBservices db = new DBservices();
+            return db.LoadUserInformation();
         }
     }
 }

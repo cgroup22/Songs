@@ -49,6 +49,19 @@ namespace FinalProject.Controllers
             }
         }
 
+        [HttpGet("LoadUserInformation")]
+        public IActionResult LoadUserInformation()
+        {
+            try
+            {
+                return Ok(Models.User.LoadUserInformation());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "Server error " + e.Message });
+            }
+        }
+
         // POST api/<UsersController>
         [HttpPost]
         // Posts a new user into the user table - Register
