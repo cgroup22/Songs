@@ -183,3 +183,12 @@ input[type="submit"] {
   font-size: 20px;
   margin:23px;
 }
+#NoConcerts {
+  text-align: center;
+  color: white;
+  font-size: 25px;
+  margin-top: 40px;
+}
+#ConcertsTitle {
+  margin-top: 30px;
+}

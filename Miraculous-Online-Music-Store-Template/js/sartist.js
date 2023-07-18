@@ -96,6 +96,7 @@ function UpdateArtist() {
 }
 function UpdateArtistSCB(data) {
     if (data.length == 0) return;
+    GetConcerts(data[0].performerName);
     document.title = `${data[0].performerName}'s Information`;
     GetArtistInfoFromLastFM(data[0].performerName);
     document.getElementById('ArtistName').innerHTML = data[0].performerName;
@@ -231,4 +232,41 @@ function ArtistAddSongToFavorites(SongID, elem) {
   function GetTotalPlaysOfArtistSCB(data) {
     document.getElementById('TotalStreams').innerHTML = `Total Plays: ${data.totalPlays}`;
     document.getElementById('TotalStreams').style.display = `block`;
+  }
+  function GetConcerts(artistName) {
+    $.ajax({
+        type:"GET",
+        url:`https://app.ticketmaster.com/discovery/v2/events.json?keyword=${artistName}&apikey=sGS4leVOIAuCcazajk6HxuSuvPhcaoCu`,
+        async:true,
+        dataType: "json",
+        success: function(json) {
+                    console.log(json);
+                    if (undefined == json._embedded) {
+                        document.getElementById('concerts').style.display = 'block';
+                        document.getElementById('concerts').innerHTML = `<p id="NoConcerts">${artistName} has no concerts at this time!</p>`;
+                        return;
+                    }
+                    document.getElementById('concerts').style.display = 'block';
+                    let str = `<div class="ms_heading"><h1 id="ConcertsTitle">Concerts</h1></div><div class="album_inner_list"><div class="album_list_wrapper">`;
+                    str += `<ul class="album_list_name"><li>#</li><li>Name</li><li>Date</li><li class="text-center">Location</li><li class="text-center">Genre</li><li class="text-center">Buy tickets</li></ul>`;
+                    let counter = 1;
+                    for (i of json._embedded.events) {
+                        if (i.type == "event") {
+                            str += `<ul>
+                            <li><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
+                            <li style="text-align:left;"><a href="javascript:void(0)" class="sNames">${i.name}</a></li>
+                            <li><a href="javascript:void(0)">${i.dates.start.localDate} @ ${i.dates.start.localTime}</a></li>` +
+                            `<li style="text-align:left;"><a href="javascript:void(0)">${i._embedded.venues[0].country.name}, ${i._embedded.venues[0].city.name}</a></li>
+                            <li><a href="javascript:void(0)">${i.classifications[0].genre.name}</a></li>
+                            <li class="text-center ms_more_icon" onclick=""><a href="${i.url}" target="_blank">Buy</a></ul>`;
+                            counter++;
+                        }
+                    }
+                    str += `</div></div>`;
+                    document.getElementById('concerts').innerHTML = str;
+                 },
+        error: function(xhr, status, err) {
+                    document.getElementById('concerts').style.display = 'none';
+                 }
+      });
   }
