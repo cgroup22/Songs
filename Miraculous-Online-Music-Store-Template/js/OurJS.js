@@ -206,6 +206,11 @@ function UpdateFeaturedArtists(data) {
         let images = document.getElementsByClassName(`Artist${i}Image`);
         let names = document.getElementsByClassName(`Artist${i}Name`);
         let playBtns = document.getElementsByClassName(`Artist${i}Play`);
+        let artistNames = document.getElementsByClassName(`Artist${i}`);
+        for (j of artistNames)
+        {
+            j.setAttribute('onclick', `MoveToArtist(${data[i].performerID})`); 
+        }
         for (j of playBtns)
         {
             j.id = data[i].performerID;
