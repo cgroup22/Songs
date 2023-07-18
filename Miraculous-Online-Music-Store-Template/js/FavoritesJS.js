@@ -87,7 +87,7 @@ function UpdateFavSongs() {
         counter++;
     }
     if (FavoriteSongs.length == 0) {
-        str += `<p id="NoFavSongs">None<p>`;
+        str += `<p id="NoFavSongs">None</p>`;
     }
     document.getElementById('FavoritesContainer').innerHTML = str;
 }

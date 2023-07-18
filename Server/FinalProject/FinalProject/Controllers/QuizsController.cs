@@ -17,10 +17,43 @@ namespace FinalProject.Controllers
         }
 
         // GET api/<QuizsController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
+        [HttpGet("GetUserPastQuiz/UserID/{UserID}")]
+        public IActionResult GetUserPastQuiz(int UserID)
         {
-            return "value";
+            try
+            {
+                return Ok(Quiz.GetUserPastQuiz(UserID));
+            }
+            catch (Exception e)
+            {
+                return BadRequest("SERVER ERROR " + e.Message);
+            }
+        }
+
+        [HttpGet("GetUserPastQuizzesWithoutQuestions/UserID/{UserID}")]
+        public IActionResult GetUserPastQuizzesWithoutQuestions(int UserID)
+        {
+            try
+            {
+                return Ok(Quiz.GetUserPastQuizzesNoQuestions(UserID));
+            }
+            catch (Exception e)
+            {
+                return BadRequest("SERVER ERROR " + e.Message);
+            }
+        }
+
+        [HttpGet("GetQuizQuestions/QuizID/{QuizID}")]
+        public IActionResult GetQuizQuestions(int QuizID)
+        {
+            try
+            {
+                return Ok(Quiz.GetQuizQuestions(QuizID));
+            }
+            catch (Exception e)
+            {
+                return BadRequest("SERVER ERROR " + e.Message);
+            }
         }
 
         // POST api/<QuizsController>

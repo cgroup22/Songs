@@ -457,3 +457,10 @@ function TakeAQuiz() {
     }
     window.location.href = 'quiz.html';
 }
+function MoveToQuizHistory() {
+    if (!IsLoggedIn()) {
+        openPopup("ERROR", 'red', 'Login first!');
+        return;
+    }
+    window.location.href = 'quizhistory.html';
+}

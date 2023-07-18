@@ -177,3 +177,9 @@ input[type="submit"] {
   padding:3px;
   width:150px;
 }
+#QuizAverageGrade {
+  color:white;
+  text-align: center;
+  font-size: 20px;
+  margin:23px;
+}

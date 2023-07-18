@@ -8,7 +8,7 @@
 <!-- Begin Head -->
 
 <head>
-    <title>Quiz</title>
+    <title>Past Quizzes</title>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta name="description" content="Music">
@@ -87,6 +87,10 @@
 							<img src="images/svg/search.svg" alt="">
 						</button>
                     </form>
+                </div>
+                <div class="ms_top_trend">
+                    <!--<span><a href="#"  class="ms_color">Trending Songs :</a></span> <span class="top_marquee"><a href="#">Dream your moments, Until I Met You, Gimme Some Courage, Dark Alley (+8 More)</a></span>-->
+                    <a class="ms_btn" id="TakeQuizBTN" href="javascript:void(0)" onclick="TakeAQuiz()">Take A Quiz</a>
                 </div>
             </div>
             <div class="ms_top_right">
@@ -241,15 +245,30 @@
         <!----Album Single Section Start---->
         <!---Main Content Start--->
         <div class="ms_content_wrapper padder_top80">
+            <div class="ms_free_download ms_purchase_wrapper" id="AllQuizzesData">
+                <div class="ms_heading" style="margin:0;">
+                    <h1>Your Past Quizzes</h1>
+                </div>
+                <p id="QuizAverageGrade">Your Average: 0%</p>
+				<div class="album_inner_list">
+					<div class="album_list_wrapper" id="FavoritesContainer">
+						<ul class="album_list_name">
+							<li>#</li>
+							<li class="text-center">Quiz Date</li>
+							<li class="text-center">Questions</li>
+							<li class="text-center">Grade</li>
+							<li class="text-center">Watch Quiz</li>
+						</ul>
+					</div>
+				</div>
+            </div>
             <!----Free Download Css Start---->
-            <h1 class="blueTitle" id="QuizTitle">Quiz</h1>
-            <div id="timer">03:00</div>
             <div id="QuizEndScreen" style="display:none;">
                 
             </div>
 
             <div id="QuestionDiv">
-  <form id="QuizForm">
+  <form id="QuizForm" style="display:none">
     <h2 class="blueTitle" id="QuestionTitle">Question 1:</h2>
     <p id="QuestionContent">What is the capital of France?</p>
 
@@ -1061,7 +1080,7 @@
     <script type="text/javascript" src="js/custom.js"></script>
     <script src="js/ajaxCalls.js"></script>
     <script type="text/javascript" src="js/GeneralJS.js"></script>
-    <script type="text/javascript" src="js/QuizJS.js"></script>
+    <script type="text/javascript" src="js/QuizHistoryJS.js"></script>
 </body>
 
 </html>

@@ -9,6 +9,7 @@ namespace FinalProject.Models
         private string content;
         private List<string> answers;
         private int correctAnswer;
+        private int userAnswer;
 
         public Question(int id, string content, List<string> answers, int correctAnswer)
         {
@@ -17,11 +18,20 @@ namespace FinalProject.Models
             this.answers = answers;
             this.correctAnswer = correctAnswer;
         }
+        public Question(int id, string content, List<string> answers, int correctAnswer, int userAnswer)
+        {
+            this.id = id;
+            this.content = content;
+            this.answers = answers;
+            this.correctAnswer = correctAnswer;
+            this.UserAnswer = userAnswer;
+        }
 
         public int Id { get => id; set => id = value; }
         public string Content { get => content; set => content = value; }
         public List<string> Answers { get => answers; set => answers = value; }
         public int CorrectAnswer { get => correctAnswer; set => correctAnswer = value; }
+        public int UserAnswer { get => userAnswer; set => userAnswer = value; }
 
         public static Question GetRandomQuestion() {
             Random random = new Random();

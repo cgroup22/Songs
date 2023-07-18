@@ -1140,7 +1140,6 @@ public class DBservices
                 con.Close();
             }
         }
-
     }
     public int PutUserAnswer(int QuestionID, int answer)
     {
@@ -2409,6 +2408,183 @@ public class DBservices
             int numEffected = cmd.ExecuteNonQuery(); // execute the command
             // int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
             return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
+    public List<object> GetUserPastQuizDataWithoutQuestions(int UserID)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@UserID", UserID);
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetUserPastQuizWithoutQuestions", con, paramDic);             // create the command
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            List<object> quizzes = new List<object>();
+            while (dataReader.Read())
+            {
+                quizzes.Add(new
+                {
+                    QuizID = Convert.ToInt32(dataReader["QuizID"]),
+                    QuizDate = dataReader["QuizDate"].ToString().Substring(0, 10),
+                    QuizGrade = Math.Round((Convert.ToInt32(dataReader["QuestionsGotRight"]) / 5.0f) * 100.0f)
+                });
+            }
+            return quizzes;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
+    public Quiz GetQuizQuestions(int QuizID)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@QuizID", QuizID);
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetQuizQuestions", con, paramDic);             // create the command
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            List<Question> questions = new List<Question>();
+            DateTime QuizDate = DateTime.Now;
+            while (dataReader.Read())
+            {
+                List<string> answers = new List<string>();
+                answers.Add(dataReader["answer1"].ToString());
+                answers.Add(dataReader["answer2"].ToString());
+                answers.Add(dataReader["answer3"].ToString());
+                answers.Add(dataReader["answer4"].ToString());
+                questions.Add(new Question(Convert.ToInt32(dataReader["QuestionID"]), dataReader["content"].ToString(), answers, Convert.ToInt32(dataReader["correctAnswer"]), Convert.ToInt32(dataReader["userAnswer"])));
+                QuizDate = Convert.ToDateTime(dataReader["QuizDate"].ToString());
+            }
+            Quiz q = new Quiz(QuizID, -1, questions, QuizDate);
+            return q;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
+    public List<Quiz> GetUserPastQuizzesAndQuestions(int UserID)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@UserID", UserID);
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetUserPastQuiz", con, paramDic);             // create the command
+
+
+        List<Quiz> quizList = new List<Quiz>();
+        int qID = -2;
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            List<Question> quizQuestions = new List<Question>();
+            List<string> answers;
+            while (dataReader.Read())
+            {
+                answers = new List<string>();
+                answers.Add(dataReader["answer1"].ToString());
+                answers.Add(dataReader["answer2"].ToString());
+                answers.Add(dataReader["answer3"].ToString());
+                answers.Add(dataReader["answer4"].ToString());
+                Question q = new Question(Convert.ToInt32(dataReader["QuestionID"]), dataReader["content"].ToString(), answers, Convert.ToInt32(dataReader["correctAnswer"]), Convert.ToInt32(dataReader["userAnswer"]));
+                if (qID == -2)
+                {
+                    qID = Convert.ToInt32(dataReader["QuizID"]);
+                    quizQuestions = new List<Question>();
+                    quizQuestions.Add(q);
+                }
+                else if (qID == Convert.ToInt32(dataReader["QuizID"])) // another question on the same quiz
+                {
+                    quizQuestions.Add(q);
+                }
+                else // New Quiz
+                {
+                    Quiz qu = new Quiz(qID, UserID, quizQuestions);
+                    quizList.Add(qu);
+                    qID = Convert.ToInt32(dataReader["QuizID"]);
+                    quizQuestions = new List<Question>();
+                    quizQuestions.Add(q);
+                }
+            }
+            return quizList;
         }
         catch (Exception ex)
         {
