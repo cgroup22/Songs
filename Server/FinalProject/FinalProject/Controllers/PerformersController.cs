@@ -68,5 +68,18 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "Server error " + e.Message });
             }
         }
+
+        [HttpGet("GetTotalFavoritesOfPerformer/PerformerID/{PerformerID}")]
+        public IActionResult GetTotalFavoritesOfPerformer(int PerformerID)
+        {
+            try
+            {
+                return Ok(Performer.GetTotalFavorites(PerformerID));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "Server error " + e.Message });
+            }
+        }
     }
 }

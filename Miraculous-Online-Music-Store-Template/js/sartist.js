@@ -35,6 +35,7 @@ function ArtLoaded() {
     UpdateArtist();
     CheckAudioPlayer();
     GetTotalPlaysOfArtist();
+    GetTotalFavoritesOfArtist();
     // Takes care of updating html elements on play and adding/removing songs from the queue.
     $("#jquery_jplayer_1").bind($.jPlayer.event.play, function (event) {
         let tmp = document.getElementById('FavoritesContainer');
@@ -107,10 +108,10 @@ function UpdateArtistSCB(data) {
 }
 function UpdateArtistSongs() {
     let counter = 1;
-    let str = `<ul class="album_list_name"><li>#</li><li>Song Title</li><li>Artist</li><li class="text-center">Duration</li><li class="text-center">More</li><li class="text-center">Favorite</li></ul>`;
+    let str = `<ul class="album_list_name"><li style="width: 3%;">#</li><li>Song Title</li><li>Artist</li><li class="text-center">Duration</li><li class="text-center">More</li><li class="text-center">Favorite</li><li class="text-center" style="">World Wide Favorites</li></ul>`;
     for (i in ArtistSongs) {
     str += `<ul>
-        <li onclick='ArtistPlaySong(${i})'><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
+        <li style="width: 3%;" onclick='ArtistPlaySong(${i})'><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
         <li onclick="getLyrics(${ArtistSongs[i].songID})"><a href="javascript:void(0)" class="sNames">${ArtistSongs[i].songName}</a></li>
         <li><a href="javascript:void(0)">${ArtistSongs[i].performerName}</a></li>` +
         //<li class="text-center"><a href="javascript:void(0)">Free</a></li>
@@ -131,6 +132,7 @@ function UpdateArtistSongs() {
         //<li style="text-align:center;"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download</a></li>
         //`<li class="text-center"><a href="javascript:void(0)"><span class="ms_close" onclick="RemoveFromFavorites(${ArtistSongs[i].songID})">
             //    <img src="images/svg/close.svg" alt=""></span></a></li>
+            str += `<li class="text-center" ><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>${ArtistSongs[i].songTotalFavorites}</a></li>`
     str += `</ul>`;
         counter++;
     }
@@ -233,6 +235,16 @@ function ArtistAddSongToFavorites(SongID, elem) {
     document.getElementById('TotalStreams').innerHTML = `Total Plays: ${data.totalPlays}`;
     document.getElementById('TotalStreams').style.display = `block`;
   }
+/////////////////
+  function GetTotalFavoritesOfArtist() {
+    const api = `${apiStart}/Performers/GetTotalFavoritesOfPerformer/PerformerID/${Artist.id}`;
+    ajaxCall("GET", api, "", GetTotalFavoritesOfArtistSCB, (err) => { console.log(err); });
+  }
+  function GetTotalFavoritesOfArtistSCB(data) {
+    document.getElementById('TotalFavorites').innerHTML = `Total Favorites: ${data.totalFavorites}`;
+    document.getElementById('TotalFavorites').style.display = `block`;
+  }
+/////////////////
   function GetConcerts(artistName) {
     $.ajax({
         type:"GET",

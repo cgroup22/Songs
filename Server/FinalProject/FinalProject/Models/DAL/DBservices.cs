@@ -195,6 +195,60 @@ public class DBservices
             }
         }
     }
+
+    public object GetTotalFavoritesOfArtist(int PerformerID)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@PerformerID", PerformerID);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetTotalFavoritesOfPerformer", con, paramDic);             // create the command
+
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                object res = new
+                {
+                    TotalFavorites = Convert.ToInt32(dataReader["TotalFavorites"])
+                };
+                return res;
+            }
+            throw new ArgumentException("Performer doesn't exist");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
     public Dictionary<string, object> GetRandomSong()
     {
 
@@ -890,6 +944,65 @@ public class DBservices
 
     }
 
+    public List<object> GetArtists()
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetArtist", con, null);             // create the command
+
+
+        List<object> artists = new List<object>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                int PerformerID = Convert.ToInt32(dataReader["PerformerID"]);
+                string PName = dataReader["PerformerName"].ToString();
+                string PImage = dataReader["PerformerImage"].ToString();
+                object s = new
+                {
+                    PerformerID = PerformerID,
+                    PerformerName = PName,
+                    PerformerImage = PImage
+                };
+                artists.Add(s);
+            }
+
+            return artists;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
     public List<object> GetPerformerSongs(int PID, int UserID)
     {
 
@@ -928,6 +1041,7 @@ public class DBservices
                 if (SLength != null && SLength.Contains(' '))
                     SLength = SLength.Substring(0, SLength.IndexOf(' '));
                 int IsInFav = Convert.ToInt32(dataReader["InFav"]);
+                int favorites = Convert.ToInt32(dataReader["SongNumOfFav"]);
                 object s = new
                 {
                     SongID = SID,
@@ -935,7 +1049,8 @@ public class DBservices
                     PerformerImage = PImage,
                     SongName = SName,
                     SongLength = SLength,
-                    IsInFavorites = IsInFav
+                    IsInFavorites = IsInFav,
+                    SongTotalFavorites = favorites
                 };
                 songs.Add(s);
             }

@@ -136,7 +136,23 @@ function DeletePlaylist() {
     const api = `https://localhost:44355/api/Playlists/DeleteUserPlaylist/PlaylistID/${PlaylistID}/UserID/${userID}`;
     ajaxCall("DELETE", api, "", DeletePlaylistSCB, ECB);
 }
-function DeletePlaylistSCB(data) {
-    openPopup("Playlist Deleted!", 'green', "Deleted successfuly!");
+function DeletePlaylistSCB() {
+    //openPopup("Playlist Deleted!", 'green', "Deleted successfuly!");
     setTimeout(() => {window.location.href='index.html'}, 2000);
+    const overlay = document.getElementById('lyrics-overlay');
+    const closeButton = document.getElementById('close-button');
+    const lyricsText = document.getElementById('lyrics-text');
+    const body = document.body;
+
+    document.getElementById("songLyrics").textContent = "Playlist deleted";
+    document.getElementById("songLyrics").style.marginBottom = "20px";
+    lyricsText.innerHTML = "Deleted successfully"
+    overlay.style.display = 'flex';
+
+
+
+    closeButton.addEventListener('click', function () {
+        overlay.style.display = 'none';
+
+    });
 }

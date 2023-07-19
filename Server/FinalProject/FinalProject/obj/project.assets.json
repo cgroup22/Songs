@@ -786,25 +786,23 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\user\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {},
-    "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
+    "C:\\Users\\Yuval\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Visual Studio Projects\\Ruppin Year B\\ServerSide\\Git\\Songs\\Server\\FinalProject\\FinalProject\\FinalProject.csproj",
+      "projectUniqueName": "C:\\Program Files (x86)\\מדמח\\שנה ב'\\סמסטר ב'\\צד שרת\\מטלות\\פרוקיט סיום\\Songs\\Server\\FinalProject\\FinalProject\\FinalProject.csproj",
       "projectName": "FinalProject",
-      "projectPath": "D:\\Visual Studio Projects\\Ruppin Year B\\ServerSide\\Git\\Songs\\Server\\FinalProject\\FinalProject\\FinalProject.csproj",
-      "packagesPath": "C:\\Users\\user\\.nuget\\packages\\",
-      "outputPath": "D:\\Visual Studio Projects\\Ruppin Year B\\ServerSide\\Git\\Songs\\Server\\FinalProject\\FinalProject\\obj\\",
+      "projectPath": "C:\\Program Files (x86)\\מדמח\\שנה ב'\\סמסטר ב'\\צד שרת\\מטלות\\פרוקיט סיום\\Songs\\Server\\FinalProject\\FinalProject\\FinalProject.csproj",
+      "packagesPath": "C:\\Users\\Yuval\\.nuget\\packages\\",
+      "outputPath": "C:\\Program Files (x86)\\מדמח\\שנה ב'\\סמסטר ב'\\צד שרת\\מטלות\\פרוקיט סיום\\Songs\\Server\\FinalProject\\FinalProject\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages",
-        "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
       ],
       "configFilePaths": [
-        "C:\\Users\\user\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Yuval\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
@@ -863,7 +861,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.412\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\7.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   }
