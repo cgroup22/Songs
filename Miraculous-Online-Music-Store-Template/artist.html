@@ -195,23 +195,23 @@
             <div class="ms_header">
                 <div class="ms_top_left">
                     <div class="ms_top_search">
-                        <input type="text" class="form-control" placeholder="Search Music Here..">
-                        <span class="search_icon">
+                        <form id="SearchForm">
+                        <input type="text" class="form-control" placeholder="Search Music Here.." id="SearchBar">
+                        <span class="search_icon" onclick="SearchQuery()" id="SearchBTN">
 							<img src="images/svg/search.svg" alt="">
 						</span>
+                    </form>
                     </div>
                     <div class="ms_top_trend">
-                        <span><a href="#"  class="ms_color">Trending Songs :</a></span> <span class="top_marquee"><a href="#">Dream your moments, Until I Met You, Gimme Some Courage, Dark Alley (+8 More)</a></span>
+                        <!--<span><a href="#"  class="ms_color">Trending Songs :</a></span> <span class="top_marquee"><a href="#">Dream your moments, Until I Met You, Gimme Some Courage, Dark Alley (+8 More)</a></span>-->
+                        <a class="ms_btn" id="TakeQuizBTN" href="javascript:void(0)" onclick="TakeAQuiz()">Take A Quiz</a>
                     </div>
                 </div>
                 <div class="ms_top_right">
-                    <div class="ms_top_lang">
+                    <!--<div class="ms_top_lang">
                         <span data-toggle="modal" data-target="#lang_modal">languages <img src="images/svg/lang.svg" alt=""></span>
-                    </div>
-					<div class="ms_top_btn">
-                        <a href="javascript:;" class="ms_btn reg_btn" data-toggle="modal" data-target="#myModal"><span>register</span></a>
-                        <a href="javascript:;" class="ms_btn login_btn" data-toggle="modal" data-target="#myModal1"><span>login</span></a>
-                    </div>
+                    </div>-->
+                    <div class="ms_top_btn" id="LoginRegisterAccountHeader"><a href="javascript:;" class="ms_admin_name" onclick="ToggleProfile()">Hello Yuval <span class="ms_pro_name">Y</span></a><ul class="pro_dropdown_menu"><li><a href="profile.html">Profile</a></li><li><a onclick="Logout()" href="#">Logout</a></li></ul></div> 
                 </div>
             </div>
             <!---Featured Artists Music--->
@@ -1751,6 +1751,9 @@
     <script type="text/javascript" src="js/plugins/nice_select/jquery.nice-select.min.js"></script>
 	<script type="text/javascript" src="js/plugins/scroll/jquery.mCustomScrollbar.js"></script>
     <script type="text/javascript" src="js/custom.js"></script>
+    <script type="text/javascript" src="js/GeneralJS.js"></script>
+    <script type="text/javascript" src="js/OurJS.js"></script>
+    
 </body>
 
 </html>
