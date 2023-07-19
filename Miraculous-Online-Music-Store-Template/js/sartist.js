@@ -240,7 +240,7 @@ function ArtistAddSongToFavorites(SongID, elem) {
         async:true,
         dataType: "json",
         success: function(json) {
-                    console.log(json);
+                    // console.log(json);
                     if (undefined == json._embedded) {
                         document.getElementById('concerts').style.display = 'block';
                         document.getElementById('concerts').innerHTML = `<p id="NoConcerts">${artistName} has no concerts at this time!</p>`;

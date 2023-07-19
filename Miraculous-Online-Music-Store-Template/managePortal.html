@@ -28,7 +28,7 @@
     <link rel="shortcut icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" type="text/css" href="css/OurSS.css">
 </head>
-<body onload="LoadUserInformation()">
+<body onload="ManageLoaded()">
 	<!----Loader---->
 	<div class="ms_inner_loader">
 		<div class="ms_loader">
@@ -80,7 +80,7 @@
         <div class="ms_header">
             <div class="ms_top_left">
                 <div class="ms_top_search">
-                    <form id="SearchForm">
+                    <form id="SearchForm" style="display:none;">
                     <input type="text" class="form-control" placeholder="Search Music Here.." id="SearchBar">
                     <button class="search_icon" onclick="SearchQuery()" id="SearchBTN">
 							<img src="images/svg/search.svg" alt="">
@@ -89,10 +89,10 @@
                 </div>
                 <div class="ms_top_trend">
                     <!--<span><a href="#"  class="ms_color">Trending Songs :</a></span> <span class="top_marquee"><a href="#">Dream your moments, Until I Met You, Gimme Some Courage, Dark Alley (+8 More)</a></span>-->
-                    <a class="ms_btn" id="TakeQuizBTN" href="javascript:void(0)" onclick="TakeAQuiz()">Take A Quiz</a>
+                    <a class="ms_btn" id="TakeQuizBTN" href="javascript:void(0)" onclick="TakeAQuiz()" style="display:none;">Take A Quiz</a>
                 </div>
             </div>
-            <div class="ms_top_right">
+            <div class="ms_top_right" style="visibility:hidden;">
                 <div class="ms_top_btn" id="LoginRegisterAccountHeader">
 					<a href="javascript:;" class="ms_btn reg_btn" data-toggle="modal" data-target="#myModal"><span>register</span></a>
 					<a href="javascript:;" class="ms_btn login_btn" data-toggle="modal" data-target="#myModal1"><span>login</span></a>
@@ -199,7 +199,7 @@
 						</span>
 						</a>
                         </li>
-                        <li onclick="MoveToFavorites()"><a href="javascript:void(0)" class="active" title="Favourites">
+                        <li onclick="MoveToFavorites()"><a href="javascript:void(0)" title="Favourites">
 						<span class="nav_icon">
 							<span class="icon icon_favourite"></span>
 						</span>
@@ -250,7 +250,7 @@
                     <h1>Manage Portal</h1>
                 </div>
 				<div class="album_inner_list">
-					<div class="album_list_wrapper" id="UsersContainer">
+					<div class="album_list_wrapper" id="UsersContainer" style="display:none;">
 						<ul class="album_list_name">
 							<li>Name</li>
 							<li>Email</li>
@@ -292,6 +292,29 @@
 							<a href="#" class="ms_btn">view more</a>
 						</div>-->
 					</div>
+                    <div id="AdminOptions">
+                        <a class="ms_btn manageBTNS" onclick="LoadUserInformation()" style="color:white;" href="javascript:void(0)">Users</a>
+                        <a class="ms_btn manageBTNS" onclick="UploadArtist()" style="color:white;" href="javascript:void(0)">Upload Artist</a>
+                        <a class="ms_btn manageBTNS" onclick="UploadSong()" style="color:white;" href="javascript:void(0)">Upload Song</a>
+                    </div>
+                    <form id="UploadArtistForm" style="display:none;">
+                        <a onclick="DisplayOptions()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a><br>
+                        <div style="margin-top:15px;"><span class="Upload">Name: </span><input type="text" id="PName" style="width:400px;" required><br></div>
+                        <div style="margin-top:15px"><span class="Upload">Is it a band? </span><input type="checkbox" id="PIsBand"><br></div>
+                        <div style="margin-top:15px;"><span class="Upload">Image URL: </span><input type="text" id="PImage" style="width:400px;" required><br></div>
+                        <button class="ms_btn" style="border:0;margin-top:15px;">Submit</button>
+                    </form>
+                    <form id="UploadSongForm" style="display:none;">
+                        <a onclick="DisplayOptions()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a><br>
+                        <div style="margin-top:15px;"><span class="Upload">Name: </span><input type="text" id="SName" style="width:400px;" required><br></div>
+                        <div style="margin-top:15px"><span class="Upload">Genre: </span><select id="GenreSelect"></select><br></div>
+                        <div style="margin-top:15px"><span class="Upload">Release Year: </span><input type="number" id="SYear" style="width:400px;" required></select><br></div>
+                        <div style="margin-top:15px"><span class="Upload">Artist: </span><select id="PerformerSelect"></select><br></div>
+                        <div style="margin-top:15px;"><span class="Upload">Length: </span><input type="text" id="SLength" style="width:400px;" required><br></div>
+                        <div style="margin-top:15px;"><span class="Upload">Lyrics: </span><textarea id="SLyrics" style="width:400px;" required cols="1000" rows="10"></textarea><br></div>
+                        <div style="margin-top:15px;"><span class="Upload">MP3 File: </span><input type="file" id="SFile" style="width:400px;color:wheat;" accept="audio/mp3" required><br></div>
+                        <button class="ms_btn" style="border:0;margin-top:15px;">Submit</button>
+                    </form>
 				</div>
             </div>
             <!----Live Radio Section Start---->
@@ -909,7 +932,7 @@
                             <li>
                                 <label class="lang_check_label">
 							 German 
-							<input type="checkbox" name="check"> 
+							<input type="checkbox" name="check">
 							<span class="label-text"></span>
 							</label>
                             </li>

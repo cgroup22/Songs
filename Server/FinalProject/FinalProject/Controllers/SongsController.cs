@@ -1,5 +1,6 @@
 ﻿using FinalProject.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.SqlServer.Server;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -96,10 +97,33 @@ namespace FinalProject.Controllers
             }
         }
 
-        // POST api/<SongsController>
-        [HttpPost]
-        public void Post([FromBody] string value)
+        [HttpPost("PostSongDataWithoutFile")]
+        public IActionResult PostSongDataWithoutFile(Song s)
         {
+            try
+            {
+                return Ok(s.PostSongDataWithoutFile());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "SERVER ERROR " + e.Message });
+            }
+        }
+
+        // POST api/<SongsController>
+        [HttpPost("PostFileDataFromJS/SongID/{SongID}")]
+        public IActionResult PostFileDataFromJS(int SongID)
+        {
+            IFormFile file = Request.Form.Files[0];
+            try
+            {
+                bool res = Song.InsertFileDataToSongID(SongID, file);
+                return res ? Ok(new { message = "File uploaded successfully" }) : BadRequest(new { message = "Couldn't insert file to SQL db" });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "SERVER ERROR " + e.Message });
+            }
         }
 
         // PUT api/<SongsController>/5

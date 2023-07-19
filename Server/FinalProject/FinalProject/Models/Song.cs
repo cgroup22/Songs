@@ -9,28 +9,45 @@ namespace FinalProject.Models
         private string name;
         private string lyrics;
         private int numOfPlays;
-        private FileContentResult fileData;
+        //private FileContentResult fileData;
+        private int performerID;
         private int genreID;
         private int releaseYear;
+        private string length;
 
-        public Song(int id, string name, string lyrics, int numOfPlays, FileContentResult fileData, int genreID, int releaseYear)
+        public Song(int id, string name, string lyrics, int numOfPlays, /*FileContentResult fileData,*/ int genreID, int releaseYear)
         {
             Id = id;
             Name = name;
             Lyrics = lyrics;
             NumOfPlays = numOfPlays;
-            FileData = fileData;
+            //FileData = fileData;
             GenreID = genreID;
             ReleaseYear = releaseYear;
         }
+        /*public Song(string name, string lyrics, FileContentResult fileData, int genreID, int releaseYear, int performerID, string length)
+        {
+            Id = 0;
+            Name = name;
+            Lyrics = lyrics;
+            NumOfPlays = 0;
+            FileData = fileData;
+            GenreID = genreID;
+            ReleaseYear = releaseYear;
+            PerformerID = performerID;
+            Length = length;
+        }*/
 
         public int Id { get => id; set => id = value; }
         public string Name { get => name; set => name = value; }
         public string Lyrics { get => lyrics; set => lyrics = value; }
         public int NumOfPlays { get => numOfPlays; set => numOfPlays = value; }
-        public FileContentResult FileData { get => fileData; set => fileData = value; }
+        //public FileContentResult FileData { get => fileData; set => fileData = value; }
         public int GenreID { get => genreID; set => genreID = value; }
         public int ReleaseYear { get => releaseYear; set => releaseYear = value; }
+        public int PerformerID { get => performerID; set => performerID = value; }
+        public string Length { get => length; set => length = value; }
+
         // Inserts a song and its mp3 file to our db
         public bool Insert(IFormFile file)
         {
@@ -122,6 +139,12 @@ namespace FinalProject.Models
         {
             DBservices db = new DBservices();
             return db.Get3RandomReleaseYear(ReleaseYearToIgnore);
+        }
+
+        public object PostSongDataWithoutFile()
+        {
+            DBservices db = new DBservices();
+            return new { SongID = db.PostSongDataWithoutFile(this) };
         }
     }
 }

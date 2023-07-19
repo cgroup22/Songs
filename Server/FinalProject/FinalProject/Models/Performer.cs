@@ -2,18 +2,18 @@
 
 namespace FinalProject.Models
 {
-    public abstract class Performer
+    public class Performer
     {
         protected int performerID;
         protected string performerName;
-        //protected int isABand;
-        protected FileContentResult performerImage;
+        protected int isABand;
+        protected string performerImage;
 
         public int PerformerID { get => performerID; set => performerID = value; }
         public string PerformerName { get => performerName; set => performerName = value; }
-        //public int IsABand { get => isABand; set => isABand = value; }
-        public FileContentResult PerformerImage { get => performerImage; set => performerImage = value; }
-        protected static byte[] TranslateImageToHEX(IFormFile file)
+        public int IsABand { get => isABand; set => isABand = value; }
+        public string PerformerImage { get => performerImage; set => performerImage = value; }
+        /*protected static byte[] TranslateImageToHEX(IFormFile file)
         {
             if (file == null || file.Length == 0)
                 throw new ArgumentException("No file provided");
@@ -25,7 +25,7 @@ namespace FinalProject.Models
                 fileData = memoryStream.ToArray();
             }
             return fileData;
-        }
+        }*/
         public void UpdateImage(IFormFile file)
         {
             //performerImage = TranslateImageToHEX(file);
@@ -57,6 +57,16 @@ namespace FinalProject.Models
         {
             DBservices db = new DBservices();
             return db.Get3RandomSingleArtists();
+        }
+        public bool Insert()
+        {
+            DBservices db = new DBservices();
+            return db.AdminInsertPerformer(this) > 0;
+        }
+        public static List<Performer> GetAllPerformers()
+        {
+            DBservices db = new DBservices();
+            return db.GetAllPerformers();
         }
     }
 }

@@ -19,5 +19,10 @@
             DBservices db = new DBservices();
             return db.Get3RandomGenres(GenreToIgnore);
         }
+        public static List<Genre> GetAllGenres()
+        {
+            DBservices db = new DBservices();
+            return db.GetAllGenres();
+        }
     }
 }

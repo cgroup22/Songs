@@ -65,7 +65,8 @@ function TryLogin() {
 function ECB(e) {
     console.log(e)
     //alert(e);
-    openPopup("ERROR", "red", e.responseJSON.message);
+    if (e != undefined && e.responseJSON != undefined && e.responseJSON.message != undefined)
+        openPopup("ERROR", "red", e.responseJSON.message);
 }
 function openPopup(popupTitle, popupTitleColor, popupText) {
   document.body.classList.add("no-scroll");
@@ -214,6 +215,10 @@ function getLyricsSCB(data) {
   // console.log(data.Lyrics);
   //openPopup(data.SongName, "white", data.Lyrics.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>'));
   const overlay = document.getElementById('lyrics-overlay');
+  if (overlay == undefined) {
+    openPopup(data.SongName, "white", data.Lyrics.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>'));
+    return;
+  }
   const closeButton = document.getElementById('close-button');
   const lyricsText = document.getElementById('lyrics-text');
   const body = document.body;

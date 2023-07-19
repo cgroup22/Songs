@@ -226,11 +226,9 @@ input[type="submit"] {
   width: 100%;
   max-height: 80%;
   overflow-y: auto;
-  opacity: 0.9;
   color:white;
   border-radius:10px;
 }
-
 .close-button {
   position: absolute;
   top: 10px;
@@ -239,5 +237,10 @@ input[type="submit"] {
   color: white;
   cursor: pointer;
 }
-
-
+.manageBTNS {
+  color:white;
+  width:150px;
+}
+.Upload {
+  color:white;
+}

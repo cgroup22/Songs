@@ -350,6 +350,50 @@ public class DBservices
             }
         }
     }
+    public int AdminInsertPerformer(Performer p)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@PerformerName", p.PerformerName);
+        paramDic.Add("@isABand", p.IsABand == 0 ? 0 : 1);
+        paramDic.Add("@PerformerImage", p.PerformerImage);
+
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_AdminInsertPerformer", con, paramDic);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
     // TEMP
     public List<object> GetTop15(int UserID)
     {
@@ -2654,5 +2698,190 @@ public class DBservices
                 con.Close();
             }
         }
+    }
+
+    public List<Performer> GetAllPerformers()
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_AdminGetAllArtists", con, null);             // create the command
+
+
+        List<Performer> performers = new List<Performer>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            while (dataReader.Read())
+            {
+                Performer p = new Performer();
+                p.PerformerID = Convert.ToInt32(dataReader["PerformerID"]);
+                p.PerformerName = dataReader["PerformerName"].ToString();
+                p.IsABand = Convert.ToInt32(dataReader["isABand"]);
+                p.PerformerImage = dataReader["PerformerImage"].ToString();
+                performers.Add(p);
+            }
+            return performers;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+    public List<Genre> GetAllGenres()
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetAllGenres", con, null);             // create the command
+
+
+        List<Genre> genres = new List<Genre>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            while (dataReader.Read())
+            {
+                genres.Add(new Genre(Convert.ToInt32(dataReader["GenreID"]), dataReader["GenreName"].ToString()));
+            }
+            return genres;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
+    public int PostSongDataWithoutFile(Song song)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        int SongID = GetSongScopeIdentity() + 1;
+        paramDic.Add("@SongID", SongID);
+        paramDic.Add("@SongName", song.Name);
+        paramDic.Add("@SongLyrics", song.Lyrics);
+        paramDic.Add("@GenreID", song.GenreID);
+        paramDic.Add("@ReleaseYear", song.ReleaseYear);
+        paramDic.Add("@PerformerID", song.PerformerID);
+        paramDic.Add("@SongLength", song.Length);
+
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_PostSongDataWithoutFile", con, paramDic);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return SongID;
+        }
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+    private int GetSongScopeIdentity()
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetCurrentSongIdentity", con, null);             // create the command
+
+
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                return Convert.ToInt32(dataReader["CurrentID"]);
+            }
+            throw new Exception("DB ERROR");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
     }
 }

@@ -11,9 +11,16 @@ namespace FinalProject.Controllers
     {
         // GET: api/<PerformersController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public IActionResult Get()
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                return Ok(Performer.GetAllPerformers());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "SERVER ERROR " + e.Message });
+            }
         }
 
         // GET api/<PerformersController>/5
@@ -25,8 +32,16 @@ namespace FinalProject.Controllers
 
         // POST api/<PerformersController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public IActionResult Post(Performer p)
         {
+            try
+            {
+                return p.Insert() ? Ok(new {message = "Success"}) : BadRequest(new {message = "ERROR"});
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "SERVER ERROR " + e.Message });
+            }
         }
 
         // PUT api/<PerformersController>/5
