@@ -938,6 +938,7 @@ public class DBservices
                 if (SLength != null && SLength.Contains(' '))
                     SLength = SLength.Substring(0, SLength.IndexOf(' '));
                 int IsInFav = Convert.ToInt32(dataReader["InFav"]);
+                int favorites = Convert.ToInt32(dataReader["SongNumOfFav"]);
                 object s = new
                 {
                     SongID = SID,
@@ -945,7 +946,8 @@ public class DBservices
                     PerformerImage = PImage,
                     SongName = SName,
                     SongLength = SLength,
-                    IsInFavorites = IsInFav
+                    IsInFavorites = IsInFav,
+                    SongTotalFavorites = favorites
                 };
                 songs.Add(s);
             }
