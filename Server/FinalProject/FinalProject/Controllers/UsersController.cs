@@ -112,6 +112,30 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = e.Message });
             }
         }
+        [HttpPost("FollowArtist/UserID/{UserID}/PerformerID/{PerformerID}")]
+        public IActionResult FollowArtist(int UserID, int PerformerID)
+        {
+            try
+            {
+                return Ok(Models.User.FollowArtist(UserID, PerformerID));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "SERVER ERROR " + e.Message });
+            }
+        }
+        [HttpDelete("UnfollowArtist/UserID/{UserID}/PerformerID/{PerformerID}")]
+        public IActionResult UnfollowArtist(int UserID, int PerformerID)
+        {
+            try
+            {
+                return Ok(Models.User.UnfollowArtist(UserID, PerformerID));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "SERVER ERROR " + e.Message });
+            }
+        }
         [HttpDelete("DeleteUserFavorite/UserID/{UserID}/SongID/{SongID}")]
         public IActionResult DeleteUserFavorite(int UserID, int SongID)
         {

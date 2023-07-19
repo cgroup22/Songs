@@ -852,6 +852,8 @@ public class DBservices
                 string GName = dataReader["GenreName"].ToString();
                 int IQIL = Convert.ToInt32(dataReader["IsQueryInLyrics"]);
                 int IsInFav = Convert.ToInt32(dataReader["InFav"]);
+                int UF = Convert.ToInt32(dataReader["UserFavorites"]);
+                int AF = Convert.ToInt32(dataReader["ArtistFavorites"]);
                 object res = new
                 {
                     SongID = SID,
@@ -863,7 +865,9 @@ public class DBservices
                     PerformerImage = PImage,
                     GenreName = GName,
                     IsQueryInLyrics = IQIL,
-                    IsInFavorites = IsInFav
+                    IsInFavorites = IsInFav,
+                    SongFavorites = UF,
+                    ArtistFavorites = AF
                 };
                 searchResults.Add(res);
             }
@@ -1003,6 +1007,139 @@ public class DBservices
 
     }
 
+    public int FollowArtist(int UserID, int PerformerID)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@UserID", UserID);
+        paramDic.Add("@PerformerID", PerformerID);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_FollowArtist", con, paramDic);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            // int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
+    public int UnfollowArtist(int UserID, int PerformerID)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@UserID", UserID);
+        paramDic.Add("@PerformerID", PerformerID);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_UnfollowArtist", con, paramDic);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            // int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
+    public int Insert(Comment c)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@UserID", c.UserID);
+        paramDic.Add("@PerformerID", c.PerformerID);
+        paramDic.Add("@Content", c.Content);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_PostComment", con, paramDic);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            // int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
     public List<object> GetPerformerSongs(int PID, int UserID)
     {
 
@@ -1050,7 +1187,8 @@ public class DBservices
                     SongName = SName,
                     SongLength = SLength,
                     IsInFavorites = IsInFav,
-                    SongTotalFavorites = favorites
+                    SongTotalFavorites = favorites,
+                    IsUserFollowingArtist = UserID < 1 ? -1 : Convert.ToInt32(dataReader["IsUserFollowingArtist"])
                 };
                 songs.Add(s);
             }
@@ -2813,6 +2951,61 @@ public class DBservices
                 con.Close();
             }
         }
+    }
+
+    public List<Comment> ReadComments(int PerformerID)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@PerformerID", PerformerID);
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetArtistsComments", con, paramDic);             // create the command
+
+
+        List<Comment> commentsList = new List<Comment>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                Comment c = new Comment();
+                c.Content = dataReader["CommentContent"].ToString();
+                c.UserName = dataReader["UserName"].ToString();
+                c.Date = Convert.ToDateTime(dataReader["CommentDate"]);
+                commentsList.Add(c);
+            }
+            return commentsList;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
     }
 
     public List<Performer> GetAllPerformers()

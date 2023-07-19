@@ -64,18 +64,19 @@ function Search(query) {
 }
 function SearchSCB(data) {
     let query = sessionStorage['query'];
+    // console.log(data);
     SearchedResults = data;
     // console.log(data);
     let counter = 1;
-    let str = `<ul class="album_list_name"><li>#</li><li>Song Title</li><li>Artist</li><li class="text-center">Duration</li><li class="text-center">More</li><li class="text-center">Streams</li></ul>`;
+    let str = `<ul class="album_list_name"><li style="width:3%;">#</li><li>Song Title</li><li>Artist</li><li class="text-center" style="width:10%;">Duration</li><li class="text-center">More</li><li class="text-center">Streams</li><li class="text-center">Song Favorites</li></ul>`;
     for (i in data) {
         if (data[i].songName.toLowerCase().includes(query.toLowerCase())) {
             str += `<ul>
-        <li onclick='SearchAddToQueue(${i})'><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
+        <li onclick='SearchAddToQueue(${i})' style="width:3%;"><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
         <li onclick="getLyrics(${data[i].songID})"><a href="javascript:void(0)" class="sNames">${data[i].songName}</a></li>
         <li onclick="MoveToArtist(${data[i].performerID})"><a href="javascript:void(0)">${data[i].performerName}</a></li>` +
         //<li class="text-center"><a href="javascript:void(0)">Free</a></li>
-        `<li class="text-center"><a href="javascript:void(0)">${data[i].length}</a></li>
+        `<li class="text-center" style="width:9%;"><a href="javascript:void(0)">${data[i].length}</a></li>
         `+`<li class="text-center ms_more_icon"><a href="javascript:;" onclick="ToggleMore(this)"><span class="ms_icon1 ms_active_icon"></span></a>
         <ul class="more_option SongMO" style="visibility:hidden;">`;
             if (data[i].isInFavorites == 0)
@@ -91,35 +92,35 @@ function SearchSCB(data) {
         </ul>
     </li>`+
         //<li style="text-align:center;"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download</a></li>
-        `<li class="text-center"><a href="javascript:void(0)">${data[i].numOfPlays}</a></li></ul>`;
+        `<li class="text-center"><a href="javascript:void(0)">${data[i].numOfPlays}</a></li><li class="text-center"><a href="javascript:void(0)">${data[i].songFavorites}</a></ul>`;
             counter++;
         }
     }
     document.getElementById('SearchSongsContainer').innerHTML = str;
     counter = 1;
     let Artists = [];
-    let ArtistsSTR = `<ul class="album_list_name"><li>#</li><li>Name</li><li class="text-center">Add To Queue</li></ul>`;
+    let ArtistsSTR = `<ul class="album_list_name"><li>#</li><li>Name</li><li class="text-center">Add To Queue</li><li class="text-center">Artist Favorites</li></ul>`;
     for (i in data) {
         if (data[i].performerName.toLowerCase().includes(query.toLowerCase()) && !Artists.includes(data[i].performerName.toLowerCase())) {
             Artists.unshift(data[i].performerName.toLowerCase());
             ArtistsSTR += `<ul>
             <li onclick='PlayArtistFromSearch(${data[i].performerID})'><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
             <li onclick="MoveToArtist(${data[i].performerID})"><a href="javascript:void(0)">${data[i].performerName}</a></li><li style="text-align:center;" onclick="AddArtistToQueue(${data[i].performerID})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add</a></li>
-            </ul>`;
+            <li class="text-center"><a href="javascript:void(0)">${data[i].artistFavorites}</a></ul>`;
             counter++;
         }
     }
     document.getElementById('SearchArtistsContainer').innerHTML = ArtistsSTR;
     counter = 1;
-    let GenreSearch = `<ul class="album_list_name"><li>#</li><li>Song Title</li><li>Artist</li><li class="text-center">Duration</li><li class="text-center">More</li><li class="text-center">Genre</li></ul>`;
+    let GenreSearch = `<ul class="album_list_name"><li style="width:3%;">#</li><li>Song Title</li><li>Artist</li><li class="text-center" style="width:10%;">Duration</li><li class="text-center">More</li><li class="text-center">Genre</li><li class="text-center">Song Favorites</li></ul>`;
     for (i in data) {
         if (data[i].genreName.toLowerCase().includes(query.toLowerCase())) {
             GenreSearch += `<ul>
-            <li onclick='SearchAddToQueue(${i})'><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
+            <li onclick='SearchAddToQueue(${i})' style="width:3%;"><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
             <li onclick="getLyrics(${data[i].songID})"><a href="javascript:void(0)" class="sNames">${data[i].songName}</a></li>
             <li onclick="MoveToArtist(${data[i].performerID})"><a href="javascript:void(0)">${data[i].performerName}</a></li>` +
             //<li class="text-center"><a href="javascript:void(0)">Free</a></li>
-            `<li class="text-center"><a href="javascript:void(0)">${data[i].length}</a></li>
+            `<li class="text-center" style="width:9%;"><a href="javascript:void(0)">${data[i].length}</a></li>
             `+`<li class="text-center ms_more_icon"><a href="javascript:;" onclick="ToggleMore(this)"><span class="ms_icon1 ms_active_icon"></span></a>
             <ul class="more_option SongMO" style="visibility:hidden;">`;
                 if (data[i].isInFavorites == 0)
@@ -135,21 +136,21 @@ function SearchSCB(data) {
             </ul>
         </li>`+
             //<li style="text-align:center;"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download</a></li>
-            `<li class="text-center"><a href="javascript:void(0)">${data[i].genreName}</a></li></ul>`;
+            `<li class="text-center"><a href="javascript:void(0)">${data[i].genreName}</a></li><li class="text-center"><a href="javascript:void(0)">${data[i].songFavorites}</a></ul>`;
                 counter++;
         }
     }
     document.getElementById('SearchGenreContainer').innerHTML = GenreSearch;
     counter = 1;
-    let ContainsQuery = `<ul class="album_list_name"><li>#</li><li>Song Title</li><li>Artist</li><li class="text-center">Duration</li><li class="text-center">More</li><li class="text-center">Streams</li></ul>`;
+    let ContainsQuery = `<ul class="album_list_name"><li style="width:3%;">#</li><li>Song Title</li><li>Artist</li><li class="text-center" style="width:10%;">Duration</li><li class="text-center">More</li><li class="text-center">Streams</li><li class="text-center">Song Favorites</li></ul>`;
     for (i in data) {
         if (data[i].isQueryInLyrics == 1) {
             ContainsQuery += `<ul>
-            <li onclick='SearchAddToQueue(${i})'><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
+            <li onclick='SearchAddToQueue(${i})' style="width:3%;"><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
             <li onclick="getLyrics(${data[i].songID})"><a href="javascript:void(0)" class="sNames">${data[i].songName}</a></li>
             <li onclick="MoveToArtist(${data[i].performerID})"><a href="javascript:void(0)">${data[i].performerName}</a></li>` +
             //<li class="text-center"><a href="javascript:void(0)">Free</a></li>
-            `<li class="text-center"><a href="javascript:void(0)">${data[i].length}</a></li>
+            `<li class="text-center" style="width:9%;"><a href="javascript:void(0)">${data[i].length}</a></li>
             <li class="text-center ms_more_icon"><a href="javascript:;" onclick="ToggleMore(this)"><span class="ms_icon1 ms_active_icon"></span></a>
             <ul class="more_option SongMO" style="visibility:hidden;">`;
             if (data[i].isInFavorites == 0)
@@ -164,7 +165,8 @@ function SearchSCB(data) {
             <li onclick="getLyrics(${data[i].songID})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
         </ul></li>`+
             //<li style="text-align:center;"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download</a></li>
-            `<li class="text-center"><a href="javascript:void(0)">${data[i].numOfPlays}</a></li></ul>`;
+            `<li class="text-center"><a href="javascript:void(0)">${data[i].numOfPlays}</a></li>
+            <li class="text-center"><a href="javascript:void(0)">${data[i].songFavorites}</a></li></ul>`;
                 counter++;
         }
     }

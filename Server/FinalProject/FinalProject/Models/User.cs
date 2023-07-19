@@ -350,5 +350,24 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.LoadUserInformation();
         }
+
+        public static bool FollowArtist(int UserID, int PerformerID)
+        {
+            if (UserID < 1)
+                throw new ArgumentException("User doesn't exist!");
+            if (PerformerID < 1)
+                throw new ArgumentException("Performer doesn't exist!");
+            DBservices db = new DBservices();
+            return db.FollowArtist(UserID, PerformerID) >= 0;
+        }
+        public static bool UnfollowArtist(int UserID, int PerformerID)
+        {
+            if (UserID < 1)
+                throw new ArgumentException("User doesn't exist!");
+            if (PerformerID < 1)
+                throw new ArgumentException("Performer doesn't exist!");
+            DBservices db = new DBservices();
+            return db.UnfollowArtist(UserID, PerformerID) >= 0;
+        }
     }
 }

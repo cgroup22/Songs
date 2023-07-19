@@ -213,7 +213,7 @@ function getLyrics(SongID) {
 }
 function getLyricsSCB(data) {
   // console.log(data.Lyrics);
-  //openPopup(data.SongName, "white", data.Lyrics.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>'));
+  // openPopup(data.SongName, "white", data.Lyrics.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>'));
   const overlay = document.getElementById('lyrics-overlay');
   if (overlay == undefined) {
     openPopup(data.SongName, "white", data.Lyrics.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>'));
@@ -232,7 +232,6 @@ function getLyricsSCB(data) {
 
   closeButton.addEventListener('click', function () {
     overlay.style.display = 'none';
-
   });
 }
 function Download(SongID, fileName) {

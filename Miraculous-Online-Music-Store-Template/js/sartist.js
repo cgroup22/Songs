@@ -36,6 +36,7 @@ function ArtLoaded() {
     CheckAudioPlayer();
     GetTotalPlaysOfArtist();
     GetTotalFavoritesOfArtist();
+    GetArtistsComments();
     // Takes care of updating html elements on play and adding/removing songs from the queue.
     $("#jquery_jplayer_1").bind($.jPlayer.event.play, function (event) {
         let tmp = document.getElementById('FavoritesContainer');
@@ -96,15 +97,171 @@ function UpdateArtist() {
     ajaxCall("GET", api, "", UpdateArtistSCB, ECB);
 }
 function UpdateArtistSCB(data) {
+  // console.log(data)
     if (data.length == 0) return;
     GetConcerts(data[0].performerName);
     document.title = `${data[0].performerName}'s Information`;
     GetArtistInfoFromLastFM(data[0].performerName);
     document.getElementById('ArtistName').innerHTML = data[0].performerName;
     document.getElementById('TopArtistPage').querySelector('img').src = data[0].performerImage;
+    if (data[0].isUserFollowingArtist == -1) {
+      $("#CommentForm").submit(LoginToPostComment);
+      document.getElementById('CommentBTN').setAttribute('onclick', 'LoginToPostComment()');
+      document.getElementById('FollowBTN').setAttribute('onclick', 'LoginToFollowArtist()');
+      document.getElementById('FollowText').innerHTML = "Follow";
+    } else if (data[0].isUserFollowingArtist == 1) {
+      $("#CommentForm").submit(PostComment);
+      document.getElementById('CommentBTN').setAttribute('onclick', 'PostComment()');
+      document.getElementById('FollowText').innerHTML = "Unfollow";
+      document.getElementById('FollowBTN').setAttribute('onclick', 'UnfollowArtist()');
+    } else {
+      $("#CommentForm").submit(FollowToPostComment);
+      document.getElementById('CommentBTN').setAttribute('onclick', 'FollowToPostComment()');
+      document.getElementById('FollowText').innerHTML = "Follow";
+      document.getElementById('FollowBTN').setAttribute('onclick', 'FollowArtist()');
+    }
     // console.log(data);
     ArtistSongs = data;
     UpdateArtistSongs();
+}
+function LoginToPostComment() {
+  openPopup('ERROR', "red", "Login to post a comment!");
+  return false;
+}
+function FollowToPostComment() {
+  openPopup('ERROR', "red", "Only followers can post a comment!");
+  return false;
+}
+function FollowArtist() {
+  let UserID = GetUserID();
+  if (UserID == undefined || UserID < 1) return;
+  const api = `${apiStart}/Users/FollowArtist/UserID/${UserID}/PerformerID/${Artist.id}`;
+  ajaxCall("POST", api, "", FollowArtistSCB, ECB);
+}
+function FollowArtistSCB() {
+  document.getElementById('FollowText').innerHTML = "Unfollow";
+  document.getElementById('FollowBTN').setAttribute('onclick', 'UnfollowArtist()');
+  $("#CommentForm").off("submit");
+  if (!IsLoggedIn()) {
+    document.getElementById('CommentBTN').setAttribute('onclick', 'LoginToPostComment()');
+    $("#CommentForm").submit(LoginToPostComment);
+  }
+  else {
+    $("#CommentForm").submit(PostComment);
+    document.getElementById('CommentBTN').setAttribute('onclick', 'PostComment()');
+  }
+}
+function PostComment() {
+  if (document.getElementById('CommentInput').value == "" || document.getElementById('CommentInput').value == undefined) return;
+  let UserID = GetUserID();
+  if (UserID == undefined || UserID < 1) return;
+  const api = `${apiStart}/Comments`;
+  let UserName = (sessionStorage['User'] == undefined || sessionStorage['User'] == "") ? JSON.parse(localStorage['User']).name : JSON.parse(sessionStorage['User']).name;
+ // console.log(dateString)
+  CommentToPost = {
+    "commentID": 0,
+    "userID": UserID,
+    "performerID": Artist.id,
+    "content": document.getElementById('CommentInput').value,
+    "userName": UserName
+  };
+  ajaxCall("POST", api, JSON.stringify(CommentToPost), PostCommentSCB, ECB);
+  return false;
+}
+function GetArtistsComments() {
+  const api = `${apiStart}/Comments/GetArtistsComments/PerformerID/${Artist.id}`;
+  ajaxCall("GET", api, "", GetArtistsCommentsSCB, ECB);
+}
+function GetArtistsCommentsSCB(data) {
+  NumberOfComments = data.length;
+  if (data.length == 0) {
+    document.getElementById('CommentSection').innerHTML = 'No comments yet.. bet the first to comment!';
+    document.getElementById('CommentSection').style.color = 'white';
+    document.getElementById('CommentSection').style.textAlign = 'center';
+    document.getElementById('CommentSection').style.fontSize = '20px';
+    return;
+  }
+  document.getElementById('CommentsTitle').innerHTML = `${NumberOfComments} Comments`;
+  let str = ``, img = ``;
+  let randomInt;
+  // console.log(data);
+  for (i in data) {
+    randomInt = Math.floor(Math.random() * 3);
+    switch (randomInt) {
+      case 0:
+        img = `https://bootdey.com/img/Content/user_1.jpg`;
+        break;
+      case 1:
+        img = `https://bootdey.com/img/Content/user_2.jpg`;
+        break;
+      default:
+        img = `https://bootdey.com/img/Content/user_3.jpg`;
+        break;
+    }
+    str += `<li class="clearfix">
+    <img src="${img}" class="avatar" alt="">
+    <div class="post-comments">
+        <p class="meta">${data[i].date.substring(0, data[i].date.indexOf('T'))}<a style="color:#3bc8e7;"> ${data[i].userName}</a> says:
+        <p>
+        ${data[i].content}
+        </p>
+    </div>
+  </li>`;
+  }
+  document.getElementById('CommentSection').innerHTML = str;
+}
+function PostCommentSCB() {
+  document.getElementById('CommentInput').value = "";
+  let randomInt = Math.floor(Math.random() * 3);
+  let date = new Date();
+  let dateString = `${date.getFullYear()}-${date.getMonth() + 1 < 10 ? "0" + (date.getMonth() + 1) : date.getMonth() + 1}-${date.getDate() < 10 ? "0" + date.getDate() : date.getDate()}`;
+    switch (randomInt) {
+      case 0:
+        img = `https://bootdey.com/img/Content/user_1.jpg`;
+        break;
+      case 1:
+        img = `https://bootdey.com/img/Content/user_2.jpg`;
+        break;
+      default:
+        img = `https://bootdey.com/img/Content/user_3.jpg`;
+        break;
+    }
+    let UserName = (sessionStorage['User'] == undefined || sessionStorage['User'] == "") ? JSON.parse(localStorage['User']).name : JSON.parse(sessionStorage['User']).name;
+    let str = `<li class="clearfix">
+    <img src="${img}" class="avatar" alt="">
+    <div class="post-comments">
+        <p class="meta" style="text-align:left;">${dateString}<a style="color:#3bc8e7;"> ${UserName}</a> says:
+        <p style="text-align:left;">
+        ${CommentToPost.content}
+        </p>
+    </div>
+  </li>`;
+  if (NumberOfComments === 0)
+    document.getElementById('CommentSection').innerHTML = str;
+    else document.getElementById('CommentSection').innerHTML += str;
+    NumberOfComments++;
+}
+function UnfollowArtist() {
+  let UserID = GetUserID();
+  if (UserID == undefined || UserID < 1) return;
+  const api = `${apiStart}/Users/UnfollowArtist/UserID/${UserID}/PerformerID/${Artist.id}`;
+  ajaxCall("DELETE", api, "", UnfollowArtistSCB, ECB);
+}
+function UnfollowArtistSCB() {
+  document.getElementById('FollowText').innerHTML = "Follow";
+  document.getElementById('FollowBTN').setAttribute('onclick', 'FollowArtist()');
+  $("#CommentForm").off("submit");
+  if (!IsLoggedIn()) {
+    document.getElementById('CommentBTN').setAttribute('onclick', 'LoginToPostComment()');
+    $("#CommentForm").submit(LoginToPostComment);
+  }
+  else {
+    document.getElementById('CommentBTN').setAttribute('onclick', 'FollowToPostComment()');
+    $("#CommentForm").submit(FollowToPostComment);
+  }
+}
+function LoginToFollowArtist() {
+  openPopup('ERROR', 'red', 'Login to follow the artist!');
 }
 function UpdateArtistSongs() {
     let counter = 1;
@@ -269,7 +426,7 @@ function ArtistAddSongToFavorites(SongID, elem) {
                             <li style="text-align:left;"><a href="javascript:void(0)" class="sNames">${i.name}</a></li>
                             <li><a href="javascript:void(0)">${i.dates.start.localDate} @ ${i.dates.start.localTime}</a></li>` +
                             `<li style="text-align:left;"><a href="javascript:void(0)">${i._embedded.venues[0].country.name}, ${i._embedded.venues[0].city.name}</a></li>
-                            <li><a href="javascript:void(0)">${i.classifications[0].genre.name}</a></li>
+                            <li class="text-center"><a href="javascript:void(0)">${i.classifications[0].genre.name}</a></li>
                             <li class="text-center ms_more_icon" onclick=""><a href="${i.url}" target="_blank">Buy</a></ul>`;
                             counter++;
                         }

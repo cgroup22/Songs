@@ -27,6 +27,7 @@
     <!-- Favicon Link -->
     <link rel="shortcut icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" type="text/css" href="css/OurSS.css">
+    <link rel="stylesheet" type="text/css" href="css/CommentSectionCSS.css">
 </head>
 <body onload="ArtLoaded()">
 	<!----Loader---->
@@ -254,6 +255,7 @@
         <div class="ms_content_wrapper padder_top80">
             <div class="ms_heading" style="text-align:center; margin-top: 15px;">
                 <h1 id="ArtistName">Ariana Grande</h1>
+                <div class="ms_btn" id="FollowBTN"><a href="javascript:void(0)" id="FollowText" style="color:white;">Follow</a></div>
             </div>
             <div id="TopArtistPage" class="ms_rcnt_box_img">
                 <img src="https://ichef.bbci.co.uk/news/976/cpsprodpb/17638/production/_124800859_gettyimages-817514614.jpg.webp" id="ArtistImage">
@@ -314,7 +316,48 @@
 					</div>
 				</div>
             </div>
-            <div id="concerts" style="display:none;">
+
+            <div class="container bootstrap snippets bootdey" id="CommentsDiv">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="blog-comment">
+                            <h3 style="margin-top:40px;" id="CommentsTitle">Comments</h3>
+                            <hr/>
+                            <ul class="comments">
+                                <div id="CommentSection">
+                            <li class="clearfix">
+                              <img src="https://bootdey.com/img/Content/user_1.jpg" class="avatar" alt="">
+                              <div class="post-comments">
+                                  <p class="meta">Dec 18, 2014 <a href="#">JohnDoe</a> says:
+                                  <p>
+                                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                      Etiam a sapien odio, sit amet
+                                  </p>
+                              </div>
+                            </li>
+                            <li class="clearfix">
+                              <img src="https://bootdey.com/img/Content/user_2.jpg" class="avatar" alt="">
+                              <div class="post-comments">
+                                  <p class="meta">Dec 19, 2014 <a href="#">JohnDoe</a> says:
+                                  <p>
+                                      Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                                      Etiam a sapien odio, sit amet
+                                  </p>
+                            </li>
+                        </div>
+                        <form id="CommentForm">
+                        <div class="d-flex flex-row add-comment-section mt-4 mb-4"><input type="text" class="form-control mr-3" placeholder="Add comment" id="CommentInput" required><button id="CommentBTN" class="btn btn-primary" type="button">Comment</button></div>
+                    </form>
+                    </div>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <h3>
+                Concerts
+            </h3>
+            <div id="concerts" style="display:none; margin-left:7%;">
                 
             </div>
             <!----Live Radio Section Start---->
