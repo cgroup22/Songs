@@ -900,6 +900,65 @@ public class DBservices
 
     }
 
+    public List<object> GetArtists()
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("myProjDB"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetArtist", con, null);             // create the command
+
+
+        List<object> artists = new List<object>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                int PerformerID = Convert.ToInt32(dataReader["PerformerID"]);
+                string PName = dataReader["PerformerName"].ToString();
+                string PImage = dataReader["PerformerImage"].ToString();
+                object s = new
+                {
+                    PerformerID = PerformerID,
+                    PerformerName = PName,
+                    PerformerImage = PImage
+                };
+                artists.Add(s);
+            }
+
+            return artists;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
     public List<object> GetPerformerSongs(int PID, int UserID)
     {
 

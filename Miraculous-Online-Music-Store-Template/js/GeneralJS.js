@@ -480,3 +480,46 @@ function MoveToQuizHistory() {
     }
     window.location.href = 'quizhistory.html';
 }
+
+function PlayArtist(PID) {
+    // console.log(PID)
+    let UserID = GetUserID();
+    const api = `${apiStart}/Songs/GetPerformerSongs/PerformerID/${PID}/UserID/${UserID}`;
+    ajaxCall("GET", api, "", PlayPerformerSongsSCB, ECB);
+    // TODO: play artist's first song and save other songs to the queue
+}
+// Plays all of the songs of a specific artist, also saves them to the queue.
+function PlayPerformerSongsSCB(data) {
+    // Randomize the queue
+    shuffle(data);
+    window.myPlaylist.playlist = [];
+    window.myPlaylist.original = [];
+    //console.log(data);
+    let song;
+    for (i in data) {
+        song = {
+            image: data[i].performerImage,	
+            title: data[i].songName,
+            artist: data[i].performerName,
+            mp3: `${apiStart}/Songs/GetSongByID/SongID/${data[i].songID}`,
+            oga: `${apiStart}/Songs/GetSongByID/SongID/${data[i].songID}`,
+            option : window.myPlayListOtion
+        };
+        window.myPlaylist.playlist.push(song);
+        window.myPlaylist.original.push(song);
+    }
+    window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
+    localStorage['Queue'] = JSON.stringify(window.myPlaylist.playlist);
+    HandleIndexPlayFirstInQueue();
+    PlayFirstInQueue();
+}
+
+function HandleIndexPlayFirstInQueue() {
+    let del = document.getElementById('deldel');
+    if (del)
+        del.parentNode.removeChild(del);
+    if (document.getElementsByClassName('ms_active_play').length > 0)
+    document.getElementsByClassName('ms_active_play')[0].classList.remove('ms_active_play');
+    for (i of document.getElementsByClassName('ms_play_icon'))
+        i.style.visibility = 'visible';
+  }

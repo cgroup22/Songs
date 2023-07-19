@@ -38,6 +38,19 @@ namespace FinalProject.Controllers
             }
         }
 
+        [HttpGet("GetArtists")]
+        public IActionResult GetArtists()
+        {
+            try
+            {
+                return Ok(Performer.GetArtists());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "Server error " + e.Message });
+            }
+        }
+
         [HttpGet("ArtistImage/artistName/{artistName}")]
         public async Task<IActionResult> InsertArtist(string artistName)
         {

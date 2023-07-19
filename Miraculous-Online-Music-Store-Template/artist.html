@@ -18,6 +18,7 @@
     <meta name="MobileOptimized" content="320">
     <!--Start Style -->
     <link rel="stylesheet" type="text/css" href="css/fonts.css">
+    <link rel="stylesheet" type="text/css" href="css/OurSS.css">
     <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="css/font-awesome.min.css">
     <link rel="stylesheet" type="text/css" href="js/plugins/swiper/css/swiper.min.css">
@@ -47,7 +48,37 @@
 		</div>
 	</div>
     <!----Main Wrapper Start---->
+    
     <div class="ms_main_wrapper">
+        <div class="PlaylistPopup" id="CreatePlaylistPopup" style="display:none;">
+            <div class="playlist-popup-inner">
+                <h2 id="CNPTitle">Create New Playlist</h2>
+                <input type="text" id="playlist-name" placeholder="Enter playlist name">
+                <br>
+                <a href="javascript:void(0);"><button onclick="CreatePlaylistOK()" class="ms_btn" id="CreatePlaylistBTN">Create</button></a>
+                <a href="javascript:void(0);"><button onclick="CreatePlaylistCancel()" class="ms_btn" id="CreatePlaylistBTN">Cancel</button></a>
+            </div>
+        </div>
+        <div class="PlaylistPopup" id="AddToPlaylistPopup" style="display:none;">
+            <div class="playlist-popup-inner" id="CPLWindow">
+                <h2 id="CPTitle">Choose Playlist</h2>
+                <div id="AddToPlaylistInfo">
+                    <a href="javascript:void(0)" class="PlaylistOption">Test</a>
+                    <br>
+                </div>
+                <a href="javascript:void(0);"><button onclick="AddToPlaylistCancel()" class="ms_btn" id="CreatePlaylistBTN">Cancel</button></a>
+                <p id="AddedToPlaylistInfo">Added To X</p>
+            </div>
+        </div>
+        <div class="popup-container">
+            <div id="lyrics-overlay" class="lyrics-overlay">
+              <div class="lyrics-content">
+                <h1 style="font-size: 30px;" id="songLyrics">Song Lyrics</h1>
+                <p id="lyrics-text"></p>
+                <span id="close-button" class="close-button">&times;</span>
+              </div>
+            </div>
+          </div>
         <!---Side Menu Start--->
         <div class="ms_sidemenu_wrapper">
             <div class="ms_nav_close">
@@ -215,7 +246,7 @@
                 </div>
             </div>
             <!---Featured Artists Music--->
-            <div class="ms_featured_slider padder_top20">
+            <div style="display: none;" class="ms_featured_slider padder_top20">
                 <div class="ms_heading">
                     <h1>Featured Artists</h1>
                     <span class="veiw_all"><a href="#">view more</a></span>
@@ -493,13 +524,13 @@
             <!----Top Artist Section---->
             <div class="ms_top_artist">
                 <div class="container-fluid">
-                    <div class="row">
+                    <div id="ArtistDiv" class="row">
                         <div class="col-lg-12">
                             <div class="ms_heading">
-                                <h1>Top Artists</h1>
+                                <h1>Artists</h1>
                             </div>
                         </div>
-                        <div class="col-lg-2 col-md-6">
+                        <!--<div class="col-lg-2 col-md-6">
                             <div class="ms_rcnt_box marger_bottom30">
                                 <div class="ms_rcnt_box_img">
                                     <img src="images/music/r_music1.jpg" alt="" class="img-fluid">
@@ -1018,12 +1049,13 @@
                                     <h3><a href="artist_single.html">Sophie Hudson</a></h3>
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
                     </div>
                 </div>
             </div>
+            
             <!----Live Radio Section Start---->
-            <div class="ms_radio_wrapper padder_top20">
+            <div style="display: none;" class="ms_radio_wrapper padder_top20">
                 <div class="ms_heading">
                     <h1>Live Radio</h1>
                     <span class="veiw_all"><a href="#">view more</a></span>
@@ -1751,8 +1783,11 @@
     <script type="text/javascript" src="js/plugins/nice_select/jquery.nice-select.min.js"></script>
 	<script type="text/javascript" src="js/plugins/scroll/jquery.mCustomScrollbar.js"></script>
     <script type="text/javascript" src="js/custom.js"></script>
+    <script src="js/ajaxCalls.js"></script>
     <script type="text/javascript" src="js/GeneralJS.js"></script>
-    <script type="text/javascript" src="js/OurJS.js"></script>
+    <script type="text/javascript" src="js/Artist.js"></script>
+    <!--<script type="text/javascript" src="js/GeneralJS.js"></script>
+    <script type="text/javascript" src="js/OurJS.js"></script>-->
     
 </body>
 

@@ -35,6 +35,12 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.GetFeaturedArtists();
         }
+
+        public static List<object> GetArtists()
+        {
+            DBservices db = new DBservices();
+            return db.GetArtists();
+        }
         public static object GetTotalStreams(int PerformerID)
         {
             if (PerformerID < 1)
