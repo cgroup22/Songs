@@ -129,11 +129,41 @@ function DownloadFromPlaylist(i) {
 function PlaylistPlaySong(id) {
     UnshiftToQueueAndPlay(PlaylistSongs[id]);
 }
+function PlayPlaylist() {
+    let userID = GetUserID();
+    if (userID == null || userID < 1 || PlaylistID < 1)
+        return;
+    if (PlaylistID == undefined)
+        return;
+    // console.log(PlaylistSongs);
+    window.myPlaylist.playlist = [];
+    window.myPlaylist.original = [];
+    let song;
+    for (i in PlaylistSongs) {
+        song = {
+            image: PlaylistSongs[i].performerImage,	
+            title: PlaylistSongs[i].songName,
+            artist: PlaylistSongs[i].performerName,
+            mp3: `${apiStart}/Songs/GetSongByID/SongID/${PlaylistSongs[i].songID}`,
+            oga: `${apiStart}/Songs/GetSongByID/SongID/${PlaylistSongs[i].songID}`,
+            option : window.myPlayListOtion
+        };
+        window.myPlaylist.playlist.push(song);
+        window.myPlaylist.original.push(song);
+    }
+    window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
+    localStorage['Queue'] = JSON.stringify(window.myPlaylist.playlist);
+    HandleIndexPlayFirstInQueue();
+    PlayFirstInQueue();
+}
+function PlayPlaylistSCB(data) {
+
+}
 function DeletePlaylist() {
     let userID = GetUserID();
     if (userID == null || userID < 1 || PlaylistID < 1)
         return;
-    const api = `https://localhost:44355/api/Playlists/DeleteUserPlaylist/PlaylistID/${PlaylistID}/UserID/${userID}`;
+    const api = `${apiStart}/Playlists/DeleteUserPlaylist/PlaylistID/${PlaylistID}/UserID/${userID}`;
     ajaxCall("DELETE", api, "", DeletePlaylistSCB, ECB);
 }
 function DeletePlaylistSCB() {

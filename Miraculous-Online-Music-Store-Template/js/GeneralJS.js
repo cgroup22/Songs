@@ -528,3 +528,31 @@ function HandleIndexPlayFirstInQueue() {
     for (i of document.getElementsByClassName('ms_play_icon'))
         i.style.visibility = 'visible';
   }
+  function CheckAudioPlayer() {
+    let Q = localStorage['Queue'];
+    if (Q == "" || Q == undefined) {
+        HideAudioPlayer(); // Hide audio player if there's no queue.
+    }
+    else {
+        let tmp = JSON.parse(Q); // tmp is the user's Q saved in our localStorage
+        window.myPlaylist.playlist = tmp;
+        window.myPlaylist.original = tmp;
+        window.myPlaylist.setPlaylist(tmp);
+        document.getElementById('AudioPlayerSongInfo').innerHTML = `<div class="jp-track-name">
+        <span class="que_img"><img src="${tmp[0].image}"></span><div class="que_data">${tmp[0].title}
+        <div class="jp-artist-name">${tmp[0].artist}</div></div></div>`;
+    }
+}
+function SearchTryLogin() {
+  if (!IsLoggedIn()) {
+      // TODO
+      //openPopup('ERROR', "red", 'Log in first!');
+      //setTimeout(() => {location.href = `index.html`;}, 2000);
+      return;
+  }
+  let data = localStorage['User'] == undefined || localStorage['User'] == "" ? JSON.parse(sessionStorage['User']) : JSON.parse(localStorage['User']);
+  document.getElementById('LoginRegisterAccountHeader').innerHTML = `<a href="javascript:;" class="ms_admin_name" onclick="ToggleProfile()">Hello ${data.name.split(' ')[0]} <span class="ms_pro_name">${GetFirstLettersOfName(data.name)}</span></a><ul class="pro_dropdown_menu"><li><a href="profile.html">Profile</a></li>` + 
+  //`<li><a href="manage_acc.html" target="_blank">Pricing Plan</a></li><li><a href="blog.html" target="_blank">Blog</a></li><li><a href="#">Setting</a></li>` +
+  `<li><a onclick="Logout()" href="#">Logout</a></li></ul>`;
+  document.getElementById('NeedsMSProfile').classList.add('ms_profile');
+}

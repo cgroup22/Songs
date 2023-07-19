@@ -1,3 +1,35 @@
+$(document).ready(function() {
+    IsLooped = false;
+    $("#RegisterForm").submit(Register);
+    $("#LoginForm").submit(Login);
+    CheckAudioPlayer();
+    SearchTryLogin();
+    GetArtists();
+    $("#jquery_jplayer_1").bind($.jPlayer.event.setmedia, function (event) {
+      // Handle the song changing event here
+      // console.log("Song changed:", event.jPlayer.status.media);
+      HideMoreOptions();
+    });
+    document.addEventListener('keydown', function(event) {
+        // Check if the pressed key is the escape key
+        if (event.key === 'Escape') {
+          let LoginForm = document.getElementById('myModal1');
+          let RegisterForm = document.getElementById('myModal');
+          let bIsPopupOpen = $(LoginForm).hasClass('show') || $(RegisterForm).hasClass('show');
+          if (bIsPopupOpen) {
+            $('#myModal1').modal('hide');
+            $('#myModal').modal('hide');
+          }
+        }
+      });
+      $('#myModal1').on('hidden.bs.modal', function () {
+        RemoveErrorMesseages();
+      });
+      
+      $('#myModal').on('hidden.bs.modal', function () {
+        RemoveErrorMesseages();
+      });
+});
 function GetArtists() {
     const api = `${apiStart}/Artists/GetArtists`;
     ajaxCall("GET", api, "", UpdateArtists, ECB);
@@ -28,6 +60,4 @@ function UpdateArtists(data) {
                         </div>`
     }
     ArtisDiv.innerHTML = str;
-}   
-
-GetArtists();
+}

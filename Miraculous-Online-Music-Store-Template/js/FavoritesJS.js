@@ -91,21 +91,6 @@ function UpdateFavSongs() {
     }
     document.getElementById('FavoritesContainer').innerHTML = str;
 }
-function CheckAudioPlayer() {
-    let Q = localStorage['Queue'];
-    if (Q == "" || Q == undefined) {
-        HideAudioPlayer(); // Hide audio player if there's no queue.
-    }
-    else {
-        let tmp = JSON.parse(Q); // tmp is the user's Q saved in our localStorage
-        window.myPlaylist.playlist = tmp;
-        window.myPlaylist.original = tmp;
-        window.myPlaylist.setPlaylist(tmp);
-        document.getElementById('AudioPlayerSongInfo').innerHTML = `<div class="jp-track-name">
-        <span class="que_img"><img src="${tmp[0].image}"></span><div class="que_data">${tmp[0].title}
-        <div class="jp-artist-name">${tmp[0].artist}</div></div></div>`;
-    }
-}
 function RemoveFromFavorites(SongID) {
     RemovedSongID = SongID;
     let userID = -1;

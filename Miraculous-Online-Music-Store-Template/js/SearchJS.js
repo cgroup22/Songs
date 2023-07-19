@@ -275,16 +275,3 @@ function SearchAddSongToFavorites(SongID, elem) {
     tmpElem.setAttribute('onclick', `SearchAddSongToFavorites(${SongID}, this)`);
     //elem.setAttribute
   }
-  function SearchTryLogin() {
-    if (!IsLoggedIn()) {
-        // TODO
-        //openPopup('ERROR', "red", 'Log in first!');
-        //setTimeout(() => {location.href = `index.html`;}, 2000);
-        return;
-    }
-    let data = localStorage['User'] == undefined || localStorage['User'] == "" ? JSON.parse(sessionStorage['User']) : JSON.parse(localStorage['User']);
-    document.getElementById('LoginRegisterAccountHeader').innerHTML = `<a href="javascript:;" class="ms_admin_name" onclick="ToggleProfile()">Hello ${data.name.split(' ')[0]} <span class="ms_pro_name">${GetFirstLettersOfName(data.name)}</span></a><ul class="pro_dropdown_menu"><li><a href="profile.html">Profile</a></li>` + 
-    //`<li><a href="manage_acc.html" target="_blank">Pricing Plan</a></li><li><a href="blog.html" target="_blank">Blog</a></li><li><a href="#">Setting</a></li>` +
-    `<li><a onclick="Logout()" href="#">Logout</a></li></ul>`;
-    document.getElementById('NeedsMSProfile').classList.add('ms_profile');
-}

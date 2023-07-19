@@ -49,7 +49,15 @@
 	</div>
     <!----Main Wrapper Start---->
     
-    <div class="ms_main_wrapper">
+    <div class="ms_main_wrapper" id="NeedsMSProfile">
+        <div id="popup" class="popup" style="z-index:10999;">
+            <div class="popup-content">
+              <span class="close-button" onclick="closePopup()">&times;</span>
+              <h2 id="PopupTitle">This is a Popup</h2>
+              <p id="PopupText">Hello, this is some example content in the popup!</p>
+              <button class="PopupBTN" onclick="closePopup()">Close</button>
+            </div>
+          </div>
         <div class="PlaylistPopup" id="CreatePlaylistPopup" style="display:none;">
             <div class="playlist-popup-inner">
                 <h2 id="CNPTitle">Create New Playlist</h2>
@@ -81,21 +89,21 @@
           </div>
         <!---Side Menu Start--->
         <div class="ms_sidemenu_wrapper">
-            <div class="ms_nav_close">
+            <div class="ms_nav_close" style="z-index:-1;">
                 <i class="fa fa-angle-right" aria-hidden="true"></i>
             </div>
             <div class="ms_sidemenu_inner">
                 <div class="ms_logo_inner">
                     <div class="ms_logo">
-                        <a href="index-2.html"><img src="images/logo.png" alt="" class="img-fluid"/></a>
+                        <a href="index.html"><img src="images/logo.png" alt="" class="img-fluid"/></a>
                     </div>
                     <div class="ms_logo_open">
-                        <a href="index-2.html"><img src="images/open_logo.png" alt="" class="img-fluid"/></a>
+                        <a href="index.html"><img src="images/open_logo.png" alt="" class="img-fluid"/></a>
                     </div>
                 </div>
                 <div class="ms_nav_wrapper">
                     <ul>
-                        <li><a href="index-2.html" title="Discover">
+                        <li><a href="index.html" title="Discover">
 						<span class="nav_icon">
 							<span class="icon icon_discover"></span>
 						</span>
@@ -187,7 +195,7 @@
 						</span>
 						</a>
                         </li>
-                        <li><a href="history.html" title="History">
+                        <li><a href="quizhistory.html" title="History">
 						<span class="nav_icon">
 							<span class="icon icon_history"></span>
 						</span>
@@ -242,7 +250,10 @@
                     <!--<div class="ms_top_lang">
                         <span data-toggle="modal" data-target="#lang_modal">languages <img src="images/svg/lang.svg" alt=""></span>
                     </div>-->
-                    <div class="ms_top_btn" id="LoginRegisterAccountHeader"><a href="javascript:;" class="ms_admin_name" onclick="ToggleProfile()">Hello Yuval <span class="ms_pro_name">Y</span></a><ul class="pro_dropdown_menu"><li><a href="profile.html">Profile</a></li><li><a onclick="Logout()" href="#">Logout</a></li></ul></div> 
+                    <div class="ms_top_btn" id="LoginRegisterAccountHeader">
+                        <a href="javascript:;" class="ms_btn reg_btn" data-toggle="modal" data-target="#myModal"><span>register</span></a>
+                        <a href="javascript:;" class="ms_btn login_btn" data-toggle="modal" data-target="#myModal1"><span>login</span></a>
+                    </div>
                 </div>
             </div>
             <!---Featured Artists Music--->
@@ -1335,7 +1346,7 @@
         <!----Footer Start---->
         <div class="ms_footer_wrapper">
             <div class="ms_footer_logo">
-                <a href="index-2.html"><img src="images/open_logo.png" alt=""></a>
+                <a href="index.html"><img src="images/open_logo.png" alt=""></a>
             </div>
             <div class="ms_footer_inner">
                 <div class="row">
@@ -1426,7 +1437,7 @@
         </div>
         <!----Audio Player Section---->
         <div class="ms_player_wrapper">
-			<div class="ms_player_close">
+			<div class="ms_player_close" style="z-index:1;">
 				<i class="fa fa-angle-up" aria-hidden="true"></i>
 			</div>
             <div class="player_mid">
@@ -1438,7 +1449,7 @@
                                 <div class="play_song_name">
                                     <a href="javascript:void(0);" id="playlist-text">
                                         <div class="jp-now-playing flex-item">
-                                            <div class="jp-track-name"></div>
+                                            <div class="jp-track-name" id="AudioPlayerSongInfo"></div>
                                             <div class="jp-artist-name"></div>
                                         </div>
                                     </a>
@@ -1467,7 +1478,6 @@
 								</div>
                                 <div class="jp_queue_btn">
                                     <a href="javascript:;" class="ms_clear" data-toggle="modal" data-target="#clear_modal">clear</a>
-                                    <a href="clear_modal.html" class="ms_save" data-toggle="modal" data-target="#save_modal">save</a>
                                 </div>
                             </div>
                         </div>
@@ -1516,10 +1526,10 @@
                                 </div>
                                 <div class="jp-toggles flex-item">
                                     <button class="jp-shuffle" tabindex="0" title="Shuffle">
-				<i class="ms_play_control"></i></button>
-				<button class="jp-repeat" tabindex="0" title="Repeat"><i class="ms_play_control"></i></button>
+				                    <i class="ms_play_control"></i></button>
+                                    <button class="jp-repeat" tabindex="0" title="Repeat" onclick="ToggleRepeat()"><i class="ms_play_control" id="LoopSVG"></i></button>
                                 </div>
-                                <div class="jp_quality_optn custom_select">
+                                <div class="jp_quality_optn custom_select" style="display:none;">
                                     <select>
 						<option>quality</option>
 						<option value="1">HD</option>
@@ -1550,35 +1560,38 @@
                         <div class="ms_register_img">
                             <img src="images/register_img.png" alt="" class="img-fluid" />
                         </div>
-                        <div class="ms_register_form">
-                            <h2>Register / Sign Up</h2>
-                            <div class="form-group">
-                                <input type="text" placeholder="Enter Your Name" class="form-control">
-                                <span class="form_icon">
-							<i class="fa_icon form-user" aria-hidden="true"></i>
-							</span>
+                        <form id="RegisterForm">
+                            <div class="ms_register_form">
+                                <h2>Register / Sign Up</h2>
+                                <div class="form-group">
+                                    <input type="text" placeholder="Enter Your Name" class="form-control" id="RegisterName" required>
+                                    <span class="form_icon">
+                                <i class="fa_icon form-user" aria-hidden="true"></i>
+                                </span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="text" placeholder="Enter Your Email" class="form-control" id="RegisterEmail" required>
+                                    <span class="form_icon">
+                                <i class="fa_icon form-envelope" aria-hidden="true"></i>
+                            </span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" placeholder="Enter Password" class="form-control" id="RegisterPassword" required minlength="3">
+                                    <span class="form_icon">
+                            <i class="fa_icon form-lock" aria-hidden="true"></i>
+                            </span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" placeholder="Confirm Password" class="form-control" id="RegisterConfirmPassword" required minlength="3">
+                                    <span class="form_icon">
+                            <i class=" fa_icon form-lock" aria-hidden="true"></i>
+                            </span>
+                                </div>
+                                <input type="submit" class="ms_btn" value="register now">
+                                <p>Already Have An Account? <a href="#myModal1" data-toggle="modal" class="ms_modal hideCurrentModel">login here</a></p>
+                                <p id="RegisterErrorMSG"></p>
                             </div>
-                            <div class="form-group">
-                                <input type="text" placeholder="Enter Your Email" class="form-control">
-                                <span class="form_icon">
-							<i class="fa_icon form-envelope" aria-hidden="true"></i>
-						</span>
-                            </div>
-                            <div class="form-group">
-                                <input type="password" placeholder="Enter Password" class="form-control">
-                                <span class="form_icon">
-						<i class="fa_icon form-lock" aria-hidden="true"></i>
-						</span>
-                            </div>
-                            <div class="form-group">
-                                <input type="password" placeholder="Confirm Password" class="form-control">
-                                <span class="form_icon">
-						<i class=" fa_icon form-lock" aria-hidden="true"></i>
-						</span>
-                            </div>
-                            <a href="#" class="ms_btn">register now</a>
-                            <p>Already Have An Account? <a href="#myModal1" data-toggle="modal" class="ms_modal hideCurrentModel">login here</a></p>
-                        </div>
+                        </form>
                     </div>
                 </div>
             </div>
@@ -1595,32 +1608,35 @@
                         <div class="ms_register_img">
                             <img src="images/register_img.png" alt="" class="img-fluid" />
                         </div>
-                        <div class="ms_register_form">
-                            <h2>login / Sign in</h2>
-                            <div class="form-group">
-                                <input type="text" placeholder="Enter Your Email" class="form-control">
-                                <span class="form_icon">
-							<i class="fa_icon form-envelope" aria-hidden="true"></i>
-						</span>
+                        <form id="LoginForm">
+                            <div class="ms_register_form">
+                                <h2>login / Sign in</h2>
+                                <div class="form-group">
+                                    <input type="text" placeholder="Enter Your Email" class="form-control" id="LoginEmail" required>
+                                    <span class="form_icon">
+                                <i class="fa_icon form-envelope" aria-hidden="true"></i>
+                            </span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="password" placeholder="Enter Password" id="LoginPassword" class="form-control" required minlength="3">
+                                    <span class="form_icon">
+                            <i class="fa_icon form-lock" aria-hidden="true"></i>
+                            </span>
+                                </div>
+                                <div class="remember_checkbox">
+                                    <label>Keep me signed in
+                                <input type="checkbox" id="KeepMeSignedInCheckBox">
+                                <span class="checkmark"></span>
+                            </label>
+                                </div>
+                                <input type="submit" href="profile.html" class="ms_btn" target="_blank" value="login now">
+                                <div class="popup_forgot">
+                                    <a href="#">Forgot Password?</a>
+                                </div>
+                                <p>Don't Have An Account? <a href="#myModal" data-toggle="modal" class="ms_modal1 hideCurrentModel">register here</a></p>
+                                <p id="LoginErrorMSG"></p>
                             </div>
-                            <div class="form-group">
-                                <input type="password" placeholder="Enter Password" class="form-control">
-                                <span class="form_icon">
-						<i class="fa_icon form-lock" aria-hidden="true"></i>
-						</span>
-                            </div>
-                            <div class="remember_checkbox">
-                                <label>Keep me signed in
-							<input type="checkbox">
-							<span class="checkmark"></span>
-						</label>
-                            </div>
-                            <a href="profile.html" class="ms_btn" target="_blank">login now</a>
-                            <div class="popup_forgot">
-                                <a href="#">Forgot Password ?</a>
-                            </div>
-                            <p>Don't Have An Account? <a href="#myModal" data-toggle="modal" class="ms_modal1 hideCurrentModel">register here</a></p>
-                        </div>
+                            </form>
                     </div>
                 </div>
             </div>
@@ -1730,8 +1746,8 @@
                     <div class="modal-body">
 						<h1>Are you sure you want to clear your queue?</h1>
 						<div class="clr_modal_btn">
-							<a href="#">clear all</a>
-							<a href="#">cancel</a>
+							<a onclick="FavClearQueue()" href="javascript:void(0)">clear all</a>
+							<a href="javascript:void(0)">cancel</a>
 						</div>
                     </div>
                 </div>
@@ -1785,6 +1801,7 @@
     <script type="text/javascript" src="js/custom.js"></script>
     <script src="js/ajaxCalls.js"></script>
     <script type="text/javascript" src="js/GeneralJS.js"></script>
+    <script type="text/javascript" src="js/Login.js"></script>
     <script type="text/javascript" src="js/Artist.js"></script>
     <!--<script type="text/javascript" src="js/GeneralJS.js"></script>
     <script type="text/javascript" src="js/OurJS.js"></script>-->

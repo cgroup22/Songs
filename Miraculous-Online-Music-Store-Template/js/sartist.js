@@ -108,7 +108,7 @@ function UpdateArtistSCB(data) {
 }
 function UpdateArtistSongs() {
     let counter = 1;
-    let str = `<ul class="album_list_name"><li style="width: 3%;">#</li><li>Song Title</li><li>Artist</li><li class="text-center">Duration</li><li class="text-center">More</li><li class="text-center">Favorite</li><li class="text-center" style="">World Wide Favorites</li></ul>`;
+    let str = `<ul class="album_list_name"><li style="width: 3%;">#</li><li>Song Title</li><li>Artist</li><li class="text-center">Duration</li><li class="text-center">More</li><li class="text-center">Favorite</li><li class="text-center" style="">Song User Favorites</li></ul>`;
     for (i in ArtistSongs) {
     str += `<ul>
         <li style="width: 3%;" onclick='ArtistPlaySong(${i})'><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
@@ -241,7 +241,7 @@ function ArtistAddSongToFavorites(SongID, elem) {
     ajaxCall("GET", api, "", GetTotalFavoritesOfArtistSCB, (err) => { console.log(err); });
   }
   function GetTotalFavoritesOfArtistSCB(data) {
-    document.getElementById('TotalFavorites').innerHTML = `Total Favorites: ${data.totalFavorites}`;
+    document.getElementById('TotalFavorites').innerHTML = `Total ${document.getElementById('ArtistName').innerHTML}'s User Favorites: ${data.totalFavorites}`;
     document.getElementById('TotalFavorites').style.display = `block`;
   }
 /////////////////
