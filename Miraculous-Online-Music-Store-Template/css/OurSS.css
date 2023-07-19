@@ -158,7 +158,7 @@ input[type="submit"] {
   flex-direction: row;
   align-items: center;
 }
-#ArtistSummary, #TotalStreams {
+#ArtistSummary, #TotalStreams, #TotalFavorites {
   color:white;
 }
 #ArtistImage {
@@ -169,7 +169,7 @@ input[type="submit"] {
 .ms_heading h1:after {
   left: -20px;
 }
-#TotalStreams {
+#TotalStreams,#TotalFavorites {
   text-align:left;
 }
 #TakeQuizBTN {

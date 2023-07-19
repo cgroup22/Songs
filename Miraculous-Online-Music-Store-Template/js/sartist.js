@@ -35,6 +35,7 @@ function ArtLoaded() {
     UpdateArtist();
     CheckAudioPlayer();
     GetTotalPlaysOfArtist();
+    GetTotalFavoritesOfArtist();
     // Takes care of updating html elements on play and adding/removing songs from the queue.
     $("#jquery_jplayer_1").bind($.jPlayer.event.play, function (event) {
         let tmp = document.getElementById('FavoritesContainer');
@@ -233,6 +234,16 @@ function ArtistAddSongToFavorites(SongID, elem) {
     document.getElementById('TotalStreams').innerHTML = `Total Plays: ${data.totalPlays}`;
     document.getElementById('TotalStreams').style.display = `block`;
   }
+/////////////////
+  function GetTotalFavoritesOfArtist() {
+    const api = `${apiStart}/Performers/GetTotalFavoritesOfPerformer/PerformerID/${Artist.id}`;
+    ajaxCall("GET", api, "", GetTotalFavoritesOfArtistSCB, (err) => { console.log(err); });
+  }
+  function GetTotalFavoritesOfArtistSCB(data) {
+    document.getElementById('TotalFavorites').innerHTML = `Total Favorites: ${data.totalFavorites}`;
+    document.getElementById('TotalFavorites').style.display = `block`;
+  }
+/////////////////
   function GetConcerts(artistName) {
     $.ajax({
         type:"GET",

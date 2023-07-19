@@ -42,6 +42,13 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.GetTotalStreamsOfArtist(PerformerID);
         }
+        public static object GetTotalFavorites(int PerformerID)
+        {
+            if (PerformerID < 1)
+                throw new ArgumentException("Performer doesn't exist!");
+            DBservices db = new DBservices();
+            return db.GetTotalFavoritesOfArtist(PerformerID);
+        }
 
         public static List<string> Get3RandomPerformers(int PerformerID)
         {
