@@ -22,6 +22,18 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "SERVER ERROR " + e.Message });
             }
         }
+        [HttpGet("AdminGetGenresInformation")]
+        public IActionResult AdminGetGenresInformation()
+        {
+            try
+            {
+                return Ok(Genre.GetMostPlayedGenres());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "SERVER ERROR " + e.Message });
+            }
+        }
 
         // GET api/<GenresController>/5
         [HttpGet("{id}")]

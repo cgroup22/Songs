@@ -69,7 +69,19 @@ namespace FinalProject.Controllers
             }
             catch (Exception e)
             {
-                return BadRequest(new { message = "Server error " + e.Message });
+                return BadRequest(new { message = "SERVER ERROR " + e.Message });
+            }
+        }
+        [HttpGet("AdminGetSongsData")]
+        public IActionResult AdminGetSongsData()
+        {
+            try
+            {
+                return Ok(Song.AdminGetSongsData());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "SERVER ERROR " + e.Message });
             }
         }
         [HttpGet("GetMostPlayedTrack")]

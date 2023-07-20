@@ -99,6 +99,11 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.GetPerformerSongs(PID, UserID);
         }
+        public static List<object> AdminGetSongsData()
+        {
+            DBservices db = new DBservices();
+            return db.AdminGetSongsInfo();
+        }
         public static string GetSongLyrics(int SID)
         {
             if (SID < 1)

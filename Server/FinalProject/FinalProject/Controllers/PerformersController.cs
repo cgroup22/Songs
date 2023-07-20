@@ -102,6 +102,18 @@ namespace FinalProject.Controllers
             }
             catch (Exception e)
             {
+                return BadRequest(new { message = "SERVER ERROR " + e.Message });
+            }
+        }
+        [HttpGet("AdminGetPerformersData")]
+        public IActionResult AdminGetPerformersData()
+        {
+            try
+            {
+                return Ok(Performer.AdminGetPerformersData());
+            }
+            catch (Exception e)
+            {
                 return BadRequest(new { message = "Server error " + e.Message });
             }
         }

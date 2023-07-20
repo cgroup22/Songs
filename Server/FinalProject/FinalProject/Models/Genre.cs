@@ -24,5 +24,10 @@
             DBservices db = new DBservices();
             return db.GetAllGenres();
         }
+        public static object GetMostPlayedGenres()
+        {
+            DBservices db = new DBservices();
+            return db.GetGenresByPlaysDesc();
+        }
     }
 }

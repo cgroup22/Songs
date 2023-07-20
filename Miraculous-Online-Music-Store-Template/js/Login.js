@@ -35,7 +35,7 @@ function Login() {
         document.getElementById("LoginErrorMSG").innerHTML = "Please enter your email";
     if (password.length < 3)
         document.getElementById("LoginErrorMSG").innerHTML = "Please enter your password";
-    if (email === "admin@admin" && password === "admin") {
+    if (email === "admin@gmail.com" && password === "123") {
         location.href = 'managePortal.html';
         return false;
     }

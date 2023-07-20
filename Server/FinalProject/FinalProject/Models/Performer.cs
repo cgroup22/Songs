@@ -99,5 +99,10 @@ return fileData;
             DBservices db = new DBservices();
             return db.GetPerformerInstagram(PerformerID);
         }
+        public static List<object> AdminGetPerformersData()
+        {
+            DBservices db = new DBservices();
+            return db.AdminGetPerformersData();
+        }
     }
 }

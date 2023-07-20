@@ -13,6 +13,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Collections;
 using System.Xml.Linq;
 using System.Security.Cryptography;
+using Microsoft.AspNetCore.Components.Web;
 //using SendGrid;
 
 /// <summary>
@@ -1235,6 +1236,142 @@ public class DBservices
 
     }
 
+    public List<object> AdminGetPerformersData()
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_AdminGetPerformerData", con, null);             // create the command
+
+
+        List<object> performers = new List<object>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                int PerformerID = Convert.ToInt32(dataReader["PerformerID"]);
+                string PName = dataReader["PerformerName"].ToString();
+                string PInstagram = dataReader["instagramTag"].ToString();
+                bool ISB = Convert.ToInt32(dataReader["isABand"]) == 1;
+                int TPlays = Convert.ToInt32(dataReader["TotalPlays"]);
+                int TFollowers = Convert.ToInt32(dataReader["TotalFollowers"]);
+                object s = new
+                {
+                    PerformerID = PerformerID,
+                    PerformerName = PName,
+                    isABand = ISB,
+                    PerformerInstagram = PInstagram,
+                    TotalPlays = TPlays,
+                    TotalFollowers = TFollowers
+                };
+                performers.Add(s);
+            }
+
+            return performers;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
+    public List<object> AdminGetSongsInfo()
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetSongsData", con, null);             // create the command
+
+
+        List<object> songs = new List<object>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                int SID = Convert.ToInt32(dataReader["SongID"]);
+                string SName = dataReader["SongName"].ToString();
+                int RYear = Convert.ToInt32(dataReader["ReleaseYear"]);
+                int NOP = Convert.ToInt32(dataReader["NumOfPlays"]);
+                string SLength = dataReader["SongLength"].ToString();
+                if (SLength != null && SLength.Contains(' '))
+                    SLength = SLength.Substring(0, SLength.IndexOf(' '));
+                string PName = dataReader["PerformerName"].ToString();
+                string GName = dataReader["GenreName"].ToString();
+                int TFav = Convert.ToInt32(dataReader["TotalFavorites"]);
+                object s = new
+                {
+                    SongID = SID,
+                    SongName = SName,
+                    ReleaseYear = RYear,
+                    NumOfPlays = NOP,
+                    SongLength = SLength,
+                    PerformerName = PName,
+                    GenreName = GName,
+                    TotalFavorites = TFav
+                };
+                songs.Add(s);
+            }
+
+            return songs;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
     public int FollowArtist(int UserID, int PerformerID)
     {
         SqlConnection con;
@@ -1550,6 +1687,62 @@ public class DBservices
                 return s;
             }
             throw new ArgumentException("ERROR");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
+    public List<object> GetGenresByPlaysDesc()
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_AdminGetMostLovedGenre", con, null);             // create the command
+        List<object> res = new List<object>();
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                int GID = Convert.ToInt32(dataReader["GenreID"]);
+                string Name = dataReader["GenreName"].ToString();
+                int NumOfPlays = Convert.ToInt32(dataReader["SumPlays"]);
+                int NOS = Convert.ToInt32(dataReader["NumOfSongs"]);
+                object s = new
+                {
+                    GenreID = GID,
+                    GenreName = Name,
+                    NumOfSongs = NOS,
+                    NumOfPlays = NumOfPlays
+                };
+                res.Add(s);
+            }
+            return res;
         }
         catch (Exception ex)
         {
