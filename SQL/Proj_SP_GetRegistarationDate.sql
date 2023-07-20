@@ -18,9 +18,9 @@ GO
 -- Create date: <Create Date,,>
 -- Description:	<Description,,>
 -- =============================================
-CREATE PROCEDURE Proj_SP_GetTotalFollowersOfArtist
+CREATE PROCEDURE Proj_SP_GetRegistarationDate
 	-- Add the parameters for the stored procedure here
-	@PerformerID int
+	@UserID int
 AS
 BEGIN
 	-- SET NOCOUNT ON added to prevent extra result sets from
@@ -28,6 +28,6 @@ BEGIN
 	-- SET NOCOUNT ON;
 
     -- Insert statements for procedure here
-	SELECT count(distinct UserID) as TotalFollowers from Proj_Following where PerformerID = @PerformerID
+	SELECT registrationDate from Proj_Users where UserID = @UserID
 END
 GO

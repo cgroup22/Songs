@@ -62,6 +62,19 @@ namespace FinalProject.Controllers
             }
         }
 
+        [HttpGet("GetUserRegistrationDate/UserID/{UserID}")]
+        public IActionResult GetUserRegistrationDate(int UserID)
+        {
+            try
+            {
+                return Ok(Models.User.GetRegistrationDate(UserID));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "Server error " + e.Message });
+            }
+        }
+
         // POST api/<UsersController>
         [HttpPost]
         // Posts a new user into the user table - Register

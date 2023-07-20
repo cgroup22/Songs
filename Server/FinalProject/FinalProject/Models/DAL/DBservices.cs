@@ -249,6 +249,59 @@ public class DBservices
             }
         }
     }
+    public object GetUserRegistarationDate(int UserID)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@UserID", UserID);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetRegistarationDate", con, paramDic);             // create the command
+
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                object res = new
+                {
+                    RegistrationDate = dataReader["registrationDate"].ToString()
+                };
+                return res;
+            }
+            throw new ArgumentException("User doesn't exist");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
     public object GetTotalFollowersOfPerformer(int PerformerID)
     {
 

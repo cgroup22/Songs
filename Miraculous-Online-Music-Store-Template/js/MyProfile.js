@@ -5,11 +5,11 @@ $(document).ready(function() {
     HideAudioPlayer();
 })
 function LoginHeader() {
+    document.body.style.visibility = "visible";
     if (!IsLoggedIn()) {
-        alert("Please login first!");
-        location.href = "index.html";
+        openPopup("ERROR", "red", "Please login first!");
+        setTimeout(() => {location.href = "index.html";}, 1500);
     } else {
-        document.body.style.visibility = "visible";
         let data = localStorage['User'] == undefined || localStorage['User'] == "" ? JSON.parse(sessionStorage['User']) : JSON.parse(localStorage['User']);
         document.getElementById('LoginRegisterAccountHeader').innerHTML = `<a href="javascript:;" class="ms_admin_name" onclick="ToggleProfile()">Hello ${data.name.split(' ')[0]} <span class="ms_pro_name">${GetFirstLettersOfName(data.name)}</span></a><ul class="pro_dropdown_menu"><li><a href="profile.html">Profile</a></li>` + 
         `<li><a onclick="Logout()" href="#">Logout</a></li></ul>`;
@@ -19,7 +19,19 @@ function LoginHeader() {
         document.getElementById('PasswordPH').value = data.password;
         document.getElementById('ConfirmPasswordPH').value = data.password;
         GetIsUserVerified();
+        GetUserRegistrationDate();
     }
+}
+function GetUserRegistrationDate() {
+    if (!IsLoggedIn()) return;
+    let UserID = GetUserID();
+    if (UserID < 1) return;
+    const api = `${apiStart}/Users/GetUserRegistrationDate/UserID/${UserID}`;
+    ajaxCall("GET", api, "", GetUserRegistrationDateSCB, (e) => {console.log(e);});
+}
+function GetUserRegistrationDateSCB(data) {
+    document.getElementById('registrationDate').style.display = 'block';
+    document.getElementById('registrationDate').innerHTML = "Registration Date: " + data.registrationDate.split(' ')[0];
 }
 function UpdateUser() {
     if (!IsLoggedIn()) {

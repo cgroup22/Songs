@@ -369,5 +369,12 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.UnfollowArtist(UserID, PerformerID) >= 0;
         }
+        public static object GetRegistrationDate(int UserID)
+        {
+            if (UserID < 1)
+                throw new ArgumentException("User doesn't exist!");
+            DBservices db = new DBservices();
+            return db.GetUserRegistarationDate(UserID);
+        }
     }
 }
