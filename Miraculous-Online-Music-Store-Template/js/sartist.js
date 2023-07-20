@@ -151,6 +151,8 @@ function FollowArtistSCB() {
     $("#CommentForm").submit(PostComment);
     document.getElementById('CommentBTN').setAttribute('onclick', 'PostComment()');
   }
+  if (document.getElementById('TotalFollowers').style.display !== "none")
+    document.getElementById('TotalFollowers').innerHTML = `Followers: ${parseInt(document.getElementById('TotalFollowers').innerHTML.split(' ')[1]) + 1}`;
 }
 function PostComment() {
   if (document.getElementById('CommentInput').value == "" || document.getElementById('CommentInput').value == undefined) return;
@@ -260,6 +262,8 @@ function UnfollowArtistSCB() {
     document.getElementById('CommentBTN').setAttribute('onclick', 'FollowToPostComment()');
     $("#CommentForm").submit(FollowToPostComment);
   }
+  if (document.getElementById('TotalFollowers').style.display !== "none")
+    document.getElementById('TotalFollowers').innerHTML = `Followers: ${parseInt(document.getElementById('TotalFollowers').innerHTML.split(' ')[1]) - 1}`;
 }
 function LoginToFollowArtist() {
   openPopup('ERROR', 'red', 'Login to follow the artist!');
