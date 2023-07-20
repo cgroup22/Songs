@@ -38,6 +38,7 @@ function ArtLoaded() {
     GetTotalFavoritesOfArtist();
     GetTotalFollowersOfArtist();
     GetArtistsComments();
+    GetArtistInstagramHandle();
     // Takes care of updating html elements on play and adding/removing songs from the queue.
     $("#jquery_jplayer_1").bind($.jPlayer.event.play, function (event) {
         let tmp = document.getElementById('FavoritesContainer');
@@ -55,6 +56,16 @@ function ArtLoaded() {
       $("#jquery_jplayer_1").bind($.jPlayer.event.setmedia, function (event) {
         HideMoreOptions();
       });
+}
+function GetArtistInstagramHandle() {
+  const api = `${apiStart}/Performers/GetPerformerInstagram/PerformerID/${Artist.id}`;
+  ajaxCall("GET", api, "", GetArtistInstagramHandleSCB, (e) => {console.log(e);});
+}
+function GetArtistInstagramHandleSCB(d) {
+  // console.log(d);
+  if (d.instagram == "null") return;
+  document.getElementById('ArtistsInstagram').style.display = 'block';
+  document.getElementById('ArtistsInstagram').src = `https://www.instagram.com/${d.instagram}/embed`;
 }
 function GetArtistInfoFromLastFM(queryArtistName) {
     const apiKey = 'cdd5f93673066c226a1250d12317c85d';

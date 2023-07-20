@@ -172,11 +172,18 @@ public class DBservices
 
             while (dataReader.Read())
             {
-                object res = new
+                if (!dataReader.IsDBNull(dataReader.GetOrdinal("TotalPlays")))
                 {
-                    TotalPlays = Convert.ToInt32(dataReader["TotalPlays"])
+                    object res = new
+                    {
+                        TotalPlays = Convert.ToInt32(dataReader["TotalPlays"])
+                    };
+                    return res;
+                }
+                else return new
+                {
+                    TotalPlays = 0
                 };
-                return res;
             }
             throw new ArgumentException("Performer doesn't exist");
         }
@@ -529,6 +536,7 @@ public class DBservices
         paramDic.Add("@PerformerName", p.PerformerName);
         paramDic.Add("@isABand", p.IsABand == 0 ? 0 : 1);
         paramDic.Add("@PerformerImage", p.PerformerImage);
+        paramDic.Add("@PerformerInstagram", p.Instagram);
 
 
 
@@ -659,6 +667,119 @@ public class DBservices
                 return res;
             }
             throw new ArgumentException("Song doesn't exist");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
+    public object GetUserXP(int UserID)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@UserID", UserID);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetUserXP", con, paramDic);             // create the command
+
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                object res = new
+                {
+                    UserXP = Convert.ToInt32(dataReader["XP"])
+                };
+                return res;
+            }
+            throw new ArgumentException("Song doesn't exist");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
+    public object GetPerformerInstagram(int PerformerID)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@PerformerID", PerformerID);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetPerformerInstagram", con, paramDic);             // create the command
+
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                if (dataReader["instagramTag"] != null)
+                {
+                    object res = new
+                    {
+                        instagram = dataReader["instagramTag"].ToString()
+                    };
+                    return res;
+                }
+                else return new
+                {
+                    instagram = "null"
+                };
+            }
+            throw new ArgumentException("Performer doesn't exist");
         }
         catch (Exception ex)
         {
@@ -3145,6 +3266,7 @@ public class DBservices
                 p.PerformerName = dataReader["PerformerName"].ToString();
                 p.IsABand = Convert.ToInt32(dataReader["isABand"]);
                 p.PerformerImage = dataReader["PerformerImage"].ToString();
+                p.Instagram = "null";
                 performers.Add(p);
             }
             return performers;

@@ -93,5 +93,17 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "Server error " + e.Message });
             }
         }
+        [HttpGet("GetPerformerInstagram/PerformerID/{PerformerID}")]
+        public IActionResult GetPerformerInstagram(int PerformerID)
+        {
+            try
+            {
+                return Ok(Performer.GetInstagram(PerformerID));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "Server error " + e.Message });
+            }
+        }
     }
 }

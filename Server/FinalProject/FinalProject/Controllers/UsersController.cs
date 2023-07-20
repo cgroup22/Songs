@@ -75,6 +75,19 @@ namespace FinalProject.Controllers
             }
         }
 
+        [HttpGet("GetUserXP/UserID/{UserID}")]
+        public IActionResult GetUserXP(int UserID)
+        {
+            try
+            {
+                return Ok(Models.User.GetXP(UserID));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "Server error " + e.Message });
+            }
+        }
+
         // POST api/<UsersController>
         [HttpPost]
         // Posts a new user into the user table - Register

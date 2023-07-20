@@ -64,11 +64,16 @@ function InsertArtistToDB() {
     let PName = document.getElementById('PName').value;
     let PIsBand = document.getElementById('PIsBand').checked ? 1 : 0;
     let PImage = document.getElementById('PImage').value;
+    let instagram;
+    if (document.getElementById('PInstagram').value == undefined || document.getElementById('PInstagram').value == "")
+    instagram = "null";
+    else instagram = document.getElementById('PInstagram').value;
     let ArtistToInsert = {
         performerID: 0,
         performerName: PName,
         isABand: PIsBand,
-        performerImage: PImage
+        performerImage: PImage,
+        Instagram: instagram
     };
     const api = `${apiStart}/Performers`;
     ajaxCall("POST", api, JSON.stringify(ArtistToInsert), InsertArtistToDBSCB, ECB);

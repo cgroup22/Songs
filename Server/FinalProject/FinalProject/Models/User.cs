@@ -376,5 +376,12 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.GetUserRegistarationDate(UserID);
         }
+        public static object GetXP(int UserID)
+        {
+            if (UserID < 1)
+                throw new ArgumentException("User doesn't exist!");
+            DBservices db = new DBservices();
+            return db.GetUserXP(UserID);
+        }
     }
 }

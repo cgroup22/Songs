@@ -8,24 +8,27 @@ namespace FinalProject.Models
         protected string performerName;
         protected int isABand;
         protected string performerImage;
+        protected string instagram;
 
         public int PerformerID { get => performerID; set => performerID = value; }
         public string PerformerName { get => performerName; set => performerName = value; }
         public int IsABand { get => isABand; set => isABand = value; }
         public string PerformerImage { get => performerImage; set => performerImage = value; }
+        public string Instagram { get => instagram; set => instagram = value; }
+
         /*protected static byte[] TranslateImageToHEX(IFormFile file)
-        {
-            if (file == null || file.Length == 0)
-                throw new ArgumentException("No file provided");
-            // Process the uploaded file
-            byte[] fileData;
-            using (var memoryStream = new MemoryStream())
-            {
-                file.CopyTo(memoryStream);
-                fileData = memoryStream.ToArray();
-            }
-            return fileData;
-        }*/
+{
+if (file == null || file.Length == 0)
+throw new ArgumentException("No file provided");
+// Process the uploaded file
+byte[] fileData;
+using (var memoryStream = new MemoryStream())
+{
+file.CopyTo(memoryStream);
+fileData = memoryStream.ToArray();
+}
+return fileData;
+}*/
         public void UpdateImage(IFormFile file)
         {
             //performerImage = TranslateImageToHEX(file);
@@ -88,6 +91,13 @@ namespace FinalProject.Models
         {
             DBservices db = new DBservices();
             return db.GetAllPerformers();
+        }
+        public static object GetInstagram(int PerformerID)
+        {
+            if (PerformerID < 1)
+                throw new ArgumentException("Performer doesn't exist!");
+            DBservices db = new DBservices();
+            return db.GetPerformerInstagram(PerformerID);
         }
     }
 }

@@ -20,6 +20,7 @@ function LoginHeader() {
         document.getElementById('ConfirmPasswordPH').value = data.password;
         GetIsUserVerified();
         GetUserRegistrationDate();
+        GetUserXP();
     }
 }
 function GetUserRegistrationDate() {
@@ -28,6 +29,20 @@ function GetUserRegistrationDate() {
     if (UserID < 1) return;
     const api = `${apiStart}/Users/GetUserRegistrationDate/UserID/${UserID}`;
     ajaxCall("GET", api, "", GetUserRegistrationDateSCB, (e) => {console.log(e);});
+}
+function GetUserXP() {
+    if (!IsLoggedIn()) return;
+    let UserID = GetUserID();
+    if (UserID < 1) return;
+    const api = `${apiStart}/Users/GetUserXP/UserID/${UserID}`;
+    ajaxCall("GET", api, "", GetUserXPSCB, (e) => {console.log(e);});
+}
+function GetUserXPSCB(data) {
+    let XP = data.userXP;
+    let level = Math.floor(XP / 100) + 1;
+    document.getElementById('UserLevel').innerHTML = `Level: <span style="color:red;">${level}</span> - You need <span style="color:red;">${100 - (XP % 100)} XP</span> to reach level ${level + 1}`;
+    document.getElementById('UserLevel').style.display = `block`;
+    // console.log(level)
 }
 function GetUserRegistrationDateSCB(data) {
     document.getElementById('registrationDate').style.display = 'block';
