@@ -212,7 +212,7 @@ function getLyrics(SongID) {
   ajaxCall("GET", api, "", getLyricsSCB, (e) => { openPopup("ERROR", "red", "Couldn't retrieve song lyrics"); console.log(e); });
 }
 function getLyricsSCB(data) {
-  // console.log(data.Lyrics);
+  // console.log(data);
   // openPopup(data.SongName, "white", data.Lyrics.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>'));
   const overlay = document.getElementById('lyrics-overlay');
   if (overlay == undefined) {
@@ -227,12 +227,10 @@ function getLyricsSCB(data) {
   document.getElementById("songLyrics").style.marginBottom = "20px";
   lyricsText.innerHTML = data.Lyrics.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>');
   overlay.style.display = 'flex';
-
-
-
   closeButton.addEventListener('click', function () {
     overlay.style.display = 'none';
   });
+  TextToSpeech(`${data.SongName} by ${data.PerformerName}`);
 }
 function Download(SongID, fileName) {
     if (!IsLoggedIn()) {
@@ -554,4 +552,27 @@ function SearchTryLogin() {
   //`<li><a href="manage_acc.html" target="_blank">Pricing Plan</a></li><li><a href="blog.html" target="_blank">Blog</a></li><li><a href="#">Setting</a></li>` +
   `<li><a onclick="Logout()" href="#">Logout</a></li></ul>`;
   document.getElementById('NeedsMSProfile').classList.add('ms_profile');
+}
+async function TextToSpeech(text) {
+        const response = await fetch("https://alphonsebrandon-speecht5-tts-demo.hf.space/run/predict", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                data: [
+                    text,
+                    "SLT (female)",
+                ]
+            })
+        });
+    
+        const responseData = await response.json();
+        // console.log(responseData);
+        // Assuming you have the response data in a variable called 'responseData'
+    const wavUrl = `https://alphonsebrandon-speecht5-tts-demo.hf.space/file=${responseData.data[0].name}`;
+    
+    // Create an audio element
+    const audioElement = new Audio(wavUrl);
+    
+    // Play the audio
+    audioElement.play();
 }

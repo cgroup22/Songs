@@ -653,7 +653,8 @@ public class DBservices
                 string lyrics = dataReader["SongLyrics"].ToString();
                 object res = new {
                     SongName = name,
-                    Lyrics = lyrics
+                    Lyrics = lyrics,
+                    PerformerName = dataReader["PerformerName"].ToString()
                 };
                 return res;
             }
