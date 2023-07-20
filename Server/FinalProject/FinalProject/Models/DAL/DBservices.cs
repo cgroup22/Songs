@@ -249,6 +249,59 @@ public class DBservices
             }
         }
     }
+    public object GetTotalFollowersOfPerformer(int PerformerID)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@PerformerID", PerformerID);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetTotalFollowersOfArtist", con, paramDic);             // create the command
+
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                object res = new
+                {
+                    TotalFollowers = Convert.ToInt32(dataReader["TotalFollowers"])
+                };
+                return res;
+            }
+            throw new ArgumentException("Performer doesn't exist");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
     public Dictionary<string, object> GetRandomSong()
     {
 

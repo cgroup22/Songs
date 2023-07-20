@@ -81,5 +81,17 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "Server error " + e.Message });
             }
         }
+        [HttpGet("GetTotalFollowersOfPerformer/PerformerID/{PerformerID}")]
+        public IActionResult GetTotalFollowersOfPerformer(int PerformerID)
+        {
+            try
+            {
+                return Ok(Performer.GetTotalFollowers(PerformerID));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "Server error " + e.Message });
+            }
+        }
     }
 }

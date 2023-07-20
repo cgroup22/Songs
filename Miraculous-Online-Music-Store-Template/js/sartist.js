@@ -36,6 +36,7 @@ function ArtLoaded() {
     CheckAudioPlayer();
     GetTotalPlaysOfArtist();
     GetTotalFavoritesOfArtist();
+    GetTotalFollowersOfArtist();
     GetArtistsComments();
     // Takes care of updating html elements on play and adding/removing songs from the queue.
     $("#jquery_jplayer_1").bind($.jPlayer.event.play, function (event) {
@@ -391,6 +392,14 @@ function ArtistAddSongToFavorites(SongID, elem) {
   function GetTotalPlaysOfArtistSCB(data) {
     document.getElementById('TotalStreams').innerHTML = `Total Plays: ${data.totalPlays}`;
     document.getElementById('TotalStreams').style.display = `block`;
+  }
+  function GetTotalFollowersOfArtist() {
+    const api = `${apiStart}/Performers/GetTotalFollowersOfPerformer/PerformerID/${Artist.id}`;
+    ajaxCall("GET", api, "", GetTotalFollowersOfArtistSCB, (err) => { console.log(err); });
+  }
+  function GetTotalFollowersOfArtistSCB(data) {
+    document.getElementById('TotalFollowers').innerHTML = `Followers: ${data.totalFollowers}`;
+    document.getElementById('TotalFollowers').style.display = `block`;
   }
 /////////////////
   function GetTotalFavoritesOfArtist() {
