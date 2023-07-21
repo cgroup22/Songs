@@ -27,6 +27,15 @@
             Questions = QS;
         }
 
+        public Quiz()
+        {
+            QuizID = 0;
+            UserID = 0;
+            Questions = new List<Question>();
+            for (int i = 0; i < 5; i++)
+                Questions.Add(Question.GetRandomQuestion());
+        }
+
         public Quiz(int QID, int UID, List<Question> QS, DateTime quizDateTime)
         {
             QuizID = QID;

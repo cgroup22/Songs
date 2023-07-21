@@ -190,7 +190,7 @@ function GetArtistsComments() {
 function GetArtistsCommentsSCB(data) {
   NumberOfComments = data.length;
   if (data.length == 0) {
-    document.getElementById('CommentSection').innerHTML = 'No comments yet.. bet the first to comment!';
+    document.getElementById('CommentSection').innerHTML = 'No comments yet.. be the first to comment!';
     document.getElementById('CommentSection').style.color = 'white';
     document.getElementById('CommentSection').style.textAlign = 'center';
     document.getElementById('CommentSection').style.fontSize = '20px';

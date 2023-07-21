@@ -10,10 +10,17 @@ namespace FinalProject.Controllers
     public class QuizsController : ControllerBase
     {
         // GET: api/<QuizsController>
-        [HttpGet]
-        public IEnumerable<string> Get()
+        [HttpGet("GetQuizForFirebase")]
+        public IActionResult GetQuizForFirebase()
         {
-            return new string[] { "value1", "value2" };
+            try
+            {
+                return Ok(new Quiz());
+            }
+            catch (Exception e)
+            {
+                return BadRequest("SERVER ERROR " + e.Message);
+            }
         }
 
         // GET api/<QuizsController>/5

@@ -351,6 +351,12 @@ namespace FinalProject.Models
             return db.LoadUserInformation();
         }
 
+        public static object GetAdminReport()
+        {
+            DBservices db = new DBservices();
+            return db.BuildReport();
+        }
+
         public static bool FollowArtist(int UserID, int PerformerID)
         {
             if (UserID < 1)

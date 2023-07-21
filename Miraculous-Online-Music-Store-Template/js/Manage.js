@@ -14,6 +14,45 @@ function GetSongsInfo() {
     const api = `${apiStart}/Songs/AdminGetSongsData`;
     ajaxCall("GET", api, "", GetSongsInfoSCB, ECB);
 }
+function GenerateReport() {
+    const api = `${apiStart}/Users/GetAdminReport`;
+    ajaxCall("GET", api, "", GenerateReportSCB, ECB);
+}
+function GenerateReportSCB(data) {
+    Report = data;
+    // console.log(data);
+    let str = `<a onclick="DisplayOptions()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a>`;
+    str += `<p class="Report">Most played performer: ${Report.mostPlayedPerformer} with: ${Report.numOfPlaysMostPlayedPerformer} Plays</p>
+    <p class="Report">Most followed performer: ${Report.mostFollowedPerformer} with: ${Report.numOfFollowersMostFollowedPerformer} Plays</p>
+    <p class="Report">Most played genre: ${Report.mostPlayedGenre} with: ${Report.mostPlayedGenrePlays} Plays</p>
+    <p class="Report">We currently have: ${Report.numberOfUsers} registered users.</p>
+    <div class="ms_btn manageBTNS" onclick="DownloadReport()" style="margin-bottom:10px;"><a href="javascript:void(0)" style="color:white;">Download</a></div>`;
+    document.getElementById('ReportData').innerHTML = str;
+    document.getElementById("AdminOptions").style.display = 'none';
+    document.getElementById("ReportData").style.display = 'block';
+}
+function DownloadReport() {
+    if (undefined == Report) return;
+    const csvData = convertObjectToCSV(Report);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const downloadLink = document.createElement("a");
+      downloadLink.setAttribute("href", url);
+      downloadLink.setAttribute("download", "report.csv");
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+}
+function convertObjectToCSV(obj) {
+    const csvRows = [];
+    for (const key in obj) {
+      if (Object.hasOwnProperty.call(obj, key)) {
+        const csvRow = `${key},${obj[key]}`;
+        csvRows.push(csvRow);
+      }
+    }
+    return csvRows.join("\n");
+  }
 function GetSongsInfoSCB(data) {
     // console.log(data);
     let str = `<a onclick="DisplayOptions()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a>
@@ -119,6 +158,7 @@ function DisplayOptions() {
     document.getElementById("GenresContainer").style.display = 'none';
     document.getElementById("PerformersData").style.display = 'none';
     document.getElementById("SongsData").style.display = 'none';
+    document.getElementById("ReportData").style.display = 'none';
 }
 function UploadArtist() {
     document.getElementById("AdminOptions").style.display = 'none';

@@ -1038,6 +1038,217 @@ public class DBservices
         }
     }
 
+    private Dictionary<string, object> AdminReportGetMostPlayedPerformer()
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_AdminReportGetMostPlayerPerformer", con, null);             // create the command
+
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                Dictionary<string, object> res = new Dictionary<string, object>();
+                res.Add("PerformerName", dataReader["PerformerName"].ToString());
+                res.Add("TotalListeners", Convert.ToInt32(dataReader["TotalListeners"]));
+                return res;
+            }
+            throw new Exception("DB ERROR");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
+    private Dictionary<string, object> AdminReportGetMostFollowedPerformer()
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_AdminReportGetMostFollowedPerformer", con, null);             // create the command
+
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                Dictionary<string, object> res = new Dictionary<string, object>();
+                res.Add("PerformerName", dataReader["PerformerName"].ToString());
+                res.Add("TotalFollowers", Convert.ToInt32(dataReader["TotalFollowers"]));
+                return res;
+            }
+            throw new Exception("DB ERROR");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
+    private Dictionary<string, object> AdminReportGetMostPlayedGenre()
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_AdminReportGetMostPlayedGenre", con, null);             // create the command
+
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                Dictionary<string, object> res = new Dictionary<string, object>();
+                res.Add("GenreName", dataReader["GenreName"].ToString());
+                res.Add("TotalPlays", Convert.ToInt32(dataReader["TotalPlays"]));
+                return res;
+            }
+            throw new Exception("DB ERROR");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
+    private int AdminReportGetHowManyUsers()
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_AdminReportHowManyUsers", con, null);             // create the command
+
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                return Convert.ToInt32(dataReader["TotalUsers"]);
+            }
+            throw new Exception("DB ERROR");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
+    public object BuildReport()
+    {
+        Dictionary<string, object> MostPlayedPerformer = AdminReportGetMostPlayedPerformer();
+        Dictionary<string, object> MostFollowedPerformer = AdminReportGetMostFollowedPerformer();
+        Dictionary<string, object> MostPlayedGenre = AdminReportGetMostPlayedGenre();
+        int HowManyUsers = AdminReportGetHowManyUsers();
+        return new
+        {
+            MostPlayedPerformer = MostPlayedPerformer["PerformerName"],
+            NumOfPlaysMostPlayedPerformer = MostPlayedPerformer["TotalListeners"],
+            MostFollowedPerformer = MostFollowedPerformer["PerformerName"],
+            NumOfFollowersMostFollowedPerformer = MostFollowedPerformer["TotalFollowers"],
+            MostPlayedGenre = MostPlayedGenre["GenreName"],
+            MostPlayedGenrePlays = MostPlayedGenre["TotalPlays"],
+            NumberOfUsers = HowManyUsers
+        };
+    }
+
     public List<object> Search(string query, int UserID)
     {
         SqlConnection con;

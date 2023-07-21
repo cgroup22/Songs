@@ -61,6 +61,19 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "Server error " + e.Message });
             }
         }
+        [HttpGet("GetAdminReport")]
+        public IActionResult GetAdminReport()
+        {
+            try
+            {
+                return Ok(Models.User.GetAdminReport());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "Server error " + e.Message });
+            }
+        }
+
 
         [HttpGet("GetUserRegistrationDate/UserID/{UserID}")]
         public IActionResult GetUserRegistrationDate(int UserID)
