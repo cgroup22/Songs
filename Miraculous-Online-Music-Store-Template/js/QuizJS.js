@@ -1,8 +1,10 @@
+// ATTENTION: THESE ARE THE SOLO QUIZZES.
+
 // Called when the favorites page is loaded
 function FavLoaded() {
     // Saves whether we want our queue to loop
     IsLooped = false;
-    FavoriteTryLogin();
+    QuizTryLogin();
     UserID = GetUserID();
     if (UserID < 1) {
         openPopup("ERROR", "RED", "Login first!");
@@ -30,9 +32,9 @@ function FavLoaded() {
         HideMoreOptions();
       });
 }
-function FavoriteTryLogin() {
+// Updates login html elems
+function QuizTryLogin() {
     if (!IsLoggedIn()) {
-        // TODO
         openPopup('ERROR', "red", 'Log in first!');
         setTimeout(() => {location.href = `index.html`;}, 2000);
         return;
@@ -43,6 +45,7 @@ function FavoriteTryLogin() {
     `<li><a onclick="Logout()" href="#">Logout</a></li></ul>`;
     document.getElementById('NeedsMSProfile').classList.add('ms_profile');
 }
+// Updates audio player
 function CheckAudioPlayer() {
     let Q = localStorage['Queue'];
     if (Q == "" || Q == undefined) {
@@ -58,11 +61,13 @@ function CheckAudioPlayer() {
         <div class="jp-artist-name">${tmp[0].artist}</div></div></div>`;
     }
 }
+// Starts quiz, generates questions and saves info to db
 function StartQuiz(UserID) {
     currentIndex = 0;
     const api = `${apiStart}/Quizs/StartQuiz/UserID/${UserID}`;
     ajaxCall("POST", api, "", StartQuizSCB, ECB);
 }
+// on sucess, update elems, start timer, and show first question
 function StartQuizSCB(data) {
     startTimer();
     document.getElementById('QuizEndScreen').style.display = 'none';
@@ -71,6 +76,7 @@ function StartQuizSCB(data) {
     Quiz = data;
     ShowQuestion();
 }
+// shows the next question of the quiz
 function ShowQuestion() {
     if (currentIndex >= Quiz.questions.length) {
         QuizEnd();
@@ -88,6 +94,7 @@ function ShowQuestion() {
     document.getElementById('SubmitBTN').setAttribute('onclick', `SubmitQuestion()`);
     currentIndex++;
 }
+// submits user answer to the question
 function SubmitQuestion() {
     if (document.querySelector('input[name="q1"]:checked') == null) return;
     // console.log(document.querySelector('input[name="q1"]:checked').value)
@@ -96,6 +103,7 @@ function SubmitQuestion() {
     const api = `${apiStart}/Questions/UpdateUserAnswer/QuestionID/${Quiz.questions[currentIndex - 1].id}/Answer/${document.querySelector('input[name="q1"]:checked').value}`;
     ajaxCall("PUT", api, "", ShowQuestion, ECB);
 }
+// quiz ended, show end screen with info about questions
 function QuizEnd() {
     if (totalSeconds > 0) {
         clearInterval(timer);
@@ -152,7 +160,7 @@ function QuizEnd() {
     str += `<a class="ms_btn" id="TakeQuizBTN" href="javascript:void(0)" onclick="StartQuiz(${UserID})" style="margin:auto; margin-top:40px;">Take Another Quiz</a>`;
     document.getElementById('QuizEndScreen').innerHTML = str;
 }
-
+// START TIMER
  // Timer variables
  var timerElement = document.getElementById("timer");
  var totalSeconds = 180; // 3 minutes (3 minutes * 60 seconds)
@@ -177,7 +185,7 @@ function QuizEnd() {
      // Update the timer element
      timerElement.textContent = formattedTime;
 
-     if (totalSeconds <= 0) {
+     if (totalSeconds <= 0) { // ran out of time for the quiz.
          clearInterval(timer);
          timerElement.textContent = "Time's up!";
          QuizEnd();
@@ -186,3 +194,4 @@ function QuizEnd() {
 
      totalSeconds--;
  }
+ // END TIMER

@@ -1,9 +1,10 @@
 $(document).ready(function() {
-    $("#UpdateUserForm").submit(UpdateUser);
+    $("#UpdateUserForm").submit(UpdateUser); // updates user info
     // לא מאפשרים לשמוע שירים בדף עדכון המידע על מנת שאנשים לא ישארו בו
     // כי זו סכנת אבטחה (לדוגמה אם הולכים מהמחשב וישאירו דף זה פתוח...)
     HideAudioPlayer();
 })
+// updates user details
 function LoginHeader() {
     document.body.style.visibility = "visible";
     if (!IsLoggedIn()) {
@@ -23,6 +24,7 @@ function LoginHeader() {
         GetUserXP();
     }
 }
+// gets user registration date
 function GetUserRegistrationDate() {
     if (!IsLoggedIn()) return;
     let UserID = GetUserID();
@@ -30,6 +32,7 @@ function GetUserRegistrationDate() {
     const api = `${apiStart}/Users/GetUserRegistrationDate/UserID/${UserID}`;
     ajaxCall("GET", api, "", GetUserRegistrationDateSCB, (e) => {console.log(e);});
 }
+// gets user xp
 function GetUserXP() {
     if (!IsLoggedIn()) return;
     let UserID = GetUserID();
@@ -37,6 +40,7 @@ function GetUserXP() {
     const api = `${apiStart}/Users/GetUserXP/UserID/${UserID}`;
     ajaxCall("GET", api, "", GetUserXPSCB, (e) => {console.log(e);});
 }
+// updates user level dynamically
 function GetUserXPSCB(data) {
     let XP = data.userXP;
     let level = Math.floor(XP / 100) + 1;
@@ -44,10 +48,12 @@ function GetUserXPSCB(data) {
     document.getElementById('UserLevel').style.display = `block`;
     // console.log(level)
 }
+// updates user registration date
 function GetUserRegistrationDateSCB(data) {
     document.getElementById('registrationDate').style.display = 'block';
     document.getElementById('registrationDate').innerHTML = "Registration Date: " + data.registrationDate.split(' ')[0];
 }
+// update user info on submit
 function UpdateUser() {
     if (!IsLoggedIn()) {
         alert("Please login first!");
@@ -69,24 +75,28 @@ function UpdateUser() {
     //UpdateError("", "red");
     return false;
 }
+// on sucess, save new user object to storage
 function UpdateSuccessCallback(msg) {
     if (localStorage['User'] != undefined && localStorage['User'] != "")
         localStorage['User'] = JSON.stringify(data);
     if (sessionStorage['User'] != undefined && sessionStorage['User'] != "")
         sessionStorage['User'] = JSON.stringify(data);
     // console.log(msg.message)
-    UpdateError(msg.message, 'white');
+    UpdateError(msg.message, 'white'); // used update error to save a new function and element.
     // console.log(data);
 }
+// updates error
 function UpdateErrorCallback(msg) {
     console.log(msg);
     UpdateError(msg.responseJSON.message, "red");
 }
+// updates message for the user to see
 function UpdateError(msg, color) {
     let x = document.getElementById('LoginErrorMSG');
     x.innerHTML = msg;
     x.style.color = color;
 }
+// gets if user is verified
 function GetIsUserVerified() {
     if (!IsLoggedIn()) return;
     let data = localStorage['User'] == undefined || localStorage['User'] == "" ? JSON.parse(sessionStorage['User']) : JSON.parse(localStorage['User']);
@@ -94,6 +104,7 @@ function GetIsUserVerified() {
     const api = `${apiStart}/Users/IsUserVerified/id/${id}`;
     ajaxCall("GET", api, "", IsUserVerifiedSuccessCallback, GeneralErrorCallback);
 }
+// if not verified, shows message and button to verify
 function IsUserVerifiedSuccessCallback(bIsVerified) {
     // console.log(bIsVerified);
     if (!bIsVerified) {
@@ -101,6 +112,7 @@ function IsUserVerifiedSuccessCallback(bIsVerified) {
         UpdateError("We recommend verifing your email!", "white");
     }
 }
+// initiate new verification request
 function VerifyRequest() {
     if (!IsLoggedIn()) return;
     let data = localStorage['User'] == undefined || localStorage['User'] == "" ? JSON.parse(sessionStorage['User']) : JSON.parse(localStorage['User']);
@@ -108,6 +120,7 @@ function VerifyRequest() {
     console.log(api);
     ajaxCall("PUT", api, "", VerificationSentSCB, GeneralErrorCallback);
 }
+// show message verification sent.
 function VerificationSentSCB(msg) {
     UpdateError(msg.message, "green");
 }

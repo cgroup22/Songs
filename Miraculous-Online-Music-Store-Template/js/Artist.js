@@ -1,16 +1,18 @@
+// Called onload.
 $(document).ready(function() {
-    IsLooped = false;
+    IsLooped = false; // Saves whether the queue is looped
+    // Login and register forms
     $("#RegisterForm").submit(Register);
     $("#LoginForm").submit(Login);
-    CheckAudioPlayer();
-    SearchTryLogin();
-    GetArtists();
-    $("#jquery_jplayer_1").bind($.jPlayer.event.setmedia, function (event) {
+    CheckAudioPlayer(); // updates queue and html if there's one.
+    SearchTryLogin(); // if the user is logged in, updates html elements
+    GetArtists(); // Gets the artists data and updates elems
+    $("#jquery_jplayer_1").bind($.jPlayer.event.setmedia, function (event) { // Updates queue onchange.
       // Handle the song changing event here
       // console.log("Song changed:", event.jPlayer.status.media);
       HideMoreOptions();
     });
-    document.addEventListener('keydown', function(event) {
+    document.addEventListener('keydown', function(event) { // Close login/register form when user clicks escape
         // Check if the pressed key is the escape key
         if (event.key === 'Escape') {
           let LoginForm = document.getElementById('myModal1');
@@ -30,11 +32,11 @@ $(document).ready(function() {
         RemoveErrorMesseages();
       });
 });
-function GetArtists() {
+function GetArtists() { // ajax call to get the artists data
     const api = `${apiStart}/Artists/GetArtists`;
     ajaxCall("GET", api, "", UpdateArtists, ECB);
 }
-// Updates featured artists section (by # of listeners)
+// Updates artists html (by # of listeners)
 function UpdateArtists(data) {
     //console.log(data);
     let ArtisDiv = document.getElementById('ArtistDiv');

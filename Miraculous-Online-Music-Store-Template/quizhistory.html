@@ -29,7 +29,7 @@
     <link rel="stylesheet" type="text/css" href="css/OurSS.css">
     <link rel="stylesheet" type="text/css" href="css/QuizCSS.css">
 </head>
-<body onload="FavLoaded()">
+<body onload="QHLoaded()">
 	<!----Loader---->
 	<div class="ms_inner_loader">
 		<div class="ms_loader">
@@ -100,6 +100,7 @@
                 <div class="ms_top_trend">
                     <!--<span><a href="#"  class="ms_color">Trending Songs :</a></span> <span class="top_marquee"><a href="#">Dream your moments, Until I Met You, Gimme Some Courage, Dark Alley (+8 More)</a></span>-->
                     <a class="ms_btn" id="TakeQuizBTN" href="javascript:void(0)" onclick="TakeAQuiz()">Take A Quiz</a>
+                    <a class="ms_btn" id="TakeQuizBTN" href="javascript:void(0)" onclick="MPQuiz()">Multiplayer Quiz</a>
                 </div>
             </div>
             <div class="ms_top_right">
@@ -254,13 +255,39 @@
         <!----Album Single Section Start---->
         <!---Main Content Start--->
         <div class="ms_content_wrapper padder_top80">
-            <div class="ms_free_download ms_purchase_wrapper" id="AllQuizzesData">
+            <div id="BTNS">
+            <div class="ms_heading" style="margin:0;margin-top:35px;">
+                <h1>Your Past Quizzes</h1>
+            </div>
+                <div class="ms_btn" style="margin-top:20px;" onclick="WatchSolo()"><a href="javascript:void(0)" style="color:white;">Solo Quizzes</a></div>
+                <div class="ms_btn" style="margin-top:20px;" id="MPBTN" onclick="WatchMP()"><a href="javascript:void(0)" style="color:white;">MP Quizzes</a></div>
+            </div>
+            <div class="ms_free_download ms_purchase_wrapper" id="AllQuizzesData" style="display:none;">
                 <div class="ms_heading" style="margin:0;">
-                    <h1>Your Past Quizzes</h1>
+                    <h1>Your Past Solo Quizzes</h1>
+                    <div class="ms_btn" style="margin-top:20px;" onclick="Back()"><a href="javascript:void(0)" style="color:white;">Back</a></div>
                 </div>
                 <p id="QuizAverageGrade">Your Average: 0%</p>
 				<div class="album_inner_list">
 					<div class="album_list_wrapper" id="FavoritesContainer">
+						<ul class="album_list_name">
+							<li>#</li>
+							<li class="text-center">Quiz Date</li>
+							<li class="text-center">Questions</li>
+							<li class="text-center">Grade</li>
+							<li class="text-center">Watch Quiz</li>
+						</ul>
+					</div>
+				</div>
+            </div>
+            <div class="ms_free_download ms_purchase_wrapper" id="AllMPQuizzesData" style="display:none;">
+                <div class="ms_heading" style="margin:0;">
+                    <h1>Your Past Multiplayer Quizzes</h1>
+                    <div class="ms_btn" style="margin-top:20px;" onclick="Back()"><a href="javascript:void(0)" style="color:white;">Back</a></div>
+                </div>
+                <p id="MPQuizAverageGrade">Your Average: 0%</p>
+				<div class="album_inner_list">
+					<div class="album_list_wrapper" id="MPQuizzesContainer">
 						<ul class="album_list_name">
 							<li>#</li>
 							<li class="text-center">Quiz Date</li>
@@ -312,7 +339,7 @@
                     <h1>Your Favourites</h1>
                 </div>
 				<div class="album_inner_list">
-					<div class="album_list_wrapper" id="FavoritesContainer">
+					<div class="album_list_wrapper">
 						<ul class="album_list_name">
 							<li>#</li>
 							<li>Song Title</li>
@@ -1090,6 +1117,10 @@
     <script src="js/ajaxCalls.js"></script>
     <script type="text/javascript" src="js/GeneralJS.js"></script>
     <script type="text/javascript" src="js/QuizHistoryJS.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.2.2/firebase-analytics.min.js"></script>
+    <script type="text/javascript" src="js/Firebase.js"></script>
 </body>
 
 </html>

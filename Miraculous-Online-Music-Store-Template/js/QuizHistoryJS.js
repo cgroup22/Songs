@@ -1,8 +1,9 @@
-// Called when the favorites page is loaded
-function FavLoaded() {
+// Called when the page is loaded
+function QHLoaded() { // inits firebase, updates login info and gets user quizzes to update.
     // Saves whether we want our queue to loop
     IsLooped = false;
-    FavoriteTryLogin();
+    QuizHistoryTryLogin();
+    initFirebase();
     UserID = GetUserID();
     if (UserID < 1) {
         openPopup("ERROR", "RED", "Login first!");
@@ -31,9 +32,9 @@ function FavLoaded() {
         HideMoreOptions();
       });
 }
-function FavoriteTryLogin() {
+// Tries to login and updates html on sucess. On error, leave page.
+function QuizHistoryTryLogin() {
     if (!IsLoggedIn()) {
-        // TODO
         openPopup('ERROR', "red", 'Log in first!');
         setTimeout(() => {location.href = `index.html`;}, 2000);
         return;
@@ -44,6 +45,7 @@ function FavoriteTryLogin() {
     `<li><a onclick="Logout()" href="#">Logout</a></li></ul>`;
     document.getElementById('NeedsMSProfile').classList.add('ms_profile');
 }
+// Updates audio player.
 function CheckAudioPlayer() {
     let Q = localStorage['Queue'];
     if (Q == "" || Q == undefined) {
@@ -59,114 +61,27 @@ function CheckAudioPlayer() {
         <div class="jp-artist-name">${tmp[0].artist}</div></div></div>`;
     }
 }
-function StartQuiz(UserID) {
-    currentIndex = 0;
-    const api = `${apiStart}/Quizs/StartQuiz/UserID/${UserID}`;
-    ajaxCall("POST", api, "", StartQuizSCB, ECB);
-}
-function StartQuizSCB(data) {
-    document.getElementById('QuizEndScreen').style.display = 'none';
-    document.getElementById('QuestionDiv').style.display = 'block';
-    // console.log(data);
-    Quiz = data;
-    ShowQuestion();
-}
-function ShowQuestion() {
-    if (currentIndex >= Quiz.questions.length) {
-        QuizEnd();
-        return;
-    }
-    if (document.querySelector('input[name="q1"]:checked') != null)
-        document.querySelector('input[name="q1"]:checked').checked = false;
-    document.getElementById('QuestionTitle').innerHTML = `Question ${currentIndex + 1}:`;
-    document.getElementById('QuestionContent').innerHTML = Quiz.questions[currentIndex].content;
-    document.getElementById('SubmitBTN').setAttribute('QuestionID', Quiz.questions[currentIndex].id);
-    document.getElementById(`Answer0`).innerHTML = `a) ${Quiz.questions[currentIndex].answers[0]}`;
-    document.getElementById(`Answer1`).innerHTML = `b) ${Quiz.questions[currentIndex].answers[1]}`;
-    document.getElementById(`Answer2`).innerHTML = `c) ${Quiz.questions[currentIndex].answers[2]}`;
-    document.getElementById(`Answer3`).innerHTML = `d) ${Quiz.questions[currentIndex].answers[3]}`;
-    document.getElementById('SubmitBTN').setAttribute('onclick', `SubmitQuestion()`);
-    currentIndex++;
-}
-function SubmitQuestion() {
-    if (document.querySelector('input[name="q1"]:checked') == null) return;
-    // console.log(document.querySelector('input[name="q1"]:checked').value)
-    // console.log(document.querySelector('input[name="q1"]:checked').value == Quiz.questions[currentIndex - 1].correctAnswer);
-    Quiz.questions[currentIndex - 1]["userAnswer"] = document.querySelector('input[name="q1"]:checked').value;
-    const api = `${apiStart}/Questions/UpdateUserAnswer/QuestionID/${Quiz.questions[currentIndex - 1].id}/Answer/${document.querySelector('input[name="q1"]:checked').value}`;
-    ajaxCall("PUT", api, "", ShowQuestion, ECB);
-}
-function QuizEnd() {
-    if (totalSeconds > 0) {
-        clearInterval(timer);
-        timerElement.textContent = "";
-    }
-    document.getElementById('QuizEndScreen').style.display = 'block';
-    document.getElementById('QuestionDiv').style.display = 'none';
-    let str = ``;
-    for (i in Quiz.questions) {
-        if (Quiz.questions[i] != undefined) {
-            str += `<div class="Question"><h2 class="blueTitle" id="PostQuestionTitle">Question ${parseInt(i) + 1}:</h2>
-        <p id="PostQuestionContent">${Quiz.questions[i].content}</p>
-    
-        <div class="answer-group" style="display:block;">
-          <div class="answer-option">
-            <label id="PostAnswer0" style="background-color: ${Quiz.questions[i].userAnswer != Quiz.questions[i].correctAnswer && Quiz.questions[i].correctAnswer == 0 ? "green" : "transparent"};">a) ${Quiz.questions[i].answers[0]} ${Quiz.questions[i].userAnswer == "0" ? Quiz.questions[i].correctAnswer == 0 ? "✅" : "❌" : ""}</label><br>
-          </div>
-          <div class="answer-option">
-            <label id="PostAnswer1" style="background-color: ${Quiz.questions[i].userAnswer != Quiz.questions[i].correctAnswer && Quiz.questions[i].correctAnswer == 1 ? "green" : "transparent"};">b) ${Quiz.questions[i].answers[1]} ${Quiz.questions[i].userAnswer == "1" ? Quiz.questions[i].correctAnswer == 1 ? "✅" : "❌" : ""}</label><br>
-          </div>
-        </div>
-    
-        <div class="answer-group" style="display:block;">
-          <div class="answer-option">
-            <label id="PostAnswer2" style="background-color: ${Quiz.questions[i].userAnswer != Quiz.questions[i].correctAnswer && Quiz.questions[i].correctAnswer == 2 ? "green" : "transparent"};">c) ${Quiz.questions[i].answers[2]} ${Quiz.questions[i].userAnswer == "2" ? Quiz.questions[i].correctAnswer == 2 ? "✅" : "❌" : ""}</label><br>
-          </div>
-          <div class="answer-option">
-            <label id="PostAnswer3" style="background-color: ${Quiz.questions[i].userAnswer != Quiz.questions[i].correctAnswer && Quiz.questions[i].correctAnswer == 3 ? "green" : "transparent"};">d) ${Quiz.questions[i].answers[3]} ${Quiz.questions[i].userAnswer == "3" ? Quiz.questions[i].correctAnswer == 3 ? "✅" : "❌" : ""}</label><br>
-          </div>
-        </div></div>`;
-        } else {
-            str += `<div class="Question"><h2 class="blueTitle" id="PostQuestionTitle">Question ${parseInt(i) + 1}:</h2>
-        <p id="PostQuestionContent">${Quiz.questions[i].content}</p>
-    
-        <div class="answer-group" style="display:block;">
-          <div class="answer-option">
-            <label id="PostAnswer0" style="background-color: ${Quiz.questions[i].correctAnswer == 0 ? "green" : "transparent"};">a) ${Quiz.questions[i].answers[0]}</label><br>
-          </div>
-          <div class="answer-option">
-            <label id="PostAnswer1" style="background-color: ${Quiz.questions[i].correctAnswer == 1 ? "green" : "transparent"};">b) ${Quiz.questions[i].answers[1]}</label><br>
-          </div>
-        </div>
-    
-        <div class="answer-group" style="display:block;">
-          <div class="answer-option">
-            <label id="PostAnswer2" style="background-color: ${Quiz.questions[i].correctAnswer == 2 ? "green" : "transparent"};">c) ${Quiz.questions[i].answers[2]}</label><br>
-          </div>
-          <div class="answer-option">
-            <label id="PostAnswer3" style="background-color: ${Quiz.questions[i].correctAnswer == 3 ? "green" : "transparent"};">d) ${Quiz.questions[i].answers[3]}</label><br>
-          </div>
-        </div></div>`;
-        }
-    }
-    str += `<a class="ms_btn" id="TakeQuizBTN" href="javascript:void(0)" onclick="StartQuiz(${UserID})" style="margin:auto; margin-top:40px;">Take Another Quiz</a>`;
-    document.getElementById('QuizEndScreen').innerHTML = str;
-}
+// Gets solo quiz history
  function GetQuizHistory(UserID) {
   const api = `${apiStart}/Quizs/GetUserPastQuizzesWithoutQuestions/UserID/${UserID}`
   ajaxCall("GET", api, "", GetQuizHistorySCB, ECB);
  }
+ // updates html elems
  function GetQuizHistorySCB(data) {
   Quizzes = data;
   BackToQuizzes();
   // console.log(data);
+  document.getElementById('AllQuizzesData').style.display = 'none';
+  document.getElementById('QuizEndScreen').style.display = 'block';
  }
+ // Watch specific solo quiz info.
  function WatchQuiz(qID, grade, date) {
   const api = `${apiStart}/Quizs/GetQuizQuestions/QuizID/${qID}`;
   QuizGrade = grade;
   QuizDate = date;
   ajaxCall("GET", api, "", WatchQuizSCB, ECB);
  }
+ // On sucess, update html and present quiz info (questions, answers, grade, date, etc..)
  function WatchQuizSCB(data) {
   // console.log(data);
   document.getElementById('AllQuizzesData').style.display = 'none';
@@ -204,6 +119,7 @@ function QuizEnd() {
  str += `<a class="ms_btn" style="color:white; margin:0; margin-top:10px;" href="javascript:void(0)" onclick="BackToQuizzes()">Back</a>`;
  document.getElementById('QuizEndScreen').innerHTML = str;
 }
+// Back to solo quizzes
 function BackToQuizzes() {
   document.getElementById('AllQuizzesData').style.display = 'block';
   document.getElementById('QuizEndScreen').style.display = 'none';
@@ -230,7 +146,29 @@ function BackToQuizzes() {
     document.getElementById("QuizAverageGrade").style.display = 'none';
   }
   else {
-    document.getElementById("QuizAverageGrade").innerHTML = `Your Average: ${sum / Quizzes.length}%`;
+    document.getElementById("QuizAverageGrade").innerHTML = `Your Average: ${(sum / Quizzes.length).toFixed(2)}%`;
   }
   document.getElementById('FavoritesContainer').innerHTML = str;
+}
+// Watch solo quizzes
+function WatchSolo() {
+  document.getElementById('FavoritesContainer').style.display = `block`;
+  document.getElementById('AllQuizzesData').style.display = `block`;
+  document.getElementById('MPQuizzesContainer').style.display = `none`;
+  document.getElementById('BTNS').style.display = `none`;
+}
+// Watch multiplayer quizzes
+function WatchMP() {
+  document.getElementById('FavoritesContainer').style.display = `none`;
+  document.getElementById('MPQuizzesContainer').style.display = `block`;
+  document.getElementById('AllMPQuizzesData').style.display = `block`;
+  document.getElementById('BTNS').style.display = `none`;
+}
+// go back to choices
+function Back() {
+  document.getElementById('FavoritesContainer').style.display = `none`;
+  document.getElementById('MPQuizzesContainer').style.display = `none`;
+  document.getElementById('AllQuizzesData').style.display = `none`;
+  document.getElementById('AllMPQuizzesData').style.display = `none`;
+  document.getElementById('BTNS').style.display = `block`;
 }

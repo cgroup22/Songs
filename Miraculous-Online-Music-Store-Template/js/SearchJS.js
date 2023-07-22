@@ -1,9 +1,10 @@
-function SearchLoaded() {
-    $("#RegisterForm").submit(Register);
-    $("#LoginForm").submit(Login);
-    SearchTryLogin();
+function SearchLoaded() { // Get query and initiate search
+    $("#RegisterForm").submit(Register); // submit register form
+    $("#LoginForm").submit(Login); // submit login form
+    SearchTryLogin(); // login
     // Saves whether we want our queue to loop
     IsLooped = false;
+    // on escape, clear login and register forms
     document.addEventListener('keydown', function(event) {
         // Check if the pressed key is the escape key
         if (event.key === 'Escape') {
@@ -24,11 +25,13 @@ function SearchLoaded() {
         RemoveErrorMesseages();
       });
       // סוף הטפסים
-    CheckAudioPlayer();
+    CheckAudioPlayer(); // update queue
+    // if no query, don't do anything, the user will leave the page on his own.
     if (sessionStorage['query'] == "" || sessionStorage['query'] == undefined) {
         //alert("Search something first");
         return;
     }
+    // on new song play, update html
     $("#jquery_jplayer_1").bind($.jPlayer.event.play, function (event) {
         let tmpArr = [document.getElementById('SearchSongsContainer'), document.getElementById('SearchGenreContainer'), document.getElementById('SearchLyricsContainer')];
         let index = window.myPlaylist.current;
@@ -44,15 +47,18 @@ function SearchLoaded() {
             }
         }
       });
+      // on change queue, update html and hide more options inside queue
     $("#jquery_jplayer_1").bind($.jPlayer.event.setmedia, function (event) {
         HideMoreOptions();
       });
+      // update html for query
     document.getElementById('ResultsTitle').innerHTML = `Results For "${sessionStorage['query']}"`;
     if (sessionStorage['query'].split(' ') > 1)
         document.getElementById('SongContains').innerHTML = `Songs That Contains The Words "${sessionStorage['query']}"`;
     else document.getElementById('SongContains').innerHTML = `Songs That Contains The Word "${sessionStorage['query']}"`;
-    Search(sessionStorage['query']);
+    Search(sessionStorage['query']); // initiate search on db
 }
+// initiates search on db
 function Search(query) {
     let UserID = -1;
     if (IsLoggedIn() && localStorage["User"] != null && localStorage["User"] != "")
@@ -62,12 +68,14 @@ function Search(query) {
     const api = `${apiStart}/Songs/Search/query/${query}/UserID/${UserID}`;
     ajaxCall("GET", api, "", SearchSCB, ECB);
 }
+// on sucess, update html according to search results.
 function SearchSCB(data) {
     let query = sessionStorage['query'];
     // console.log(data);
     SearchedResults = data;
     // console.log(data);
     let counter = 1;
+    // Update by song name
     let str = `<ul class="album_list_name"><li style="width:3%;">#</li><li>Song Title</li><li>Artist</li><li class="text-center" style="width:10%;">Duration</li><li class="text-center">More</li><li class="text-center">Streams</li><li class="text-center">Song Favorites</li></ul>`;
     for (i in data) {
         if (data[i].songName.toLowerCase().includes(query.toLowerCase())) {
@@ -96,6 +104,7 @@ function SearchSCB(data) {
             counter++;
         }
     }
+    // Update by artist
     document.getElementById('SearchSongsContainer').innerHTML = str;
     counter = 1;
     let Artists = [];
@@ -112,6 +121,7 @@ function SearchSCB(data) {
     }
     document.getElementById('SearchArtistsContainer').innerHTML = ArtistsSTR;
     counter = 1;
+    // Update by genre
     let GenreSearch = `<ul class="album_list_name"><li style="width:3%;">#</li><li>Song Title</li><li>Artist</li><li class="text-center" style="width:10%;">Duration</li><li class="text-center">More</li><li class="text-center">Genre</li><li class="text-center">Song Favorites</li></ul>`;
     for (i in data) {
         if (data[i].genreName.toLowerCase().includes(query.toLowerCase())) {
@@ -140,6 +150,7 @@ function SearchSCB(data) {
                 counter++;
         }
     }
+    // Update by songs lyrics
     document.getElementById('SearchGenreContainer').innerHTML = GenreSearch;
     counter = 1;
     let ContainsQuery = `<ul class="album_list_name"><li style="width:3%;">#</li><li>Song Title</li><li>Artist</li><li class="text-center" style="width:10%;">Duration</li><li class="text-center">More</li><li class="text-center">Streams</li><li class="text-center">Song Favorites</li></ul>`;
@@ -172,12 +183,15 @@ function SearchSCB(data) {
     }
     document.getElementById('SearchLyricsContainer').innerHTML = ContainsQuery;
 }
+// Play song (adds to queue as first and plays)
 function SearchAddToQueue(i) {
     UnshiftToQueueAndPlay(SearchedResults[i]);
 }
+// Add to queue
 function AddToQueueSearch(i) {
     AddToQueue(SearchedResults[i]);
 }
+// Plays artist songs
 function PlayArtistFromSearch(PID) {
     let UserID = GetUserID();
     const api = `${apiStart}/Songs/GetPerformerSongs/PerformerID/${PID}/UserID/${UserID}`;
@@ -207,34 +221,11 @@ function SearchPlayPerformerSongsSCB(data) {
     localStorage['Queue'] = JSON.stringify(window.myPlaylist.playlist);
     PlayFirstInQueue();
 }
-function AddArtistToQueue(PID) {
-    let UserID = GetUserID();
-    const api = `${apiStart}/Songs/GetPerformerSongs/PerformerID/${PID}/UserID/${UserID}`;
-    ajaxCall("GET", api, "", SearchAddArtistToQueueSCB, ECB);
-}
-// Plays all of the songs of a specific artist, also saves them to the queue.
-function SearchAddArtistToQueueSCB(data) {
-    // Randomize the queue
-    shuffle(data);
-    let song;
-    for (i in data) {
-        song = {
-            image: data[i].performerImage,	
-            title: data[i].songName,
-            artist: data[i].performerName,
-            mp3: `${apiStart}/Songs/GetSongByID/SongID/${data[i].songID}`,
-            oga: `${apiStart}/Songs/GetSongByID/SongID/${data[i].songID}`,
-            option : window.myPlayListOtion
-        };
-        window.myPlaylist.playlist.push(song);
-        window.myPlaylist.original.push(song);
-    }
-    window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
-    localStorage['Queue'] = JSON.stringify(window.myPlaylist.playlist);
-}
+// Download song
 function DownloadSearch(i) {
     Download(SearchedResults[i].songID, SearchedResults[i].songName + " by " + SearchedResults[i].performerName + ".mp3");
 }
+// Add song to favorites
 function SearchAddSongToFavorites(SongID, elem) {
     let UserID = -1;
     if (IsLoggedIn() && localStorage["User"] != null && localStorage["User"] != "")
@@ -250,12 +241,14 @@ function SearchAddSongToFavorites(SongID, elem) {
     const api = `${apiStart}/Users/PostUserFavorite/UserID/${UserID}/SongID/${SongID}`;
     ajaxCall("POST", api, "", SearchAddSongToFavoritesSCB, ECB);
   }
+  // on success, update html
   function SearchAddSongToFavoritesSCB(data) {
     if (!data) openPopup("ERROR", "red", "This song is already in your favorites");
     tmpElem.querySelector('a').innerHTML = `<span class="opt_icon"><span class="icon icon_fav"></span></span>Unfavorite`;
     // console.log(tmpElem)
     tmpElem.setAttribute('onclick', `SearchDeleteSongFromFavorites(${tmpElem.getAttribute('SongID')}, this)`);
   }
+  // delete song from favorites
   function SearchDeleteSongFromFavorites(id, elem) {
     let UserID = -1;
     if (IsLoggedIn() && localStorage["User"] != null && localStorage["User"] != "")
@@ -270,6 +263,7 @@ function SearchAddSongToFavorites(SongID, elem) {
     const api = `${apiStart}/Users/DeleteUserFavorite/UserID/${UserID}/SongID/${id}`;
     ajaxCall("DELETE", api, "", SearchDeleteSongFromFavoritesSCB, ECB);
   }
+  // on success, update html
   function SearchDeleteSongFromFavoritesSCB(res) {
     // console.log(res);
     tmpElem.querySelector('a').innerHTML = `<span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites`;

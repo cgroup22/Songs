@@ -1,11 +1,11 @@
-const port = "44355";
-const apiStart = `https://localhost:${port}/api`;
-$(document).ready(function() {
+const port = "44355"; // port of the server.
+const apiStart = `https://localhost:${port}/api`; // host url.
+$(document).ready(function() { // onload. Updates playlists and search.
     $("#SearchForm").submit(SearchQuery);
     document.getElementsByClassName('nav_playlist')[0].children[0].style.display = "none";
     document.getElementsByClassName('nav_playlist')[0].children[1].querySelector('a').href = "javascript:void(0);";
     document.getElementsByClassName('nav_playlist')[0].children[1].querySelector('a').setAttribute('onclick', 'CreatePlaylist()');
-    RequestPlaylists();
+    RequestPlaylists(); // gets user playlists if logged in
     $("#jquery_jplayer_1").bind($.jPlayer.event.setmedia, function (event) {
         //console.log(document.getElementsByClassName('play_song_options')[0].children[0].children)
         let updateElems = document.getElementsByClassName('play_song_options')[0].children[0].children;
@@ -20,9 +20,9 @@ $(document).ready(function() {
         updateElems[3].querySelector('a').innerHTML = `<span class="song_optn_icon"><i class="ms_icon icon_share"></i></span>Lyrics`;
     });
 });
+// logs in if there's a user in our storage. Otherwise, leave page.
 function GamesTryLogin() {
     if (!IsLoggedIn()) {
-        // TODO
         openPopup('ERROR', "red", 'Log in first!');
         setTimeout(() => {location.href = `index.html`;}, 2000);
         return;
@@ -56,13 +56,16 @@ function GetFirstLettersOfName(name) {
     }
     return res;
 }
+// Toggles profile options
 function ToggleProfile() {
     $(".pro_dropdown_menu").toggleClass("open_dropdown");
 }
+// alerts error. Used for tests.
 function GeneralErrorCallback(e) {
     console.log(e);
     alert(e.responseJSON.message);
 }
+// Tries to login, if not logged in, stays on the same page.
 function TryLogin() {
     if (!IsLoggedIn()) return; // Returns if the user is not logged in
     let data = localStorage['User'] == undefined || localStorage['User'] == "" ? JSON.parse(sessionStorage['User']) : JSON.parse(localStorage['User']);
@@ -75,12 +78,14 @@ function TryLogin() {
     `<li><a onclick="Logout()" href="#">Logout</a></li></ul>`;
     document.getElementById('NeedsMSProfile').classList.add('ms_profile');
 }
+// On error, opens popup for the user
 function ECB(e) {
     console.log(e)
     //alert(e);
     if (e != undefined && e.responseJSON != undefined && e.responseJSON.message != undefined)
         openPopup("ERROR", "red", e.responseJSON.message);
 }
+// opens popup with the requested title, color, and text.
 function openPopup(popupTitle, popupTitleColor, popupText) {
   document.body.classList.add("no-scroll");
   document.getElementById("popup").style.display = "block";
@@ -88,13 +93,16 @@ function openPopup(popupTitle, popupTitleColor, popupText) {
   document.getElementById("PopupTitle").style.color = popupTitleColor;
   document.getElementById("PopupText").innerHTML = popupText;
 }
+// hides popup
 function closePopup() {
   document.body.classList.remove("no-scroll");
   document.getElementById("popup").style.display = "none";
 }
+// hides audio player
 function HideAudioPlayer() {
   document.getElementsByClassName('ms_player_wrapper')[0].style.visibility = 'hidden';
 }
+// shows audio player
 function ShowAudioPlayer() {
   document.getElementsByClassName('ms_player_wrapper')[0].style.visibility = 'visible';
 }
@@ -106,6 +114,7 @@ function IsSongInQueueByNameAndArtist(artist, title) {
             return true;
     return false;
 }
+// Adds song to queue.
 function AddToQueue(Song) {
     // console.log(Song);
     if(IsSongInQueueByNameAndArtist(Song.performerName, Song.songName)) return;
@@ -129,7 +138,7 @@ function PlayFirstInQueue() {
         window.requestAnimationFrame(playSong);
     });
     function playSong() {
-        return new Promise(function(resolve, reject) {
+        return new Promise(function(resolve, reject) { // returns a promise because we'd like to give time for the db to get the song.
             $(document).on($.jPlayer.event.canplay, function() {
                 $("#jquery_jplayer_1").jPlayer("play");
                 ShowAudioPlayer();
@@ -163,6 +172,7 @@ function shuffle(array) {
   
     return array;
   }
+  // Saves search query, and moves to search page, which will search the query on the db.
   function SearchQuery() {
     let query = document.getElementById('SearchBar').value;
     if (query == "") {
@@ -173,17 +183,20 @@ function shuffle(array) {
     }
     return false;
   }
+  // Hides more options inside the queue. User have more options onclick on the songs name.
   function HideMoreOptions() {
     for (i of document.getElementsByClassName('que_more'))
         i.style.display = "none";
     UpdateRemoveFromQueue();
   }
+  // Toggles queue song repeat
   function ToggleRepeat() {
     if (!IsLooped)
         $('#LoopSVG').attr('style', 'background-color: green !important');
     else $('#LoopSVG').attr('style', 'background-color: transparent');
     IsLooped = !IsLooped;
   }
+  // Removes song from queue button
   function UpdateRemoveFromQueue() {
     // console.log(document.getElementsByClassName('que_close'));
     let ar = document.getElementsByClassName('que_close');
@@ -193,6 +206,7 @@ function shuffle(array) {
         ar[i].setAttribute('onclick', `RemoveSongFromQueue(${i})`);
     }
   }
+  // Removes song from queue
   function RemoveSongFromQueue(id) {
     window.myPlaylist.playlist.splice(id, 1);
     window.myPlaylist.original.splice(id, 1);
@@ -203,6 +217,7 @@ function shuffle(array) {
     else localStorage["Queue"] = JSON.stringify(window.myPlaylist.playlist);
     // window.myPlaylist.remove(id);
   }
+  // Clears queue and hides audio player and stops current playing song
   function FavClearQueue() {
     localStorage['Queue'] = "";
     window.myPlaylist.playlist=[];
@@ -220,10 +235,12 @@ function shuffle(array) {
     for (i of document.getElementsByClassName('play_active_song'))
         i.classList.remove('play_active_song');
 }
+// gets the lyrics of the chosen song
 function getLyrics(SongID) {
   const api = `${apiStart}/Songs/GetSongLyrics/SongID/${SongID}`;
   ajaxCall("GET", api, "", getLyricsSCB, (e) => { openPopup("ERROR", "red", "Couldn't retrieve song lyrics"); console.log(e); });
 }
+// shows popup with the lyrics of the song
 function getLyricsSCB(data) {
   // console.log(data);
   // openPopup(data.SongName, "white", data.Lyrics.replace(/\r\n/g, '<br>').replace(/\n/g, '<br>'));
@@ -245,6 +262,7 @@ function getLyricsSCB(data) {
   });
   TextToSpeech(`${data.SongName} by ${data.PerformerName}`);
 }
+// downloads the requested song
 function Download(SongID, fileName) {
     if (!IsLoggedIn()) {
         openPopup("ERROR", "red", "Log in to download!");
@@ -269,6 +287,7 @@ function Download(SongID, fileName) {
     };
     xhr.send();
   }
+  // Toggles more options of element.
   function ToggleMore(elem) {
     let tmp = elem.parentNode.querySelector('ul');
     if (tmp.style.visibility === "hidden") {
@@ -280,11 +299,13 @@ function Download(SongID, fileName) {
         tmp.style.opacity = "0";
     }
 }
+// hides more options
 function TurnOffMoreOptions() {
     for (i of document.getElementsByClassName('SongMO')) {
         i.style.visibility = "hidden";
         i.style.opacity = "0"; }
 }
+// gets playlists of user
 function RequestPlaylists() {
     let UserID = -1;
     if (IsLoggedIn() && localStorage["User"] != null && localStorage["User"] != "")
@@ -297,6 +318,7 @@ function RequestPlaylists() {
     const api = `${apiStart}/Playlists/GetUserPlaylists/UserID/${UserID}`;
     ajaxCall("GET", api, "", RequestPlaylistsSCB, ECB);
 }
+// updates playlists of user in html dynamically
 function RequestPlaylistsSCB(data) {
     // console.log(data);
     UserPlaylists = data;
@@ -319,8 +341,9 @@ function RequestPlaylistsSCB(data) {
     document.getElementsByClassName('nav_playlist')[0].innerHTML += str;
     document.getElementById('AddToPlaylistInfo').innerHTML = AddToPlaylistPopupInfo;
 }
+// move to playlist page
 function getPlaylist(PlaylistID) {
-    console.log(PlaylistID);
+    // console.log(PlaylistID);
     sessionStorage['PlaylistID'] = PlaylistID;
     window.location.href = "playlist.html";
 }
@@ -334,6 +357,7 @@ function GetUserID() {
     else userID = JSON.parse(localStorage['User']).id;
     return userID;
 }
+// Creates a new playlist
 function CreatePlaylist() {
     let UserID = GetUserID();
     if (undefined == UserID || isNaN(UserID) || null == UserID || UserID < 1) {
@@ -342,9 +366,11 @@ function CreatePlaylist() {
     }
     document.getElementById('CreatePlaylistPopup').style.display = 'flex';
 }
+// Cancel creating a new playlist button
 function CreatePlaylistCancel() {
     document.getElementById('CreatePlaylistPopup').style.display = 'none';
 }
+// Creates a playlist on db
 function CreatePlaylistOK() {
     let val = document.getElementById('playlist-name').value;
     let uID = GetUserID();
@@ -362,6 +388,7 @@ function CreatePlaylistOK() {
     const api = `${apiStart}/Playlists`;
     ajaxCall("POST", api, JSON.stringify(Playlist), CreatePlaylistSCB, ECB);
 }
+// Moves to playlist new page
 function CreatePlaylistSCB(data) {
     document.getElementById('CreatePlaylistPopup').style.display = 'none';
     if (data.playlistID >= 1) {
@@ -369,9 +396,11 @@ function CreatePlaylistSCB(data) {
         window.location.href = 'playlist.html';
     }
 }
+// calcen add song to playlist
 function AddToPlaylistCancel() {
     document.getElementById('AddToPlaylistPopup').style.display = 'none';
 }
+// Adds song to playlist
 function AddToPlaylistOK(pid) {
     if (SongIDATP == undefined) return;
     const api = `${apiStart}/Playlists/InsertSongToPlaylist`;
@@ -381,6 +410,7 @@ function AddToPlaylistOK(pid) {
     };
     ajaxCall("PUT", api, JSON.stringify(SongInPlaylist), AddToPlaylistSCB, AddToPlaylistECB);
 }
+// Adds song to playlist, updates elems
 function ATP(sid) {
     if (!IsLoggedIn()) {
         openPopup("ERROR", "red", "Login first!");
@@ -390,18 +420,21 @@ function ATP(sid) {
     document.getElementById('AddedToPlaylistInfo').style.display = `none`;
     SongIDATP = sid;
 }
+// Adds song to playlist sucess callback, updates elems
 function AddToPlaylistSCB() {
     let elem = document.getElementById('AddedToPlaylistInfo');
     elem.innerHTML = `Added`;
     elem.style.display = `block`;
     elem.style.color = 'green';
 }
+// Adds to playlist error. Shows the error to the user on AddedToPlaylistInfo elem
 function AddToPlaylistECB(e) {
     let elem = document.getElementById('AddedToPlaylistInfo');
     elem.innerHTML = e.responseJSON.message;
     elem.style.display = `block`;
     elem.style.color = 'red';
 }
+// Adds the current playing song to favorites
 function AddCurrentPlayingSongToFavorites(SongID) {
     if (!IsLoggedIn()) {
         openPopup("ERROR", "red", "You're not logged in!");
@@ -411,11 +444,13 @@ function AddCurrentPlayingSongToFavorites(SongID) {
     const api = `${apiStart}/Users/PostUserFavorite/UserID/${UserID}/SongID/${SongID}`;
     ajaxCall("POST", api, "", AddCurrentPlayingSongToFavoritesSCB, ECB);
   }
+  // Updates elem of current playing song.
   function AddCurrentPlayingSongToFavoritesSCB() {
     let elem = document.getElementsByClassName('play_song_options')[0].children[0].children[1];
     elem.querySelector('a').innerHTML = `<span class="song_optn_icon"><i class="ms_icon icon_fav"></i></span>Unfavourite`;
     elem.setAttribute('onclick', 'DeleteCurrentPlayingSongFromFavorites()');
   }
+  // Removes current playing song from favorites
   function DeleteCurrentPlayingSongFromFavorites() {
     if (!IsLoggedIn()) {
         openPopup("ERROR", "red", "You're not logged in!");
@@ -428,6 +463,7 @@ function AddCurrentPlayingSongToFavorites(SongID) {
     const api = `${apiStart}/Users/DeleteUserFavorite/UserID/${UserID}/SongID/${SongID}`;
     ajaxCall("DELETE", api, "", DeleteCurrentPlayingSongFromFavoritesSCB, ECB);
   }
+  // Updates html elem of current playing song. Gives the user the option to now add the song again.
   function DeleteCurrentPlayingSongFromFavoritesSCB() {
     let index = window.myPlaylist.current;
     let tmpArr = window.myPlaylist.playlist[index].mp3.split('/');
@@ -436,9 +472,11 @@ function AddCurrentPlayingSongToFavorites(SongID) {
     elem.querySelector('a').innerHTML = `<span class="song_optn_icon"><i class="ms_icon icon_fav"></i></span>Add To Favourites`;
     elem.setAttribute('onclick', `AddCurrentPlayingSongToFavorites(${SongID})`);
   }
+  // If not logged in, shows popup when trying to reach the favorites page
   function LoginToFavorite() {
     openPopup("ERROR", "red", "Log in to add songs to your favorites!");
   }
+  // Go into chosen artist page.
   function MoveToArtist(id) {
     if (typeof id != "number" || id < 1) return;
     let Artist = {
@@ -447,6 +485,7 @@ function AddCurrentPlayingSongToFavorites(SongID) {
     sessionStorage['Artist'] = JSON.stringify(Artist);
     window.location.href = 'sartist.html';
 }
+// Inserts song to queue as first and plays
 function UnshiftToQueueAndPlay(Song) {
     let songToAdd = {
         image: Song.performerImage,
@@ -474,6 +513,7 @@ function UnshiftToQueueAndPlay(Song) {
         PlayFirstInQueue();
     }
 }
+// Move to favorites page. If not logged in, popup error.
 function MoveToFavorites() {
     if (!IsLoggedIn()) {
         openPopup('ERROR', 'red', 'Login first!');
@@ -481,6 +521,7 @@ function MoveToFavorites() {
     }
     window.location.href = 'favourite.html';
 }
+// Move to solo quiz page. If not logged in, popup error.
 function TakeAQuiz() {
     if (!IsLoggedIn()) {
         openPopup("ERROR", "red", "Login first");
@@ -488,6 +529,7 @@ function TakeAQuiz() {
     }
     window.location.href = 'quiz.html';
 }
+// Move to quiz history page. If not logged in, popup error.
 function MoveToQuizHistory() {
     if (!IsLoggedIn()) {
         openPopup("ERROR", 'red', 'Login first!');
@@ -495,13 +537,24 @@ function MoveToQuizHistory() {
     }
     window.location.href = 'quizhistory.html';
 }
+// Move to multiplayer quiz. If not logged in or not verified, popup error.
 function MPQuiz() {
     if (!IsLoggedIn()) {
         openPopup("ERROR", 'red', 'Login first!');
         return;
     }
+    const api = `${apiStart}/Users/IsUserVerified/id/${GetUserID()}`;
+    ajaxCall("GET", api, MPQuizSCB, (e) => { if (typeof e === "boolean") MPQuizSCB(e); else console.log(e); /*window.location.href = 'MultiplayerQuizzes.html';*/ });
+}
+// Moves to multiplayer quiz page if user is verified.
+function MPQuizSCB(data) {
+    if (!data) {
+        openPopup("ERROR", 'red', 'You must be verified to play multiplayer!');
+        return;
+    }
     window.location.href = 'MultiplayerQuizzes.html';
 }
+// Plays the chosen artists songs.
 function PlayArtist(PID) {
     // console.log(PID)
     let UserID = GetUserID();
@@ -534,7 +587,7 @@ function PlayPerformerSongsSCB(data) {
     HandleIndexPlayFirstInQueue();
     PlayFirstInQueue();
 }
-
+// Updates elems of current playing song.
 function HandleIndexPlayFirstInQueue() {
     let del = document.getElementById('deldel');
     if (del)
@@ -544,6 +597,7 @@ function HandleIndexPlayFirstInQueue() {
     for (i of document.getElementsByClassName('ms_play_icon'))
         i.style.visibility = 'visible';
   }
+  // If there's a queue with song, updates html. Otherwise, hide audio player.
   function CheckAudioPlayer() {
     let Q = localStorage['Queue'];
     if (Q == "" || Q == undefined) {
@@ -554,11 +608,12 @@ function HandleIndexPlayFirstInQueue() {
         window.myPlaylist.playlist = tmp;
         window.myPlaylist.original = tmp;
         window.myPlaylist.setPlaylist(tmp);
-        document.getElementById('AudioPlayerSongInfo').innerHTML = `<div class="jp-track-name">
+        document.getElementById('AudioPlayerSongInfo').innerHTML = `<div class="jp-track-name" id="AudioPlayerSongInfo">
         <span class="que_img"><img src="${tmp[0].image}"></span><div class="que_data">${tmp[0].title}
         <div class="jp-artist-name">${tmp[0].artist}</div></div></div>`;
     }
 }
+// Tries to login without error popup.
 function SearchTryLogin() {
   if (!IsLoggedIn()) {
       // TODO
@@ -572,6 +627,7 @@ function SearchTryLogin() {
   `<li><a onclick="Logout()" href="#">Logout</a></li></ul>`;
   document.getElementById('NeedsMSProfile').classList.add('ms_profile');
 }
+// Calls huggingface's API to get the title and artist of song as audio (Using AI)
 async function TextToSpeech(text) {
         const response = await fetch("https://alphonsebrandon-speecht5-tts-demo.hf.space/run/predict", {
             method: "POST",
@@ -594,4 +650,38 @@ async function TextToSpeech(text) {
     
     // Play the audio
     audioElement.play();
+}
+// adds artist to queue
+function AddArtistToQueue(PID) {
+    let UserID = GetUserID();
+    const api = `${apiStart}/Songs/GetPerformerSongs/PerformerID/${PID}/UserID/${UserID}`;
+    ajaxCall("GET", api, "", SearchAddArtistToQueueSCB, ECB);
+}
+// Plays all of the songs of a specific artist, also saves them to the queue.
+function SearchAddArtistToQueueSCB(data) {
+    // Randomize the queue
+    shuffle(data);
+    let song;
+    for (i in data) {
+        song = {
+            image: data[i].performerImage,	
+            title: data[i].songName,
+            artist: data[i].performerName,
+            mp3: `${apiStart}/Songs/GetSongByID/SongID/${data[i].songID}`,
+            oga: `${apiStart}/Songs/GetSongByID/SongID/${data[i].songID}`,
+            option : window.myPlayListOtion
+        };
+        window.myPlaylist.playlist.push(song);
+        window.myPlaylist.original.push(song);
+    }
+    window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
+    localStorage['Queue'] = JSON.stringify(window.myPlaylist.playlist);
+    // Testing
+    /*let audioPlayer = document.getElementsByClassName('ms_player_wrapper')[0];
+    if (audioPlayer.style.visibility == 'hidden') {
+        audioPlayer.style.visibility = 'visible';
+
+    }*/
+    CheckAudioPlayer();
+    ShowAudioPlayer();
 }

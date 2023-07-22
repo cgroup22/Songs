@@ -1,12 +1,25 @@
 function MPQLoaded() {
     // Saves whether we want our queue to loop
     IsLooped = false;
-    GamesTryLogin();
-    CheckAudioPlayer();
-    initFirebase();
-    $("#QuizForm").submit(() => { return false; });
+    GamesTryLogin(); // logs in and updates html
+    CheckAudioPlayer(); // updates queue
+    initFirebase(); // inits firebase
+    $("#QuizForm").submit(() => { return false; }); // prevets the page from reloading when the user answers a question
     // Takes care of updating html elements on play and adding/removing songs from the queue.
-    $("#jquery_jplayer_1").bind($.jPlayer.event.play, function (event) {
+      $("#jquery_jplayer_1").bind($.jPlayer.event.setmedia, function (event) { // Hides more options in queue.
+        HideMoreOptions();
+      });
+      // if no game is saved, go back/
+    if (sessionStorage['game'] == undefined || sessionStorage['game'] == "")
+      window.location.href = `MultiplayerQuizzes.html`;
+    Game = JSON.parse(sessionStorage['game']); // otherwise, get the game update necessary data.
+    // console.log(Game)
+    // console.log(Game.currentIndex)
+    if (Game != undefined && Game.currentIndex != undefined)
+    currentIndex = Game.currentIndex - 1;
+    else currentIndex = -1;
+    // temp for queue updating.
+    /*$("#jquery_jplayer_1").bind($.jPlayer.event.play, function (event) { //d
         let tmp = document.getElementById('FavoritesContainer');
         let index = window.myPlaylist.current;
         for (i of tmp.children) {
@@ -18,21 +31,14 @@ function MPQLoaded() {
                     i.classList.remove('play_active_song');
             }
         }
-      });
+      });*/
       $("#jquery_jplayer_1").bind($.jPlayer.event.setmedia, function (event) {
         HideMoreOptions();
       });
-    if (sessionStorage['game'] == undefined || sessionStorage['game'] == "")
-      window.location.href = `MultiplayerQuizzes.html`;
-    Game = JSON.parse(sessionStorage['game']);
-    console.log(Game)
-    console.log(Game.currentIndex)
-    if (Game != undefined && Game.currentIndex != undefined)
-    currentIndex = Game.currentIndex - 1;
-    else currentIndex = -1;
-    console.log(currentIndex)
+    // console.log(currentIndex)
     UpdatePlayers();
 }
+// Updates players in game.
 function UpdatePlayers() {
     let str = `<ul class="album_list_name">
     <li>#</li>
@@ -51,6 +57,7 @@ let counter = 1;
         document.getElementById('StartGameBTN').style.display = 'block';
     } else document.getElementById('StartGameBTN').style.display = 'none';
 }
+// Leaves current game.
 function LeaveGame() {
     let UserID = GetUserID();
     if (UserID == undefined || UserID < 1) return;
@@ -105,6 +112,7 @@ function LeaveGame() {
         console.error('Error getting game data for ID ' + gameId + ':', error);
     });
 }
+// Get index of player by its id from players array of game.
 function getIndexOfPlayerByID(players, id) {
     for (i in players) {
         if (players[i].id == id)
@@ -112,6 +120,7 @@ function getIndexOfPlayerByID(players, id) {
     }
     return -1;
 }
+// returns true if player is in this game, false otherwise.
 function IsPlayerInGame(game) {
     let UserID = GetUserID();
     if (UserID == undefined || UserID < 1) return;
@@ -122,10 +131,12 @@ function IsPlayerInGame(game) {
     }
     return false;
 }
+// Starts game. use ajax call to get the quiz questions from C# server
 function StartGame() {
     const api = `${apiStart}/Quizs/GetQuizForFirebase`;
     ajaxCall("GET", api, "", GenerateQuizSCB, ECB);
 }
+// Generates quiz and updates quiz question on firebase
 function GenerateQuizSCB(data) {
     let date = GetDate();
     delete data['userID'];
@@ -163,6 +174,7 @@ function GenerateQuizSCB(data) {
             console.error('Error updating game:', error);
         });
 }
+// On quiz end, update html and XP of players.
 function QuizEnd() {
     sessionStorage['game'] = "";
     document.getElementById('QuizEndScreen').style.display = 'block';
@@ -170,6 +182,7 @@ function QuizEnd() {
     let uid = GetUserID();
     let str = ``;
     let q = 1;
+    let countQ = 0;
     for (i of Game.quiz.questions) {
         for (j of i.userAnswer)
         if (j.UserID == uid) {
@@ -193,12 +206,18 @@ function QuizEnd() {
             <label id="PostAnswer3" style="background-color: ${j.Answers != i.correctAnswer && i.correctAnswer == 3 ? "green" : "transparent"};">d) ${i.answers[3]} ${j.Answers == 3 ? i.correctAnswer == 3 ? "✅" : "❌" : ""}</label><br>
           </div>
         </div></div>`;
+        // Used to add 10 XP to the user's level for each question he got right
+        countQ = j.Answers == i.correctAnswer ? countQ + 1 : countQ;
         }
         q++;
     }
     str += `<a class="ms_btn" id="TakeQuizBTN" href="MultiplayerQuizzes.html" style="margin:auto; margin-top:40px;">Play again</a>`;
     document.getElementById('QuizEndScreen').innerHTML = str;
+    // Adding 10 XP to the user for each question he got right
+    const api = `${apiStart}/Users/AddUserXP/UserID/${GetUserID()}/XP/${countQ * 10}`;
+    ajaxCall("PUT", api, "", () => {}, (e) => { console.log(e); });
 }
+// Shows the next question to the player.
 function ShowQuestion() {
     currentIndex++;
     console.log("local currentIndex: " + currentIndex);
@@ -235,6 +254,7 @@ function ShowQuestion() {
     document.getElementById('TurnOffOnGame').style.display = `none`;
     document.getElementById('SubmitBTN').setAttribute('onclick', `submitQuestion()`);
 }
+// Get current date (to save quiz date)
 function GetDate() {
     const date = new Date();
 
@@ -246,6 +266,7 @@ let year = date.getFullYear();
 let currentDate = `${day}-${month}-${year}`;
 return currentDate;
 }
+// submits user answer to current question
 function submitQuestion() {
     if (Game == undefined || Game.isWaitingForPlayers == true) return;
     if (document.querySelector('input[name="q1"]:checked') == null) return;
@@ -269,6 +290,7 @@ function submitQuestion() {
                  console.error('Error updating game data:', error);
             });
 }
+// TIMER STARTS
  // Timer variables
  var timerElement = document.getElementById("timer");
  var totalSeconds = 20; // 3 minutes (3 minutes * 60 seconds)
@@ -305,6 +327,8 @@ function submitQuestion() {
      }
      totalSeconds--;
  }
+ // TIMER FINISH
+ // Used to update the game to the next question (happens once, only on owner's computer)
  function NextQuestion() {
     Game.currentIndex++;
     if (Game.currentIndex >= Game.questions)

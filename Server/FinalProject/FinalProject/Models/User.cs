@@ -389,5 +389,12 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.GetUserXP(UserID);
         }
+        public static bool AddUserXP(int UserID, int XP)
+        {
+            if (UserID < 1)
+                throw new ArgumentException("User doesn't exist!");
+            DBservices db = new DBservices();
+            return db.AddUserXP(UserID, XP) > 0;
+        }
     }
 }

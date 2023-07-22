@@ -1,5 +1,5 @@
 // Called when the favorites page is loaded
-function PlaylistLoaded() {
+function PlaylistLoaded() { // Gets playlist songs, updates audio player, and login info.
     // Saves whether we want our queue to loop
     IsLooped = false;
     FavoriteTryLogin();
@@ -24,6 +24,7 @@ function PlaylistLoaded() {
         HideMoreOptions();
       });
 }
+// Updates playlist songs on html page
 function UpdatePlaylist() {
     if (!IsLoggedIn()) return;
     let userID = GetUserID();
@@ -38,18 +39,22 @@ function UpdatePlaylist() {
     const apiGetName = `${apiStart}/Playlists/GetPlaylistName/PlaylistID/${PlaylistID}`;
     ajaxCall("GET", apiGetName, "", GetNameSCB, PlaylistNameECB);
 }
+// Sets playlist name on html
 function GetNameSCB(name) {
     document.getElementById('PlaylistName').innerHTML = `Playlist "${name.playlistName}"`;
 }
+// On error, just show "Your Playlist"
 function PlaylistNameECB(e) {
     console.log(e);
     document.getElementById('PlaylistName').innerHTML = `Your Playlist`;
 }
+// Gets playlist songs and updates html dynamically
 function GetPlaylistSCB(data) {
     // console.log(data);
     PlaylistSongs = data;
     UpdatePlaylistHTML();
 }
+// updates html dynamically (with the playlist's songs)
 function UpdatePlaylistHTML() {
     let counter = 1;
     let str = `<ul class="album_list_name"><li>#</li><li>Song Title</li><li>Artist</li><li class="text-center">Duration</li><li class="text-center">More</li><li class="text-center">remove</li></ul>`;
@@ -76,6 +81,7 @@ function UpdatePlaylistHTML() {
     }
     document.getElementById('FavoritesContainer').innerHTML = str;
 }
+// Remove song from playlist
 function RemoveFromPlaylist(PlaylistID, SongID) {
     RemovedSongID = SongID;
     let userID = GetUserID();
@@ -83,6 +89,7 @@ function RemoveFromPlaylist(PlaylistID, SongID) {
     const api = `${apiStart}/Playlists/DeleteSongFromPlaylist/PlaylistID/${PlaylistID}/SongID/${SongID}`;
     ajaxCall("DELETE", api, "", RemoveFromPlaylistSCB, ECB);
 }
+// on sucess, remove song from playlist songs array and updates html
 function RemoveFromPlaylistSCB(result) {
     if (result) {
         for (i in PlaylistSongs)
@@ -93,42 +100,19 @@ function RemoveFromPlaylistSCB(result) {
         UpdatePlaylistHTML();
     }
 }
+// Add song to queue
 function AddToQueuePlaylist(i) {
     AddToQueue(PlaylistSongs[i]);
 }
-/*function UnshiftToQueueAndPlay(Song) {
-    let songToAdd = {
-        image: Song.performerImage,
-        title: Song.songName,
-        artist: Song.performerName,
-        mp3: `${apiStart}/Songs/GetSongByID/SongID/${Song.songID}`,
-        oga: `${apiStart}/Songs/GetSongByID/SongID/${Song.songID}`,
-		option : window.myPlayListOtion
-    };
-    if(IsSongInQueueByNameAndArtist(Song.performerName, Song.songName)) {
-        for (i in window.myPlaylist.playlist) {
-            if (window.myPlaylist.playlist[i].title === songToAdd.title && window.myPlaylist.playlist[i].artist == songToAdd.artist) {
-                window.myPlaylist.playlist.splice(parseInt(i), 1);
-                window.myPlaylist.playlist.unshift(songToAdd);
-                window.myPlaylist.original = window.myPlaylist.playlist;
-                window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
-                PlayFirstInQueue();
-                break;
-            }
-        }
-    } else {
-        window.myPlaylist.playlist.unshift(songToAdd);
-        window.myPlaylist.original.unshift(songToAdd);
-        window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
-        PlayFirstInQueue();
-    }
-}*/
+// Download song
 function DownloadFromPlaylist(i) {
     Download(PlaylistSongs[i].songID, PlaylistSongs[i].songName + " by " + PlaylistSongs[i].performerName + ".mp3");
 }
+// Play song
 function PlaylistPlaySong(id) {
     UnshiftToQueueAndPlay(PlaylistSongs[id]);
 }
+// Play the whole playlist (sets queue songs to be playlist's songs and plays the first song in the playlist)
 function PlayPlaylist() {
     let userID = GetUserID();
     if (userID == null || userID < 1 || PlaylistID < 1)
@@ -156,9 +140,7 @@ function PlayPlaylist() {
     HandleIndexPlayFirstInQueue();
     PlayFirstInQueue();
 }
-function PlayPlaylistSCB(data) {
-
-}
+// delete playlist
 function DeletePlaylist() {
     let userID = GetUserID();
     if (userID == null || userID < 1 || PlaylistID < 1)
@@ -166,6 +148,7 @@ function DeletePlaylist() {
     const api = `${apiStart}/Playlists/DeleteUserPlaylist/PlaylistID/${PlaylistID}/UserID/${userID}`;
     ajaxCall("DELETE", api, "", DeletePlaylistSCB, ECB);
 }
+// show popup and move to another page
 function DeletePlaylistSCB() {
     //openPopup("Playlist Deleted!", 'green', "Deleted successfuly!");
     setTimeout(() => {window.location.href='index.html'}, 2000);

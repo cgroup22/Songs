@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(document).ready(function () { // onload update login/register forms, user details, queue, and top 15 songs.
     window.myPlayListOtion = "";
     $("#RegisterForm").submit(Register);
     $("#LoginForm").submit(Login);
@@ -61,6 +61,7 @@ $(document).ready(function () {
       });
 
 });
+// Used for testing
 /*function TextDecod() {
     //const api = `https://api.deezer.com/search?q={7%20Rings}&secret_key=${DeezerSecretKey}`;
     const api = `${apiStart}/Users`;
@@ -72,13 +73,13 @@ function TestCB(data) {
     //console.log(data.data[0].preview)
     var audio = new Audio(data.data[0].preview);
     audio.play();
-}*/
+}
 function TestGetSong() {
     var audio = new Audio();
     audio.src = `${apiStart}/Users/GetSong?name=Test.mp3`; // Replace 'songname' with the actual song name
     audio.type = 'audio/mpeg';
     audio.play();
-}
+}*/
 // Gets the top 15 songs to feature (by number of plays)
 function GetTop15() {
     var api = `${apiStart}/Songs/GetTop15`;
@@ -192,6 +193,7 @@ function PlaySong(elem, SongID) {
             console.error("Error occurred:", error);
         });
 }
+// gets featured artists (by num of plays)
 function GetFeaturedArtists() {
     const api = `${apiStart}/Artists/GetFeaturedArtists`;
     ajaxCall("GET", api, "", UpdateFeaturedArtists, ECB);
@@ -278,7 +280,7 @@ function IndexLoaded() {
     // Gets the most played track and updates the home page html dynamically
     GetMostPlayedTrack();
 }
-// Check
+// Clears the queue
 function ClearQueue() {
     localStorage['Queue'] = "";
     window.myPlaylist.playlist=[];
@@ -294,6 +296,7 @@ function ClearQueue() {
         i.style.visibility='visible';
     HideAudioPlayer();
 }
+// Gets most played track to feature on index.html
 function GetMostPlayedTrack() {
     const api = `${apiStart}/Songs/GetMostPlayedTrack`;
     ajaxCall("GET", api, "", GetMostPlayedTrackSCB, ECB);
@@ -352,11 +355,13 @@ function GetMostPlayedTrackSCB(data) {
         getLyrics(data.songID);
     };
 }
+// Play genre songs by its id
 function PlayGenre(GenreID) {
     const api = `${apiStart}/Songs/GetGenreSongs/GenreID/${GenreID}`;
     // Used PlayPerformerSongsSCB here because it's updating the queue and plays the first song.
     ajaxCall("GET", api, "", PlayGenreSCB, ECB);
 }
+// on sucess, play song.
 function PlayGenreSCB(data) {
     // Randomize the songs - done in PlayPerformerSongsSCB, just a test here.
     // shuffle(data);
@@ -374,6 +379,7 @@ function PlayGenreSCB(data) {
     HandleIndexPlayFirstInQueue();
     PlayFirstInQueue();
   }
+  // adds song to favorites
   function AddSongToFavorites(SongID, UserID, elem) {
     if (!IsLoggedIn()) {
         openPopup("ERROR", "red", "You're not logged in!");
@@ -383,11 +389,13 @@ function PlayGenreSCB(data) {
     const api = `${apiStart}/Users/PostUserFavorite/UserID/${UserID}/SongID/${SongID}`;
     ajaxCall("POST", api, "", AddSongToFavoritesSCB, ECB);
   }
+  // deletes song to favorites
   function DeleteSongFromFavorites(SongID, UserID, elem) {
     tmpElem = elem;
     const api = `${apiStart}/Users/DeleteUserFavorite/UserID/${UserID}/SongID/${SongID}`;
     ajaxCall("DELETE", api, "", DeleteSongFromFavoritesSCB, ECB);
   }
+  // updates html on adding song to favorites
   function AddSongToFavoritesSCB(data) {
     if (!data) openPopup("ERROR", "red", "This song is already in your favorites");
     tmpElem.querySelector('a').innerHTML = `<span class="opt_icon"><span class="icon icon_fav"></span></span>Unfavorite`;
@@ -403,6 +411,7 @@ function PlayGenreSCB(data) {
     // console.log(data);
     // TODO: Add message?
   }
+  // updates html on deleting song to favorites
   function DeleteSongFromFavoritesSCB(data) {
     /*console.log("bye");
     if(!data) return;
@@ -417,6 +426,7 @@ function PlayGenreSCB(data) {
     else
     tmpElem.onclick = () => { openPopup("ERROR", "red", "Log in to add songs to your favorites!") };
   }
+  // updates current playing song html elements
   function RemoveCurrentPlayingSongElements() {
     if (document.getElementsByClassName('ms_active_play').length > 0)
         document.getElementsByClassName('ms_active_play')[0].classList.remove('ms_active_play');
@@ -426,5 +436,3 @@ function PlayGenreSCB(data) {
     if (del)
         del.parentNode.removeChild(del);
   }
- 
-  

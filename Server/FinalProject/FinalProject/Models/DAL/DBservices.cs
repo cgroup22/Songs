@@ -1231,12 +1231,59 @@ public class DBservices
         }
     }
 
+    private int AdminReportGetHowManyQuizzes()
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_AdminGetHowManySoloQuizzes", con, null);             // create the command
+
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                return Convert.ToInt32(dataReader["TotalQuizzes"]);
+            }
+            throw new Exception("DB ERROR");
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
     public object BuildReport()
     {
         Dictionary<string, object> MostPlayedPerformer = AdminReportGetMostPlayedPerformer();
         Dictionary<string, object> MostFollowedPerformer = AdminReportGetMostFollowedPerformer();
         Dictionary<string, object> MostPlayedGenre = AdminReportGetMostPlayedGenre();
         int HowManyUsers = AdminReportGetHowManyUsers();
+        int SoloQuizzes = AdminReportGetHowManyQuizzes();
         return new
         {
             MostPlayedPerformer = MostPlayedPerformer["PerformerName"],
@@ -1245,8 +1292,52 @@ public class DBservices
             NumOfFollowersMostFollowedPerformer = MostFollowedPerformer["TotalFollowers"],
             MostPlayedGenre = MostPlayedGenre["GenreName"],
             MostPlayedGenrePlays = MostPlayedGenre["TotalPlays"],
-            NumberOfUsers = HowManyUsers
+            NumberOfUsers = HowManyUsers,
+            SoloQuizzesPlayed = SoloQuizzes
         };
+    }
+
+    public int AddUserXP(int UserID, int XP)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@UserID", UserID);
+        paramDic.Add("@XPToAdd", XP);
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_AddUserXP", con, paramDic);             // create the command
+
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
     }
 
     public List<object> Search(string query, int UserID)

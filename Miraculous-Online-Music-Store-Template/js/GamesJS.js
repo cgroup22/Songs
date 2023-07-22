@@ -1,10 +1,11 @@
-// Called when the favorites page is loaded
-function FavLoaded() {
+// Called when the multiplayer lobby page is loaded
+function MPLobbyLoaded() {
     // Saves whether we want our queue to loop
     IsLooped = false;
-    GamesTryLogin();
-    CheckAudioPlayer();
-    initFirebase();
+    GamesTryLogin(); // logs in if there's a user saved in our storage.
+    CheckAudioPlayer(); // updates queue
+    CheckIsVerified(); // if not verified, go to index.html
+    initFirebase(); // inits firebase
     // Takes care of updating html elements on play and adding/removing songs from the queue.
     $("#jquery_jplayer_1").bind($.jPlayer.event.play, function (event) {
         let tmp = document.getElementById('FavoritesContainer');
@@ -19,9 +20,11 @@ function FavLoaded() {
             }
         }
       });
+      // updates html on queue change
       $("#jquery_jplayer_1").bind($.jPlayer.event.setmedia, function (event) {
         HideMoreOptions();
       });
+      // updates current active games for the player to join
       setTimeout(() => {
         if (currentActiveGames != null) {
             for (i of Object.keys(currentActiveGames)) {
@@ -38,6 +41,20 @@ function FavLoaded() {
         }
       }, 2000);
 }
+// Checks whether the user is verified
+function CheckIsVerified() {
+    const api = `${apiStart}/Users/IsUserVerified/id/${GetUserID()}`;
+    ajaxCall("GET", api, "", CheckIsVerifiedSCB, (e) => {if (typeof e === "boolean") CheckIsVerifiedSCB(e); else window.location.href = 'index.html'; });
+}
+// if not, can't play multiplayer.
+function CheckIsVerifiedSCB(data) {
+    if (!data) {
+        openPopup('ERROR', 'red', "You must be verified to play multiplayer!");
+        setTimeout(() => { window.location.href = 'index.html'; }, 2000);
+        return;
+    }
+}
+// Updates active games for the player to join
 function UpdateActiveGames() {
     let counter = 1;
     let str = `<ul class="album_list_name">
@@ -57,10 +74,10 @@ function UpdateActiveGames() {
         }
     }
     let tmp = true;
-    if (currentActiveGames == null)
+    if (currentActiveGames == null || Object.keys(currentActiveGames).length == 0) // if there are no games to play right now
         str += `<p style="color:white;font-size:20px;margin-top:20px;">No Active Games At This Time</p>`;
     else {
-        for (i of Object.keys(currentActiveGames))
+        for (i of Object.keys(currentActiveGames)) // checks if there's any active games
         if (currentActiveGames[i].isActive)
         {
             tmp = false;
@@ -70,13 +87,15 @@ function UpdateActiveGames() {
     }
     document.getElementById('FavoritesContainer').innerHTML = str;
 }
+// Joins game. Used on clients which are not the owner of the game, to join another game.
 async function JoinGame(i) {
-    console.log(i)
+    // console.log(i)
     let UserID = GetUserID();
     if (UserID == undefined || UserID < 1) return;
     const hasAnotherGame = await DoesUserHasActiveGame(UserID);
     if (hasAnotherGame) {
         console.log("Already owning another game");
+        openPopup('ERROR', 'red', 'You already own another active game!');
         // TODO: Already has game
         return;
     }
@@ -93,15 +112,17 @@ async function JoinGame(i) {
             const game = gameArray[0]; // Assuming there's only one game with this ID
             console.log('Game data for ID ' + gameId + ':', game);
             // You can use the "game" object here or call another function to handle it.
-            if (IsPlayerInGame(game)) {
+            if (IsPlayerInGame(game)) { // if already in game, can't join again
                 console.log("Player already in game");
                 //TODO
                 return;
             }
+            // Builds the user object to insert into Game.players
             let usr = {
                 id: UserID,
                 name: (localStorage['User'] == undefined || localStorage['User'] == "") ? JSON.parse(sessionStorage['User']).name : JSON.parse(localStorage['User']).name
             };
+            // updates the game object and puts into firebase.
             game.players.push(usr);
             const gameRef = database.ref('Games').child(gameId);
             gameRef.update(game)
@@ -122,6 +143,7 @@ async function JoinGame(i) {
     });
     }
 }
+// returns true if the player is already in the game, false otherwise.
 function IsPlayerInGame(game) {
     let UserID = GetUserID();
     if (UserID == undefined || UserID < 1) return;
@@ -132,29 +154,6 @@ function IsPlayerInGame(game) {
     }
     return false;
 }
-/*function DoesUserHasActiveGame() {
-    let UserID = GetUserID();
-    if (UserID == undefined || UserID < 1) return;
-    const gamesRef = database.ref('Games');
-    gamesRef.once('value')
-        .then(function(snapshot) {
-            const gamesData = snapshot.val();
-            if (gamesData) {
-                // gamesData will be an object with all games as key-value pairs
-                // To convert the object to an array of games, you can use Object.values()
-                const gamesArray = Object.values(gamesData);
-                // You can use the "gamesArray" here or call another function to handle it.
-                for (i of gamesArray) {
-                    if (i.ownerID == UserID && i.isActive)
-                        return true;
-                }
-            }
-            return false;
-        })
-        .catch(function(error) {
-            console.error('Error getting games data:', error);
-        });
-}*/
 // Function to check if the user has an active game
 function DoesUserHasActiveGame(userID) {
     return new Promise((resolve, reject) => {
@@ -179,18 +178,16 @@ function DoesUserHasActiveGame(userID) {
             });
     });
 }
-// Gets a game and inserts to our database
+// Called when a players creates a new game. Inserts the new game to our database
 async function InsertGameToDB() {
     let UserID = GetUserID();
     if (UserID == undefined || UserID < 1) return;
-
     try {
         // Check if the user has an active game
         const hasActiveGame = await DoesUserHasActiveGame(UserID);
-        if (hasActiveGame) {
+        if (hasActiveGame) { // if already owning another game
             console.log("Already owning another game");
-            // TODO: Already has an active game, handle it accordingly
-        } else {
+        } else { // Builds a game object, and inserts to db
             // Get a new reference under "Games" and use the push method
             const newGameRef = database.ref('Games').push();
             // Get the unique key generated by push and use it as the game ID
@@ -216,6 +213,7 @@ async function InsertGameToDB() {
         console.error('Error inserting game:', error);
     }
 }
+// returns all the games in our db.
 async function getAllGames() {
     try {
         const gamesRef = database.ref('Games');

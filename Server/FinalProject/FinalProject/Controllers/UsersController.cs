@@ -203,6 +203,18 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = e.Message });
             }
         }
+        [HttpPut("AddUserXP/UserID/{UserID}/XP/{XP}")]
+        public IActionResult Put(int UserID, int XP)
+        {
+            try
+            {
+                return Models.User.AddUserXP(UserID, XP) ? Ok(new { message = "Added" }) : BadRequest(new { message = "Server error, please try again later" });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "SERVER ERROR " + e.Message });
+            }
+        }
         // Initiates a new email validation. Needed when the user wants to verify his email, but his old request timed out.
         [HttpPut("InitiateNewValidation")]
         public IActionResult Put(int id)

@@ -2,9 +2,9 @@
 function FavLoaded() {
     // Saves whether we want our queue to loop
     IsLooped = false;
-    FavoriteTryLogin();
-    UpdateFavorites();
-    CheckAudioPlayer();
+    FavoriteTryLogin(); // logs in if there's anything in the storage, moves to index.html if the user is not logged in
+    UpdateFavorites(); // ajax to get favorites and updates the page
+    CheckAudioPlayer(); // updates queue if not empty
 
     // Takes care of updating html elements on play and adding/removing songs from the queue.
     $("#jquery_jplayer_1").bind($.jPlayer.event.play, function (event) {
@@ -24,9 +24,9 @@ function FavLoaded() {
         HideMoreOptions();
       });
 }
+// logs in if there's anything in the storage, moves to index.html if the user is not logged in
 function FavoriteTryLogin() {
     if (!IsLoggedIn()) {
-        // TODO
         openPopup('ERROR', "red", 'Log in first!');
         setTimeout(() => {location.href = `index.html`;}, 2000);
         return;
@@ -37,6 +37,7 @@ function FavoriteTryLogin() {
     `<li><a onclick="Logout()" href="#">Logout</a></li></ul>`;
     document.getElementById('NeedsMSProfile').classList.add('ms_profile');
 }
+// ajax call to get users favorites
 function UpdateFavorites() {
     if (!IsLoggedIn()) return;
     let userID = -1;
@@ -47,11 +48,13 @@ function UpdateFavorites() {
     const api = `${apiStart}/Users/GetUserFavorites/UserID/${userID}`;
     ajaxCall("GET", api, "", GetFavoritesSCB, ECB);
 }
+// updates html elems
 function GetFavoritesSCB(data) {
     // console.log(data);
     FavoriteSongs = data;
     UpdateFavSongs();
 }
+// updates html elems
 function UpdateFavSongs() {
     let counter = 1;
     let str = `<ul class="album_list_name"><li>#</li><li>Song Title</li><li>Artist</li><li class="text-center">Duration</li><li class="text-center">More</li><li class="text-center">remove</li></ul>`;
@@ -91,6 +94,7 @@ function UpdateFavSongs() {
     }
     document.getElementById('FavoritesContainer').innerHTML = str;
 }
+// ajax call to delete a song from users favorites
 function RemoveFromFavorites(SongID) {
     RemovedSongID = SongID;
     let userID = -1;
@@ -101,6 +105,7 @@ function RemoveFromFavorites(SongID) {
     const api = `${apiStart}/Users/DeleteUserFavorite/UserID/${userID}/SongID/${SongID}`;
     ajaxCall("DELETE", api, "", RemoveFromFavoritesSCB, ECB);
 }
+// deletes the song from html if delete from db successded.
 function RemoveFromFavoritesSCB(result) {
     if (result) {
         for (i in FavoriteSongs)
@@ -111,12 +116,15 @@ function RemoveFromFavoritesSCB(result) {
         UpdateFavSongs();
     }
 }
+// Plays the chosen song.
 function FavoritePlaySong(id) {
     UnshiftToQueueAndPlay(FavoriteSongs[id]);
 }
+// Adds the chosen song to favorites
 function AddToQueueFav(i) {
     AddToQueue(FavoriteSongs[i]);
 }
+// Downloads the chosen song.
 function DownloadFav(i) {
     Download(FavoriteSongs[i].songID, FavoriteSongs[i].songName + " by " + FavoriteSongs[i].performerName + ".mp3");
 }
