@@ -7,6 +7,7 @@ using System.Text;
 using Newtonsoft.Json.Linq;
 using System.Net.Http.Headers;
 using Newtonsoft.Json;
+using System.Diagnostics;
 
 namespace FinalProject.Models
 {
@@ -395,6 +396,11 @@ namespace FinalProject.Models
                 throw new ArgumentException("User doesn't exist!");
             DBservices db = new DBservices();
             return db.AddUserXP(UserID, XP) > 0;
+        }
+        public static List<object> GetLeaderboard()
+        {
+            DBservices db = new DBservices();
+            return db.GetLeaderboard();
         }
     }
 }

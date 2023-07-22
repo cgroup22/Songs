@@ -214,9 +214,10 @@
                     <div class="ms_top_search">
                         <form id="SearchForm">
                         <input type="text" class="form-control" placeholder="Search Music Here.." id="SearchBar">
-                        <span class="search_icon" onclick="SearchQuery()" id="SearchBTN">
+                        <a href="javascript:void(0)" id="MicSVG"><img src="images/mic.svg" alt="Microphone" style="width:20px;height:30px;position: absolute;left:0px;top:3px;" onclick="SearchByVoice()"></a>
+                        <button class="search_icon" onclick="SearchQuery()" id="SearchBTN">
 							<img src="images/svg/search.svg" alt="">
-						</span>
+						</button>
                     </form>
                     </div>
                     <div class="ms_top_trend">

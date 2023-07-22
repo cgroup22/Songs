@@ -1479,6 +1479,70 @@ public class DBservices
 
     }
 
+    public List<object> GetLeaderboard()
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetLeaderboard", con, null);             // create the command
+
+
+        List<object> users = new List<object>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                string UName = dataReader["UserName"].ToString();
+                int XP = Convert.ToInt32(dataReader["XP"]);
+                int QGR = Convert.ToInt32(dataReader["SoloQuestionsGotRight"]);
+                int SQA = Convert.ToInt32(dataReader["SoloQuestionsAnswered"]);
+                int GP = Convert.ToInt32(dataReader["TotalGamesPlayed"]);
+                object s = new
+                {
+                    UserName = UName,
+                    XP = XP,
+                    GamesPlayed = GP,
+                    SoloQuestionsGotRight = QGR,
+                    SoloQuestionsAnswered = SQA,
+                    SoloAverage = SQA == 0 ? 0.0f : (QGR / (float)SQA) * 100,
+                    Level = Math.Floor(XP / 100.0f) + 1
+                };
+                users.Add(s);
+            }
+            return users;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+
     public List<object> GetArtists()
     {
 

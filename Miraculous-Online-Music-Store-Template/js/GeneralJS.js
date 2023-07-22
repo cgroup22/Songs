@@ -19,6 +19,9 @@ $(document).ready(function() { // onload. Updates playlists and search.
         updateElems[3].setAttribute('onclick', `getLyrics(${SongID})`);
         updateElems[3].querySelector('a').innerHTML = `<span class="song_optn_icon"><i class="ms_icon icon_share"></i></span>Lyrics`;
     });
+    // If webkit isn't supported - hide mic
+    if (!('webkitSpeechRecognition' in window || 'SpeechRecognition' in window))
+        document.getElementById('MicSVG').style.display = 'none';
 });
 // logs in if there's a user in our storage. Otherwise, leave page.
 function GamesTryLogin() {
@@ -685,3 +688,36 @@ function SearchAddArtistToQueueSCB(data) {
     CheckAudioPlayer();
     ShowAudioPlayer();
 }
+// using webkit speech recognition to get user's query by voice. (API developed by Apple)
+function SearchByVoice() {
+    // Web Speech API is supported
+    if ('webkitSpeechRecognition' in window || 'SpeechRecognition' in window) {
+      const SpeechRecognition = window.webkitSpeechRecognition || window.SpeechRecognition;
+      const recognition = new SpeechRecognition();
+  
+      // Set up the recognition language (optional)
+      recognition.lang = 'en-US'; // Change to the desired language code
+  
+      // Start speech recognition
+      recognition.start();
+  
+      // Event triggered when speech recognition receives results
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        if (transcript == "") {
+            return;
+        }
+        sessionStorage['query'] = transcript;
+        window.location.href = 'search.html';
+      };
+  
+      // Event triggered when an error occurs
+      recognition.onerror = (event) => {
+        console.error('Error occurred in speech recognition: ', event.error);
+      };
+    } else {
+      // Web Speech API is not supported, handle gracefully
+      // console.error('Web Speech API is not supported in this browser.');
+      document.getElementById('MicSVG').style.display = 'none';
+    }
+  }

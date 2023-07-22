@@ -215,6 +215,18 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "SERVER ERROR " + e.Message });
             }
         }
+        [HttpGet("GetLeaderboard")]
+        public IActionResult GetLeaderboard()
+        {
+            try
+            {
+                return Ok(Models.User.GetLeaderboard());
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "SERVER ERROR " + e.Message });
+            }
+        }
         // Initiates a new email validation. Needed when the user wants to verify his email, but his old request timed out.
         [HttpPut("InitiateNewValidation")]
         public IActionResult Put(int id)

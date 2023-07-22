@@ -8,7 +8,7 @@
 <!-- Begin Head -->
 
 <head>
-    <title>Favorite Songs</title>
+    <title>Leaderboard</title>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta name="description" content="Music">
@@ -28,7 +28,7 @@
     <link rel="shortcut icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" type="text/css" href="css/OurSS.css">
 </head>
-<body onload="FavLoaded()">
+<body onload="LeaderboardLoaded()">
 	<!----Loader---->
 	<div class="ms_inner_loader">
 		<div class="ms_loader">
@@ -209,7 +209,7 @@
 						</span>
 						</a>
                         </li>
-                        <li onclick="MoveToFavorites()"><a href="javascript:void(0)" class="active" title="Favourites">
+                        <li onclick="MoveToFavorites()"><a href="javascript:void(0)" title="Favourites">
 						<span class="nav_icon">
 							<span class="icon icon_favourite"></span>
 						</span>
@@ -257,7 +257,7 @@
             <!----Free Download Css Start---->
             <div class="ms_free_download ms_purchase_wrapper">
                 <div class="ms_heading">
-                    <h1>Your Favourites</h1>
+                    <h1>Leaderboard</h1>
                 </div>
 				<div class="album_inner_list">
 					<div class="album_list_wrapper" id="FavoritesContainer">
@@ -1037,7 +1037,7 @@
     <script type="text/javascript" src="js/custom.js"></script>
     <script src="js/ajaxCalls.js"></script>
     <script type="text/javascript" src="js/GeneralJS.js"></script>
-    <script type="text/javascript" src="js/FavoritesJS.js"></script>
+    <script type="text/javascript" src="js/LeaderboardJS.js"></script>
 </body>
 
 </html>
