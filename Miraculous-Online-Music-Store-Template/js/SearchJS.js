@@ -97,6 +97,7 @@ function SearchSCB(data) {
             <li onclick="DownloadSearch(${i})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
             <li onclick="ATP(${data[i].songID})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
             <li onclick="getLyrics(${data[i].songID})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
+            <li onclick='OpenOnYT("${data[i].songName.replace(/'/g, "").replace('"', "")}", "${data[i].performerName.replace(/'/g, "").replace('"', "")}")'><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>YouTube</a></li>
         </ul>
     </li>`+
         //<li style="text-align:center;"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download</a></li>
@@ -143,6 +144,7 @@ function SearchSCB(data) {
                 <li onclick="DownloadSearch(${i})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
                 <li onclick="ATP(${data[i].songID})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                 <li onclick="getLyrics(${data[i].songID})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
+                <li onclick='OpenOnYT("${data[i].songName.replace(/'/g, "").replace('"', "")}", "${data[i].performerName.replace(/'/g, "").replace('"', "")}")'><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>YouTube</a></li>
             </ul>
         </li>`+
             //<li style="text-align:center;"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download</a></li>
@@ -174,6 +176,7 @@ function SearchSCB(data) {
             <li onclick="DownloadSearch(${i})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
             <li onclick="ATP(${data[i].songID})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
             <li onclick="getLyrics(${data[i].songID})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
+            <li onclick='OpenOnYT("${data[i].songName.replace(/'/g, "").replace('"', "")}", "${data[i].performerName.replace(/'/g, "").replace('"', "")}")'><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>YouTube</a></li>
         </ul></li>`+
             //<li style="text-align:center;"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download</a></li>
             `<li class="text-center"><a href="javascript:void(0)">${data[i].numOfPlays}</a></li>

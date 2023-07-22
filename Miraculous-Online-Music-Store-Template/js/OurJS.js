@@ -125,6 +125,7 @@ function UpdateTop15SCB(data) {
         document.getElementById(`DownloadFeat${i}`).setAttribute('onclick', `Download(${data[i].songID}, "${data[i].songName} by ${data[i].performerName}.mp3")`);
         document.getElementById(`AddToQFeat${i}`).setAttribute('onclick', `AddToQueue(${JSON.stringify(data[i])})`);
         document.getElementById(`AddToPlaylistFeat${i}`).setAttribute('onclick', `ATP(${data[i].songID})`);
+        document.getElementById(`YTFeat${i}`).setAttribute('onclick', `OpenOnYT("${data[i].songName}", "${data[i].performerName}")`);
         x[i].querySelector('img').src = data[i].performerImage;
         names.querySelector('a').innerHTML = data[i].songName;
         names.querySelector('a').setAttribute(`onclick`, `getLyrics(${data[i].songID})`);

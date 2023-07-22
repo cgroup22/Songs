@@ -317,6 +317,7 @@ function UpdateArtistSongs() {
                 <li onclick="DownloadFromArtist(${i})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
                 <li onclick="ATP(${ArtistSongs[i].songID})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
                 <li onclick="getLyrics(${ArtistSongs[i].songID})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>Lyrics</a></li>
+                <li onclick="OpenOnYT('${ArtistSongs[i].songName.replace(/'/g, "").replace('"', "")}', '${ArtistSongs[i].performerName.replace(/'/g, "").replace('"', "")}')"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_share"></span></span>YouTube</a></li>
             </ul>`;
         if (IsLoggedIn() && ArtistSongs[i].isInFavorites == 0) {
             str += `<li onclick="ArtistAddSongToFavorites(${ArtistSongs[i].songID}, this)" class="text-center"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>`;

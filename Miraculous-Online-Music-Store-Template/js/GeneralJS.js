@@ -400,7 +400,7 @@ function CreatePlaylistSCB(data) {
     }
 }
 // Get youtube link for the song, using YouTube's API.
-async function GetYTLinkBySongNameAndArtistName(song, artist) {
+async function OpenOnYT(song, artist) {
     const apiKey = 'AIzaSyAUBDnPCnsMDLrpjpfT9RNnIi25AQD65B8';
     const formattedSongName = encodeURIComponent(song);
     const formattedArtistName = encodeURIComponent(artist);
@@ -416,9 +416,9 @@ async function GetYTLinkBySongNameAndArtistName(song, artist) {
         // Construct the YouTube video URL
         const YTLink = `https://www.youtube.com/watch?v=${videoId}`;
         const link = YTLink;
-        // Return the HTML link
-        return link;
+        window.open(link, '_blank');
     } catch (error) {
+        console.log(error);
         return YTSearchUrl;
     }
 }
