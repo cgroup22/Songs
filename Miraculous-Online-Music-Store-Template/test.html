@@ -6,10 +6,36 @@
     <title>Page Title</title>
     <meta name='viewport' content='width=device-width, initial-scale=1'>
     <!-- Add Firebase SDK -->
-<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+<!--<script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
 <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.2.2/firebase-analytics.min.js"></script>
-<script src="js/Firebase.js"></script>
+<script src="js/Firebase.js"></script>-->
+<script>
+    const bearerToken = "AAAAAAAAAAAAAAAAAAAAAGN8owEAAAAA1YzDVQqmta1H2utYBlV7k0ASTB4%3DokkJUXiDRTb5QlDoOHMZNcSrp1UTjMmurpscVgZexoXNoziEbN";
+
+
+const screenName = "ArianaGrande";
+const count = 10;
+
+fetch(`https://api.twitter.com/2/tweets?screen_name=${screenName}&count=${count}`, {
+    method: 'GET',
+    headers: {
+        "Authorization": `Bearer ${bearerToken}`,
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Credentials': 'true'
+    }
+})
+.then(response => response.json())
+.then(data => {
+    const tweetsList = document.getElementById("tweets");
+    data.data.forEach(tweet => {
+        const listItem = document.createElement("li");
+        listItem.textContent = tweet.text;
+        tweetsList.appendChild(listItem);
+    });
+})
+.catch(error => console.error("Error fetching tweets:", error));
+</script>
 </head>
 <body>
     

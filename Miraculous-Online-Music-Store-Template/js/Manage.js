@@ -42,6 +42,7 @@ function GenerateReportSCB(data) {
 }
 // Download admin report
 function DownloadReport() {
+    // console.log(Report)
     if (undefined == Report) return;
     if (MPQuizzes != undefined)
         Report.multiplayerQuizzesPlayed = MPQuizzes;
@@ -50,7 +51,7 @@ function DownloadReport() {
       const url = URL.createObjectURL(blob);
       const downloadLink = document.createElement("a");
       downloadLink.setAttribute("href", url);
-      downloadLink.setAttribute("download", "report.csv");
+      downloadLink.setAttribute("download", "GeneralReport.csv");
       document.body.appendChild(downloadLink);
       downloadLink.click();
       document.body.removeChild(downloadLink);
@@ -66,10 +67,55 @@ function convertObjectToCSV(obj) {
     }
     return csvRows.join("\n");
   }
+  function DownloadSongsReport() {
+    if (undefined == Songs) return;
+    const csvData = convertObjectToCSV(Songs);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const downloadLink = document.createElement("a");
+      downloadLink.setAttribute("href", url);
+      downloadLink.setAttribute("download", "SongsReport.csv");
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+  }
+  function DownloadPerformersReport() {
+    if (undefined == GenresData) return;
+    const csvData = convertObjectToCSV(GenresData);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const downloadLink = document.createElement("a");
+      downloadLink.setAttribute("href", url);
+      downloadLink.setAttribute("download", "GenresReport.csv");
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+  }
 // get songs, and updates html dynamically
 function GetSongsInfoSCB(data) {
     // console.log(data);
+    Songs = {
+        'songID': [],
+        "songName": [],
+        'artist': [],
+        'duration': [],
+        'genreName': [],
+        'numOfPlays': [],
+        'releaseYear': [],
+        'totalFavorites': []
+    };
+    for (i of data) {
+        Songs.songID.push(i.songID);
+        Songs.songName.push(i.songName);
+        Songs.artist.push(i.performerName);
+        Songs.duration.push(i.songLength);
+        Songs.genreName.push(i.genreName);
+        Songs.numOfPlays.push(i.numOfPlays);
+        Songs.releaseYear.push(i.releaseYear);
+        Songs.totalFavorites.push(i.totalFavorites);
+    }
     let str = `<a onclick="DisplayOptions()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a>
+    <a onclick="DownloadSongsReport()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Songs Report</a>
     <ul class="album_list_name">
                             <li style="width:7%;">Song ID</li>
 							<li>Song Name</li>
@@ -102,7 +148,25 @@ function GetPerformersInfo() {
 // updates html dynamically on sucess when getting artists
 function GetPerformersInfoSCB(data) {
     // console.log(data);
-    let str = `<a onclick="DisplayOptions()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a><ul class="album_list_name">
+    PerformersData = {
+        'PerformerID': [],
+        'PerformerName': [],
+        'isABand': [],
+        'totalFollowers': [],
+        'totalPlays': [],
+        'PerformerInstagram': []
+    };
+    for (i of data) {
+        PerformersData.PerformerID.push(i.performerID);
+        PerformersData.PerformerName.push(i.performerName);
+        PerformersData.isABand.push(i.isABand);
+        PerformersData.totalFollowers.push(i.totalFollowers);
+        PerformersData.totalPlays.push(i.totalPlays);
+        PerformersData.PerformerInstagram.push(i.performerInstagram);
+    }
+    let str = `<a onclick="DisplayOptions()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a>
+    <a onclick="DownloadPerformersReport()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Performers Report</a><br>
+    <ul class="album_list_name">
     <li>Performer ID</li>
     <li>Performer Name</li>
     <li>Is A Band</li>
@@ -126,8 +190,22 @@ function GetPerformersInfoSCB(data) {
 }
 // updates gernes dynamically
 function GetGenresInfoSCB(data) {
+    GenresData = {
+        'GenreID': [],
+        'GenreName': [],
+        'numOfPlays': [],
+        'numOfSongs': []
+    };
+    for (i of data) {
+        GenresData.GenreID.push(i.genreID);
+        GenresData.GenreName.push(i.genreName);
+        GenresData.numOfPlays.push(i.numOfPlays);
+        GenresData.numOfSongs.push(i.numOfSongs);
+    }
     // console.log(data);
-    let str = `<a onclick="DisplayOptions()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a><ul class="album_list_name">
+    let str = `<a onclick="DisplayOptions()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a>
+    <a onclick="DownloadPerformersReport()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Genres Report</a><br>
+    <ul class="album_list_name">
     <li>Genre ID</li>
     <li>Genre Name</li>
     <li>Number Of Songs</li>
@@ -150,12 +228,39 @@ function LoadUserInformation() {
     const api = `${apiStart}/Users/LoadUserInformation`;
     ajaxCall("GET", api, "", LoadUserSCB, ECB);
 }
+function DownloadUsersReport() {
+    if (undefined == UsersData) return;
+    const csvData = convertObjectToCSV(UsersData);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const downloadLink = document.createElement("a");
+      downloadLink.setAttribute("href", url);
+      downloadLink.setAttribute("download", "UsersReport.csv");
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+}
 // updates users dynamically
 function LoadUserSCB(data){
+    // console.log(data)
+    UsersData = {
+        'UserID': [],
+        'email': [],
+        'isVerified': [],
+        'registrationDate': []
+    };
+    for (i of data) {
+        UsersData.UserID.push(i.id);
+        UsersData.email.push(i.email);
+        UsersData.isVerified.push(i.isVerified);
+        UsersData.registrationDate.push(i.registrationDate.split('T')[0]);
+    }
     document.getElementById("UsersContainer").style.display = 'block';
     document.getElementById("AdminOptions").style.display = 'none';
     let Users = data;
-    let str = `<a onclick="DisplayOptions()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a><ul class="album_list_name">
+    let str = `<a onclick="DisplayOptions()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a>
+    <a onclick="DownloadUsersReport()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Users Report</a><br>
+    <ul class="album_list_name">
     <li>User ID</li>
     <li>Name</li>
     <li>Email</li>
