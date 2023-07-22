@@ -399,7 +399,30 @@ function CreatePlaylistSCB(data) {
         window.location.href = 'playlist.html';
     }
 }
-// calcen add song to playlist
+// Get youtube link for the song, using YouTube's API.
+async function GetYTLinkBySongNameAndArtistName(song, artist) {
+    const apiKey = 'AIzaSyAUBDnPCnsMDLrpjpfT9RNnIi25AQD65B8';
+    const formattedSongName = encodeURIComponent(song);
+    const formattedArtistName = encodeURIComponent(artist);
+    const songNameSearch = song.replace(/\s/g, '+');
+    const artistNaeSearch = artist.replace(/\s/g, '+');
+    const apiUrl = `https://www.googleapis.com/youtube/v3/search?part=snippet&q=${formattedSongName} ${formattedArtistName}&key=${apiKey}`;
+    const YTSearchUrl = `https://www.youtube.com/results?search_query=${songNameSearch} ${artistNaeSearch}`;
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        // Retrieve the video ID of the first search result
+        const videoId = data.items[0].id.videoId;
+        // Construct the YouTube video URL
+        const YTLink = `https://www.youtube.com/watch?v=${videoId}`;
+        const link = YTLink;
+        // Return the HTML link
+        return link;
+    } catch (error) {
+        return YTSearchUrl;
+    }
+}
+// cancel add song to playlist (hide popup)
 function AddToPlaylistCancel() {
     document.getElementById('AddToPlaylistPopup').style.display = 'none';
 }

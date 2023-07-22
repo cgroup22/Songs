@@ -97,7 +97,7 @@
 						</button>
                     </form>
                 </div>
-                <div class="ms_top_trend">
+                <div class="ms_top_trend" style="display:none;">
                     <!--<span><a href="#"  class="ms_color">Trending Songs :</a></span> <span class="top_marquee"><a href="#">Dream your moments, Until I Met You, Gimme Some Courage, Dark Alley (+8 More)</a></span>-->
                     <a class="ms_btn" id="TakeQuizBTN" href="javascript:void(0)" onclick="TakeAQuiz()">Take A Quiz</a>
                 </div>
@@ -135,7 +135,7 @@
 						</span>
 						</a>
                         </li>
-                        <li><a href="album.html" title="Albums">
+                        <li style="display:none;"><a href="album.html" title="Albums">
 						<span class="nav_icon">
 							<span class="icon icon_albums"></span>
 						</span>
@@ -153,25 +153,25 @@
 						</span>
 						</a>
                         </li>
-                        <li><a href="genres.html" title="Genres">
+                        <li onclick="TakeAQuiz()"><a href="javascript:void(0)" title="Genres">
 						<span class="nav_icon">
 							<span class="icon icon_genres"></span>
 						</span>
 						<span class="nav_text">
-							genres
+							Solo Quiz
 						</span>
 						</a>
                         </li>
-                        <li><a href="top_track.html" title="Top Tracks">
+                        <li onclick="MPQuiz()"><a href="javascript:void(0)" title="Top Tracks">
 						<span class="nav_icon">
 							<span class="icon icon_tracks"></span>
 						</span>
 						<span class="nav_text">
-							top tracks
+							MP Quiz
 						</span>
 						</a>
                         </li>
-                        <li><a href="free_music.html" title="Free Music">
+                        <li style="display:none;"><a href="free_music.html" title="Free Music">
 						<span class="nav_icon">
 							<span class="icon icon_music"></span>
 						</span>
@@ -180,7 +180,7 @@
 						</span>
 						</a>
                         </li>
-                        <li><a href="stations.html" title="Stations">
+                        <li style="display:none;"><a href="stations.html" title="Stations">
 						<span class="nav_icon">
 							<span class="icon icon_station"></span>
 						</span>
@@ -191,7 +191,7 @@
                         </li>
                     </ul>
                     <ul class="nav_downloads">
-                        <li><a href="download.html" title="Downloads">
+                        <li style="display:none;"><a href="download.html" title="Downloads">
 						<span class="nav_icon">
 							<span class="icon icon_download"></span>
 						</span>
@@ -200,7 +200,7 @@
 						</span>
 						</a>
                         </li>
-                        <li><a href="purchase.html" title="Purchased">
+                        <li style="display:none;"><a href="purchase.html" title="Purchased">
 						<span class="nav_icon">
 							<span class="icon icon_purchased"></span>
 						</span>
@@ -218,12 +218,12 @@
 						</span>
 						</a>
                         </li>
-                        <li><a href="history.html" title="History">
+                        <li onclick="MoveToQuizHistory()"><a href="javascript:void(0)" title="History">
 						<span class="nav_icon">
 							<span class="icon icon_history"></span>
 						</span>
 						<span class="nav_text">
-							history
+							Quiz History
 						</span>
 						</a>
                         </li>
@@ -595,7 +595,7 @@
         </div>
         <!----Footer Start---->
         <div class="ms_footer_wrapper">
-            <div class="ms_footer_logo">
+            <div class="ms_footer_logo" style="display:none;">
                 <a href="index.html"><img src="images/open_logo.png" alt=""></a>
             </div>
             <div class="ms_footer_inner">

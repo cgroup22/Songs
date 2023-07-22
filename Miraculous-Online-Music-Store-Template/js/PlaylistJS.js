@@ -31,6 +31,7 @@ function UpdatePlaylist() {
     if (userID == null || userID < 1) return;
     if (sessionStorage['PlaylistID'] == undefined || sessionStorage['PlaylistID'] == "") {
         openPopup("ERROR", "red", "You didn't choose a playlist!");
+        setTimeout(() => {window.location.href = 'index.html'}, 2000);
         return;
     }
     PlaylistID = sessionStorage['PlaylistID'];
