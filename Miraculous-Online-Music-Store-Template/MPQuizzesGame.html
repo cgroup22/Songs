@@ -263,6 +263,7 @@
         </div>
         <!----Album Single Section Start---->
         <!---Main Content Start--->
+        <audio id="QuizSound" src="Sounds/QuizSound.mp3"></audio>
         <div class="ms_content_wrapper padder_top80">
             <div id="QuizQuestions" style="display:none;">
                 <h1 class="blueTitle" id="QuizTitle">Multiplayer Quiz</h1>
@@ -271,7 +272,8 @@
                     
                 </div>
     
-                <div id="QuestionDiv">
+                <div id="QuestionDiv" style="text-align:center;">
+                    <div class="ms_btn" id="ToggleSoundBTN" onclick="StartMusic()" style="margin:auto;margin-bottom:20px;"><a href="javascript:void(0)" style="color:white;">Play Sound</a></div>
       <form id="QuizForm">
         <h2 class="blueTitle" id="QuestionTitle">Question 1:</h2>
         <p id="QuestionContent">What is the capital of France?</p>

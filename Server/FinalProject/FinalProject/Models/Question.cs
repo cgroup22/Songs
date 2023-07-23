@@ -65,7 +65,8 @@ namespace FinalProject.Models
         private static Question GenerateQuestionWhenWasTheSongReleased()
         {
             Dictionary<string, object> RS = Song.GetRandomSong();
-            List<string> randomYears = Song.Get3RandomReleaseYear(Convert.ToInt32(RS["ReleaseYear"]));
+            int YearToIgnore = Convert.ToInt32(RS["ReleaseYear"]);
+            List<string> randomYears = Song.Get3RandomReleaseYear(YearToIgnore);
             randomYears.Add(RS["ReleaseYear"].ToString());
             Question q = new Question(-1, "When was the next song released: " + RS["SongName"].ToString() + "?", randomYears, 3);
             q.ShuffleAnswers();

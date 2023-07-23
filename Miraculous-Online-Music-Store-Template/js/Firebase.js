@@ -132,14 +132,38 @@ function WatchMPQuiz(id, grade) {
   else str = ``;
   if (Games[id]?.quiz?.quizDate != undefined)
   str += `<p style="color: white; font-size: 20px; margin-top: 30px;">Quiz Date: ${Games[id].quiz.quizDate}</p>`;
+  let winnersCounter = 0;
   if (Games[id]?.players?.length > 0) {
     str += `<p style="color: white; font-size: 20px; margin-top: 30px;">Players: `;
   for (i in Games[id].players) {
     str += `${Games[id].players[i].name}(${Games[id].players[i].id})`;
     if (parseInt(i) != Games[id].players.length - 1)
         str += `, `;
+    if (Games[id].players[i].won) {
+      winnersCounter++;
+    }
   }
   str += `</p>`;
+  }
+  if (winnersCounter == 0) {
+    str += `<p style="color: white; font-size: 20px; margin-top: 30px;">No Winners</p>`;
+  } else if (winnersCounter == 1) {
+    str += `<p style="color: white; font-size: 20px; margin-top: 30px;">Winner: `;
+    for (i in Games[id].players)
+      if (Games[id].players[i].won) {
+        str += `${Games[id].players[i].name}`;
+        break;
+      }
+  } else {
+    let tmp = 0;
+    str += `<p style="color: white; font-size: 20px; margin-top: 30px;">Winners: `;
+    for (i in Games[id].players)
+      if (Games[id].players[i].won) {
+        str += `${Games[id].players[i].name}`;
+        tmp++;
+        if (tmp != winnersCounter)
+          str += `, `;
+      }
   }
   for (i in Games[id]?.quiz?.questions) {
     for (j of Games[id]?.quiz?.questions[i].userAnswer)
@@ -191,6 +215,7 @@ function ListenToGames() {
 function SetGame() {
     // Listen to the games object
     database.ref('Games').on('value', function(snapshot) {
+      if (Game.finished) return;
         var gamesData = snapshot.val();
         currentActiveGames = gamesData;
         console.log(currentActiveGames)

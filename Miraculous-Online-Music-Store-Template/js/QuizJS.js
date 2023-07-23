@@ -76,26 +76,6 @@ function StartQuizSCB(data) {
     Quiz = data;
     ShowQuestion();
 }
-// Start quiz music
-function StartMusic() {
-  // Get the audio element
-  const audioElement = document.getElementById("QuizSound");
-  // Play the audio
-  audioElement.play();
-  document.getElementById("ToggleSoundBTN").setAttribute('onclick', 'StopMusic()');
-  audioElement.volume = 0.3;
-  document.getElementById("ToggleSoundBTN").innerHTML = `<a href="javascript:void(0)" style="color:white;">Stop Sound</a>`;
-}
-// Stops quiz music
-function StopMusic() {
-  // Get the audio element
-  const audioElement = document.getElementById("QuizSound");
-  // Play the audio
-  audioElement.pause();
-  document.getElementById("ToggleSoundBTN").setAttribute('onclick', 'StartMusic()');
-  audioElement.volume = 0.3;
-  document.getElementById("ToggleSoundBTN").innerHTML = `<a href="javascript:void(0)" style="color:white;">Play Sound</a>`;
-}
 // shows the next question of the quiz
 function ShowQuestion() {
     if (currentIndex >= Quiz.questions.length) {

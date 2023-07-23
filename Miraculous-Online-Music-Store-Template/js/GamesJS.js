@@ -202,7 +202,8 @@ async function InsertGameToDB() {
                 players: [usr],
                 questions: 5,
                 isActive: true,
-                isWaitingForPlayers: true
+                isWaitingForPlayers: true,
+                finished: false
             };
             await newGameRef.set(Game);
             console.log('Game inserted successfully!');

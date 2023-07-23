@@ -498,6 +498,26 @@ function PlayArtistSongsWithoutShuffleSCB(data) {
   HandleIndexPlayFirstInQueue();
   PlayFirstInQueue();
 }
+// Start quiz music
+function StartMusic() {
+    // Get the audio element
+    const audioElement = document.getElementById("QuizSound");
+    // Play the audio
+    audioElement.play();
+    document.getElementById("ToggleSoundBTN").setAttribute('onclick', 'StopMusic()');
+    audioElement.volume = 0.3;
+    document.getElementById("ToggleSoundBTN").innerHTML = `<a href="javascript:void(0)" style="color:white;">Stop Sound</a>`;
+  }
+  // Stops quiz music
+  function StopMusic() {
+    // Get the audio element
+    const audioElement = document.getElementById("QuizSound");
+    // Play the audio
+    audioElement.pause();
+    document.getElementById("ToggleSoundBTN").setAttribute('onclick', 'StartMusic()');
+    audioElement.volume = 0.3;
+    document.getElementById("ToggleSoundBTN").innerHTML = `<a href="javascript:void(0)" style="color:white;">Play Sound</a>`;
+  }
 // logs in if there's anything in the storage, moves to index.html if the user is not logged in
 function FavoriteTryLogin() {
     if (!IsLoggedIn()) {

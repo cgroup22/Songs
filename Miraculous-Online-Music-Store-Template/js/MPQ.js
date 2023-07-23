@@ -176,11 +176,13 @@ function GenerateQuizSCB(data) {
 }
 // On quiz end, update html and XP of players.
 function QuizEnd() {
+    StopMusic();
+    document.getElementById('QuizSound').style.display = 'none';
     sessionStorage['game'] = "";
     document.getElementById('QuizEndScreen').style.display = 'block';
     document.getElementById('QuestionDiv').style.display = 'none';
     let uid = GetUserID();
-    let str = ``;
+    let str = `<p id="winners" style="color:white;text-align:center;margin:5px;font-size:23px;"></p>`;
     let q = 1;
     let countQ = 0;
     for (i of Game.quiz.questions) {
@@ -213,9 +215,79 @@ function QuizEnd() {
     }
     str += `<a class="ms_btn" id="TakeQuizBTN" href="MultiplayerQuizzes.html" style="margin:auto; margin-top:40px;">Play again</a>`;
     document.getElementById('QuizEndScreen').innerHTML = str;
+    CalculateWinners(Game);
     // Adding 10 XP to the user for each question he got right
     const api = `${apiStart}/Users/AddUserXP/UserID/${GetUserID()}/XP/${countQ * 10}`;
     ajaxCall("PUT", api, "", () => {}, (e) => { console.log(e); });
+}
+// Calculates who won the game.
+function CalculateWinners(game) {
+    let players = game.players;
+    for (i of players)
+        i.correct = 0;
+    for (i of game.quiz.questions) {
+        for (x of i.userAnswer) {
+            for (j of players) {
+                if (x.UserID == j.id) {
+                    if (x.Answers == i.correctAnswer)
+                        j.correct++;
+                    break;
+                }
+            }
+        }
+    }
+    let max = -1;
+    for (i of players)
+    {
+        if (i.correct > max)
+            max = i.correct;
+    }
+    let winners = [];
+    if (max != 0)
+        for (i of players)
+            if (i.correct == max)
+                winners.push(i);
+    if (winners.length == 0)
+        document.getElementById('winners').innerHTML = `No Winners`;
+    else if (winners.length == 1) {
+        document.getElementById('winners').innerHTML = `Winner: ${winners[0].name}`;
+    } else {
+        let str = `Players tied for the win: `;
+        for(i in winners) {
+            str += `${winners[i].name}`;
+            if (parseInt(i) != winners.length - 1)
+                str += `, `;
+        }
+        document.getElementById('winners').innerHTML = str;
+    }
+    if (GetUserID() == game.ownerID) {
+        if (winners.length == 0) {
+            for (i of game.players)
+                i.won = false;
+        }
+        else {
+            for (i of game.players) {
+                let tmp = false;
+                for (j of winners) {
+                    if (i.id == j.id) {
+                        tmp = true;
+                        break;
+                    }
+                }
+               i.won = tmp;
+            }
+        }
+        game.finished = true;
+        const gameRef = database.ref('Games').child(game.id);
+    // Use the update method to modify specific properties of the game
+    gameRef.update(game)
+        .then(function() {
+            // console.log('Game updated successfully!');
+        })
+        .catch(function(error) {
+            // console.error('Error updating game:', error);
+        });
+    }
 }
 // Shows the next question to the player.
 function ShowQuestion() {
@@ -330,6 +402,7 @@ function submitQuestion() {
  // TIMER FINISH
  // Used to update the game to the next question (happens once, only on owner's computer)
  function NextQuestion() {
+    if (Game.finished) return;
     Game.currentIndex++;
     if (Game.currentIndex >= Game.questions)
         Game.isActive = false;
