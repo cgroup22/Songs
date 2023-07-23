@@ -2179,52 +2179,6 @@ public class DBservices
             }
         }
     }
-    // TEMP - Insert band
-    public int Insert(Band b)
-    {
-
-        SqlConnection con;
-        SqlCommand cmd;
-
-        try
-        {
-            con = connect("FinalProject"); // create the connection
-        }
-        catch (Exception ex)
-        {
-            // write to log
-            throw (ex);
-        }
-
-        Dictionary<string, object> paramDic = new Dictionary<string, object>();
-        paramDic.Add("@PerformerName", b.PerformerName);
-        paramDic.Add("@establishmentDate", b.EstablishmentDate);
-        paramDic.Add("@PerformerImage", b.PerformerImage);
-
-
-        cmd = CreateCommandWithStoredProcedure("Proj_SP_InsertBand", con, paramDic);             // create the command
-
-        try
-        {
-            // int numEffected = cmd.ExecuteNonQuery(); // execute the command
-            int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
-            return numEffected;
-        }
-        catch (Exception ex)
-        {
-            // write to log
-            throw (ex);
-        }
-
-        finally
-        {
-            if (con != null)
-            {
-                // close the db connection
-                con.Close();
-            }
-        }
-    }
     public int PutUserAnswer(int QuestionID, int answer)
     {
 
@@ -2568,53 +2522,6 @@ public class DBservices
         }
 
     }
-
-    /*public int Insert(Band b)
-    {
-
-        SqlConnection con;
-        SqlCommand cmd;
-
-        try
-        {
-            con = connect("FinalProject"); // create the connection
-        }
-        catch (Exception ex)
-        {
-            // write to log
-            throw (ex);
-        }
-
-        Dictionary<string, object> paramDic = new Dictionary<string, object>();
-        paramDic.Add("@PerformerName", b.PerformerName);
-        paramDic.Add("@establishmentDate", b.EstablishmentDate);
-        paramDic.Add("@PerformerImage", b.PerformerImage);
-
-
-        cmd = CreateCommandWithStoredProcedure("Proj_SP_InsertBand", con, paramDic);             // create the command
-
-        try
-        {
-            // int numEffected = cmd.ExecuteNonQuery(); // execute the command
-            int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
-            return numEffected;
-        }
-        catch (Exception ex)
-        {
-            // write to log
-            throw (ex);
-        }
-
-        finally
-        {
-            if (con != null)
-            {
-                // close the db connection
-                con.Close();
-            }
-        }
-
-    }*/
 
     /*
     //--------------------------------------------------------------------------------------------------

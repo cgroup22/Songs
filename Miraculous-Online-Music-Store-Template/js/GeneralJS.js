@@ -744,3 +744,10 @@ function SearchByVoice() {
       document.getElementById('MicSVG').style.display = 'none';
     }
   }
+  function Leaderboard() {
+    if (!IsLoggedIn()) {
+        openPopup("ERROR", "RED", "You need to login to see the leaderboard!");
+        return;
+    }
+    window.location.href = `leaderboard.html`;
+  }
