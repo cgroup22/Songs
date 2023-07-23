@@ -182,7 +182,8 @@ function QuizEnd() {
     document.getElementById('QuizEndScreen').style.display = 'block';
     document.getElementById('QuestionDiv').style.display = 'none';
     let uid = GetUserID();
-    let str = `<p id="winners" style="color:white;text-align:center;margin:5px;font-size:23px;"></p>`;
+    let str = `<p id="winners" style="color:white;text-align:center;margin:5px;font-size:23px;"></p>
+    <p id="YourCorrect" style="color:white;text-align:center;margin:5px;font-size:23px;"></p>`;
     let q = 1;
     let countQ = 0;
     for (i of Game.quiz.questions) {
@@ -242,23 +243,29 @@ function CalculateWinners(game) {
         if (i.correct > max)
             max = i.correct;
     }
+    let YC = 0;
     let winners = [];
     if (max != 0)
-        for (i of players)
+        for (i of players) {
             if (i.correct == max)
                 winners.push(i);
+            if (i.id == GetUserID())
+                YC = i.correct;
+        }
     if (winners.length == 0)
         document.getElementById('winners').innerHTML = `No Winners`;
     else if (winners.length == 1) {
-        document.getElementById('winners').innerHTML = `Winner: ${winners[0].name}`;
+        document.getElementById('winners').innerHTML = `Winner: ${winners[0].name} with ${winners[0].correct} right questions!`;
     } else {
         let str = `Players tied for the win: `;
         for(i in winners) {
             str += `${winners[i].name}`;
             if (parseInt(i) != winners.length - 1)
                 str += `, `;
+            else str += ` with ${winners[i].correct} right questions!`;
         }
         document.getElementById('winners').innerHTML = str;
+        document.getElementById('YourCorrect').innerHTML = `You got ${YC} questions right!`;
     }
     if (GetUserID() == game.ownerID) {
         if (winners.length == 0) {
@@ -311,7 +318,7 @@ function ShowQuestion() {
         timerElement.textContent = `00:20`;
     }
     if (document.getElementById('SubmitBTN').style.display == 'none')
-    document.getElementById('SubmitBTN').style.display='block';
+    document.getElementById('SubmitBTN').style.display='initial';
     console.log(Quiz)
     if (document.querySelector('input[name="q1"]:checked') != null)
         document.querySelector('input[name="q1"]:checked').checked = false;

@@ -146,24 +146,35 @@ function WatchMPQuiz(id, grade) {
   str += `</p>`;
   }
   if (winnersCounter == 0) {
-    str += `<p style="color: white; font-size: 20px; margin-top: 30px;">No Winners</p>`;
+    str += `<p style="color: white; font-size: 20px; margin-top: 30px;">No Winners</p>
+    <p style="color: white; font-size: 20px; margin-top: 30px;">You got 0 questions right!</p>`;
   } else if (winnersCounter == 1) {
+    let YC = 0;
     str += `<p style="color: white; font-size: 20px; margin-top: 30px;">Winner: `;
-    for (i in Games[id].players)
+    for (i in Games[id].players) {
+      if (Games[id].players[i].id == GetUserID())
+        YC = Games[id].players[i].correct;
       if (Games[id].players[i].won) {
-        str += `${Games[id].players[i].name}`;
+        str += `${Games[id].players[i].name} with ${Games[id].players[i].correct} right questions!`;
         break;
       }
+    }
+    str += `<p style="color: white; font-size: 20px; margin-top: 30px;">You got ${YC} questions right!</p>`;
   } else {
     let tmp = 0;
+    let YC = 0;
     str += `<p style="color: white; font-size: 20px; margin-top: 30px;">Winners: `;
     for (i in Games[id].players)
       if (Games[id].players[i].won) {
+        if (Games[id].players[i].id == GetUserID())
+          YC = Games[id].players[i].correct;
         str += `${Games[id].players[i].name}`;
         tmp++;
         if (tmp != winnersCounter)
           str += `, `;
+        else str += ` with ${Games[id].players[i].correct} right questions!`;
       }
+      str += `<p style="color: white; font-size: 20px; margin-top: 30px;">You got ${YC} questions right!</p>`;
   }
   for (i in Games[id]?.quiz?.questions) {
     for (j of Games[id]?.quiz?.questions[i].userAnswer)
