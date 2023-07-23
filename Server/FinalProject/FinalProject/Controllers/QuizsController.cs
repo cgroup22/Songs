@@ -10,6 +10,7 @@ namespace FinalProject.Controllers
     public class QuizsController : ControllerBase
     {
         // GET: api/<QuizsController>
+        // Generates a new quiz with questions for multiplayer. Saved on firebase.
         [HttpGet("GetQuizForFirebase")]
         public IActionResult GetQuizForFirebase()
         {
@@ -24,6 +25,7 @@ namespace FinalProject.Controllers
         }
 
         // GET api/<QuizsController>/5
+        // Gets user pasts solo quizzes by his id.
         [HttpGet("GetUserPastQuiz/UserID/{UserID}")]
         public IActionResult GetUserPastQuiz(int UserID)
         {
@@ -36,7 +38,7 @@ namespace FinalProject.Controllers
                 return BadRequest("SERVER ERROR " + e.Message);
             }
         }
-
+        // Gets user past quizzes without whole questions. (Just general quiz data)
         [HttpGet("GetUserPastQuizzesWithoutQuestions/UserID/{UserID}")]
         public IActionResult GetUserPastQuizzesWithoutQuestions(int UserID)
         {
@@ -49,7 +51,7 @@ namespace FinalProject.Controllers
                 return BadRequest("SERVER ERROR " + e.Message);
             }
         }
-
+        // Gets the questions of a specific quiz by its id.
         [HttpGet("GetQuizQuestions/QuizID/{QuizID}")]
         public IActionResult GetQuizQuestions(int QuizID)
         {
@@ -63,6 +65,7 @@ namespace FinalProject.Controllers
             }
         }
 
+        // Posts a new quiz to this UserID. Generates questions and saves them, and returns the new quiz object to the user.
         // POST api/<QuizsController>
         [HttpPost("StartQuiz/UserID/{UserID}")]
         public IActionResult Post(int UserID)

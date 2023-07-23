@@ -17,6 +17,7 @@ namespace FinalProject.Controllers
         }
 
         // GET api/<PlaylistsController>/5
+        // Gets playlist songs of a specific playlist
         [HttpGet("GetPlaylistSongs/PlaylistID/{PlaylistID}")]
         public IActionResult Get(int PlaylistID)
         {
@@ -30,6 +31,7 @@ namespace FinalProject.Controllers
             }
         }
 
+        // Gets playlist name of a specific playlist
         [HttpGet("GetPlaylistName/PlaylistID/{PlaylistID}")]
         public IActionResult GetPlaylistName(int PlaylistID)
         {
@@ -44,6 +46,7 @@ namespace FinalProject.Controllers
         }
 
         // POST api/<PlaylistsController>
+        // Posts a new playlist
         [HttpPost]
         public IActionResult Post([FromBody] Playlist p)
         {
@@ -58,6 +61,7 @@ namespace FinalProject.Controllers
         }
 
         // PUT api/<PlaylistsController>/5
+        // Inserts a song to an existing playlist
         [HttpPut("InsertSongToPlaylist")]
         public IActionResult Put(SongInPlaylist s)
         {
@@ -73,6 +77,7 @@ namespace FinalProject.Controllers
             }
         }
 
+        // Delets the whole playlist of a user.
         // DELETE api/<PlaylistsController>/5
         [HttpDelete("DeleteUserPlaylist/PlaylistID/{PlaylistID}/UserID/{UserID}")]
         public IActionResult Delete(int PlaylistID, int UserID)
@@ -86,6 +91,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "SERVER ERROR " + e.Message });
             }
         }
+        // Delets one song from an existing playlist.
         [HttpDelete("DeleteSongFromPlaylist/PlaylistID/{PlaylistID}/SongID/{SongID}")]
         public IActionResult DeleteSongFromPlaylist(int PlaylistID, int SongID)
         {
@@ -98,6 +104,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "SERVER ERROR " + e.Message });
             }
         }
+        // Gets user playlist.
         [HttpGet("GetUserPlaylists/UserID/{UserID}")]
         public IActionResult GetUserPlaylists(int UserID)
         {

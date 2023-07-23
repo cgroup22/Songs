@@ -143,6 +143,7 @@ public class DBservices
             }
         }
     }
+    // Gets how many streams does the artist have (sum of all his songs)
     public object GetTotalStreamsOfArtist(int PerformerID)
     {
 
@@ -203,7 +204,7 @@ public class DBservices
             }
         }
     }
-
+    // Gets how many followers does the artist have.
     public object GetTotalFavoritesOfArtist(int PerformerID)
     {
 
@@ -257,6 +258,7 @@ public class DBservices
             }
         }
     }
+    // Gets user registration date as json
     public object GetUserRegistarationDate(int UserID)
     {
 
@@ -310,6 +312,7 @@ public class DBservices
             }
         }
     }
+    // Gets how many followers does the performer have.
     public object GetTotalFollowersOfPerformer(int PerformerID)
     {
 
@@ -363,6 +366,7 @@ public class DBservices
             }
         }
     }
+    // Gets a random song as a dictionary. Used to generate questions.
     public Dictionary<string, object> GetRandomSong()
     {
 
@@ -475,7 +479,8 @@ public class DBservices
             }
         }
     }
-    public int Test(string name, string imageurl)
+    // Inserts an artist and gets the image from Google Images, using an API.
+    public int InsertArtistAndImageUsingAI(string name, string imageurl)
     {
         SqlConnection con;
         SqlCommand cmd;
@@ -518,6 +523,7 @@ public class DBservices
             }
         }
     }
+    // Inserts a performer from managePortal.html (Only admins can do that!)
     public int AdminInsertPerformer(Performer p)
     {
         SqlConnection con;
@@ -563,7 +569,7 @@ public class DBservices
             }
         }
     }
-    // TEMP
+    // Gets top 15 songs to feature. UserID is used to know whether the user has them on his favorites.
     public List<object> GetTop15(int UserID)
     {
 
@@ -628,7 +634,7 @@ public class DBservices
         }
 
     }
-
+    // Gets the chosen song's lyrics.
     public object GetSongLyrics(int SongID)
     {
         SqlConnection con;
@@ -684,7 +690,7 @@ public class DBservices
             }
         }
     }
-
+    // Gets the user XP by his id.
     public object GetUserXP(int UserID)
     {
         SqlConnection con;
@@ -737,7 +743,7 @@ public class DBservices
             }
         }
     }
-
+    // Gets performer instagram handle by his id.
     public object GetPerformerInstagram(int PerformerID)
     {
         SqlConnection con;
@@ -797,7 +803,7 @@ public class DBservices
             }
         }
     }
-
+    // Gets user favorites by his id.
     public List<object> GetUserFavorites(int UserID)
     {
         SqlConnection con;
@@ -864,7 +870,9 @@ public class DBservices
             }
         }
     }
-
+    // Gets the songs in a playlist by the id of the playlist.
+    // Returns a list of objects rather than songs because we need to handle special data for this request. (such as image,
+    // which is not a part of the Song class properties.)
     public List<object> GetPlaylistSongs(int PlaylistID)
     {
         SqlConnection con;
@@ -931,7 +939,7 @@ public class DBservices
             }
         }
     }
-
+    // Gets a name of a playlist by its id, as a ready-to-cast json object.
     public object GetPlaylistName(int PlaylistID)
     {
         SqlConnection con;
@@ -984,7 +992,7 @@ public class DBservices
             }
         }
     }
-
+    // Gets user playlists by his id.
     public List<Playlist> GetUserPlaylists(int UserID)
     {
         SqlConnection con;
@@ -1037,7 +1045,7 @@ public class DBservices
             }
         }
     }
-
+    // Gets most played performer. Used to generate the admin's general report.
     private Dictionary<string, object> AdminReportGetMostPlayedPerformer()
     {
         SqlConnection con;
@@ -1087,6 +1095,7 @@ public class DBservices
         }
     }
 
+    // Gets most followed performer. Used to generate the admin's general report.
     private Dictionary<string, object> AdminReportGetMostFollowedPerformer()
     {
         SqlConnection con;
@@ -1136,6 +1145,7 @@ public class DBservices
         }
     }
 
+    // Gets most played genre. Used to generate the admin's general report.
     private Dictionary<string, object> AdminReportGetMostPlayedGenre()
     {
         SqlConnection con;
@@ -1185,6 +1195,7 @@ public class DBservices
         }
     }
 
+    // Gets how many users we have. Used to generate the admin's general report.
     private int AdminReportGetHowManyUsers()
     {
         SqlConnection con;
@@ -1231,6 +1242,7 @@ public class DBservices
         }
     }
 
+    // Gets how many solo quizzes users have played. Used to generate the admin's general report.
     private int AdminReportGetHowManyQuizzes()
     {
         SqlConnection con;
@@ -1277,6 +1289,8 @@ public class DBservices
         }
     }
 
+    // Builds the actual admin general report using the functions above, and returns as object. The admin can also choose to download
+    // as a csv file the report if he'd like to.
     public object BuildReport()
     {
         Dictionary<string, object> MostPlayedPerformer = AdminReportGetMostPlayedPerformer();
@@ -1296,7 +1310,7 @@ public class DBservices
             SoloQuizzesPlayed = SoloQuizzes
         };
     }
-
+    // Adds user the given XP amount.
     public int AddUserXP(int UserID, int XP)
     {
         SqlConnection con;
@@ -1339,7 +1353,7 @@ public class DBservices
             }
         }
     }
-
+    // Search the query. UserID is used to know whether this user has the songs on his favorites or not.
     public List<object> Search(string query, int UserID)
     {
         SqlConnection con;
@@ -1419,8 +1433,8 @@ public class DBservices
             }
         }
     }
-
-    public List<object> GetFeaturedArtists()
+    // Gets featured performers for the homepage.
+    public List<Performer> GetFeaturedArtists()
     {
 
         SqlConnection con;
@@ -1440,7 +1454,7 @@ public class DBservices
         cmd = CreateCommandWithStoredProcedure("Proj_SP_GetFeaturedArtists", con, null);             // create the command
 
 
-        List<object> artists = new List<object>();
+        List<Performer> artists = new List<Performer>();
 
         try
         {
@@ -1448,16 +1462,11 @@ public class DBservices
 
             while (dataReader.Read())
             {
-                int PerformerID = Convert.ToInt32(dataReader["PerformerID"]);
-                string PName = dataReader["PerformerName"].ToString();
-                string PImage = dataReader["PerformerImage"].ToString();
-                object s = new
-                {
-                    PerformerID = PerformerID,
-                    PerformerName = PName,
-                    PerformerImage = PImage
-                };
-                artists.Add(s);
+                Performer p = new Performer();
+                p.PerformerID = Convert.ToInt32(dataReader["PerformerID"]);
+                p.PerformerName = dataReader["PerformerName"].ToString();
+                p.PerformerImage = dataReader["PerformerImage"].ToString();
+                artists.Add(p);
             }
 
             return artists;
@@ -1478,7 +1487,7 @@ public class DBservices
         }
 
     }
-
+    // Gets the quizzes leaderboard.
     public List<object> GetLeaderboard()
     {
 
@@ -1542,8 +1551,8 @@ public class DBservices
         }
 
     }
-
-    public List<object> GetArtists()
+    // Gets all artists
+    public List<Performer> GetArtists()
     {
 
         SqlConnection con;
@@ -1563,7 +1572,7 @@ public class DBservices
         cmd = CreateCommandWithStoredProcedure("Proj_SP_GetArtist", con, null);             // create the command
 
 
-        List<object> artists = new List<object>();
+        List<Performer> artists = new List<Performer>();
 
         try
         {
@@ -1571,16 +1580,11 @@ public class DBservices
 
             while (dataReader.Read())
             {
-                int PerformerID = Convert.ToInt32(dataReader["PerformerID"]);
-                string PName = dataReader["PerformerName"].ToString();
-                string PImage = dataReader["PerformerImage"].ToString();
-                object s = new
-                {
-                    PerformerID = PerformerID,
-                    PerformerName = PName,
-                    PerformerImage = PImage
-                };
-                artists.Add(s);
+                Performer p = new Performer();
+                p.PerformerID = Convert.ToInt32(dataReader["PerformerID"]);
+                p.PerformerName = dataReader["PerformerName"].ToString();
+                p.PerformerImage = dataReader["PerformerImage"].ToString();
+                artists.Add(p);
             }
 
             return artists;
@@ -1601,7 +1605,7 @@ public class DBservices
         }
 
     }
-
+    // Gets artists sorted by # of plays for the admin's report. Admin can also download the report later.
     public List<object> AdminGetPerformersData()
     {
 
@@ -1666,7 +1670,7 @@ public class DBservices
         }
 
     }
-
+    // Gets songs sorted by # of plays for the admin's report. Admin can also download the report later.
     public List<object> AdminGetSongsInfo()
     {
 
@@ -1737,7 +1741,7 @@ public class DBservices
         }
 
     }
-
+    // Used when a user wants to follow an artist.
     public int FollowArtist(int UserID, int PerformerID)
     {
         SqlConnection con;
@@ -1781,7 +1785,7 @@ public class DBservices
             }
         }
     }
-
+    // Used when a user wants to unfollow an aritst.
     public int UnfollowArtist(int UserID, int PerformerID)
     {
         SqlConnection con;
@@ -1825,7 +1829,8 @@ public class DBservices
             }
         }
     }
-
+    // Inserts a new comment to the db. Only following user of this artists can post.
+    // This way, we've built a fan club of the artist.
     public int Insert(Comment c)
     {
         SqlConnection con;
@@ -1870,7 +1875,7 @@ public class DBservices
             }
         }
     }
-
+    // Gets songs data of this artist. Returns them as list of object to insert special data for this request.
     public List<object> GetPerformerSongs(int PID, int UserID)
     {
 
@@ -1942,7 +1947,7 @@ public class DBservices
         }
 
     }
-
+    // Gets songs of a specific genre. Returns them as list of object to insert special data for this request.
     public List<object> GetGenreSongs(int GenreID)
     {
 
@@ -2004,8 +2009,8 @@ public class DBservices
         }
 
     }
-    
 
+    // Gets the most played song to feature on our homepage. Returns as an object to insert special data for this request. (such as image)
     public object GetMostPlayedTrack()
     {
 
@@ -2023,9 +2028,6 @@ public class DBservices
         }
 
         cmd = CreateCommandWithStoredProcedure("Proj_SP_GetMostPlayedTrack", con, null);             // create the command
-
-
-        
 
         try
         {
@@ -2070,7 +2072,8 @@ public class DBservices
         }
 
     }
-
+    // Returns the genres sorted by # of plays. Returns them as list of object to insert special data for this request.
+    // For example, NumOfSongs and NumOfPlays.
     public List<object> GetGenresByPlaysDesc()
     {
 
@@ -2179,6 +2182,7 @@ public class DBservices
             }
         }
     }
+    // Updates user answer to this question.
     public int PutUserAnswer(int QuestionID, int answer)
     {
 
@@ -2224,6 +2228,7 @@ public class DBservices
         }
 
     }
+    // Inserts the question to this quiz.
     public int Insert(Question q, int quizID)
     {
         SqlConnection con;
@@ -2284,6 +2289,7 @@ public class DBservices
         }
 
     }
+    // Inserts a playlist. Returns the current identity scope of the playlists table.
     public object Insert(Playlist p)
     {
 
@@ -2329,6 +2335,7 @@ public class DBservices
         }
 
     }
+    // Returns the current identity scope of the playlist table, as ready-to-cast json object.
     public object GetPlaylistIdentity()
     {
 
@@ -2378,6 +2385,7 @@ public class DBservices
         }
 
     }
+    // Inserts a song to the chosen playlist.
     public int InsertSongToPlaylist(SongInPlaylist s)
     {
 
@@ -2423,6 +2431,7 @@ public class DBservices
         }
 
     }
+    // Adds a new song to this user's favorites.
     public int PostUserFavorite(int UserID, int SongID)
     {
 
@@ -2468,7 +2477,8 @@ public class DBservices
         }
 
     }
-
+    // Returns all user information for the admin's report. Admins can download the report later.
+    // For security reasons, some information is not returned. Such as passwords.
     public List<User> LoadUserInformation()
     {
 
@@ -2523,242 +2533,7 @@ public class DBservices
 
     }
 
-    /*
-    //--------------------------------------------------------------------------------------------------
-    // This method update a student to the student table 
-    //--------------------------------------------------------------------------------------------------
-    public int Update(Student student)
-    {
-
-        SqlConnection con;
-        SqlCommand cmd;
-
-        try
-        {
-            con = connect("myProjDB"); // create the connection
-        }
-        catch (Exception ex)
-        {
-            // write to log
-            throw (ex);
-        }
-
-        Dictionary<string, object> paramDic = new Dictionary<string, object>();
-        paramDic.Add("@id", student.Id);
-        paramDic.Add("@name", student.Name);
-        paramDic.Add("@age", student.Age);
-
-
-
-        cmd = CreateCommandWithStoredProcedure("spUpdateStudent1", con, paramDic);             // create the command
-
-        try
-        {
-            int numEffected = cmd.ExecuteNonQuery(); // execute the command
-            return numEffected;
-        }
-        catch (Exception ex)
-        {
-            // write to log
-            throw (ex);
-        }
-
-        finally
-        {
-            if (con != null)
-            {
-                // close the db connection
-                con.Close();
-            }
-        }
-
-    }
-
-
-
-    //--------------------------------------------------------------------------------------------------
-    // This method Inserts a student to the student table 
-    //--------------------------------------------------------------------------------------------------
-    public int Insert(Student student)
-    {
-
-        SqlConnection con;
-        SqlCommand cmd;
-
-        try
-        {
-            con = connect("myProjDB"); // create the connection
-        }
-        catch (Exception ex)
-        {
-            // write to log
-            throw (ex);
-        }
-
-        Dictionary<string, object> paramDic = new Dictionary<string, object>();
-        paramDic.Add("@name", student.Name);
-        paramDic.Add("@age", student.Age);
-
-
-
-        cmd = CreateCommandWithStoredProcedure("spInsertStudent", con, paramDic);             // create the command
-
-        try
-        {
-            // int numEffected = cmd.ExecuteNonQuery(); // execute the command
-            int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
-            return numEffected;
-        }
-        catch (Exception ex)
-        {
-            // write to log
-            throw (ex);
-        }
-
-        finally
-        {
-            if (con != null)
-            {
-                // close the db connection
-                con.Close();
-            }
-        }
-
-    }
-
-
-    //--------------------------------------------------------------------------------------------------
-    // This method Reads all students
-    //--------------------------------------------------------------------------------------------------
-    public List<Student> ReadStudent()
-    {
-
-        SqlConnection con;
-        SqlCommand cmd;
-
-        try
-        {
-            con = connect("myProjDB"); // create the connection
-        }
-        catch (Exception ex)
-        {
-            // write to log
-            throw (ex);
-        }
-
-
-        cmd = CreateCommandWithStoredProcedure("spReadStudents1", con, null);             // create the command
-
-
-        List<Student> studentList = new List<Student>();
-
-        try
-        {
-            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-            while (dataReader.Read())
-            {
-                Student s = new Student();
-                s.Id = Convert.ToInt32(dataReader["Id"]);
-                s.Name = dataReader["Name"].ToString();
-                s.Age = Convert.ToDouble(dataReader["Age"]);
-                studentList.Add(s);
-            }
-            return studentList; 
-        }
-        catch (Exception ex)
-        {
-            // write to log
-            throw (ex);
-        }
-
-        finally
-        {
-            if (con != null)
-            {
-                // close the db connection
-                con.Close();
-            }
-        }
-
-    }
-
-
-
-    //--------------------------------------------------------------------------------------------------
-    // This method Reads all students above a certain age
-    // This method uses the return value mechanism
-    //--------------------------------------------------------------------------------------------------
-    public List<Student> ReadAboveAge(double age)
-    {
-
-        SqlConnection con;
-        SqlCommand cmd;
-
-        try
-        {
-            con = connect("myProjDB"); // create the connection
-        }
-        catch (Exception ex)
-        {
-            // write to log
-            throw (ex);
-        }
-
-
-        Dictionary<string, object> paramDic = new Dictionary<string, object>();
-        paramDic.Add("@age", age);
-        paramDic.Add("@maxAllowedAge", 40);
-
-
-        cmd = CreateCommandWithStoredProcedure("spReadStudentsAboveAge", con, paramDic);             // create the command
-        var returnParameter = cmd.Parameters.Add("@returnValue", SqlDbType.Int);
-
-        returnParameter.Direction = ParameterDirection.ReturnValue;
-
-
-        List<Student> studentList = new List<Student>();
-
-        try
-        {
-            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
-
-            while (dataReader.Read())
-            {
-                Student s = new Student();
-                s.Id = Convert.ToInt32(dataReader["Id"]);
-                s.Name = dataReader["Name"].ToString();
-                s.Age = Convert.ToDouble(dataReader["Age"]);
-                studentList.Add(s);
-            }
-
-            
-
-            return studentList;
-        }
-        catch (Exception ex)
-        {
-            // write to log
-            throw (ex);
-        }
-
-        finally
-        {
-            if (con != null)
-            {
-                // close the db connection
-                con.Close();
-            }
-            // note that the return value appears only after closing the connection
-            var result = returnParameter.Value;
-        }
-
-    }
-
-
-    */
-
-    // Inserts a new user into the user table
+    // Inserts a new user into the user table, gets a token to initiate an email validation process.
     public int Insert(User u, string Token)
     {
         SqlConnection con;
@@ -2806,6 +2581,7 @@ public class DBservices
         }
 
     }
+    // Gets 3 random artist names, as a list of strings to generate a question. Cannot include ArtistToNotInclude.
     public List<string> Get3RandomArtists(int ArtistToNotInclude)
     {
 
@@ -2855,7 +2631,7 @@ public class DBservices
         }
 
     }
-
+    // Gets 3 random single performers (not bands) as a list of strings to generate a question.
     public List<string> Get3RandomSingleArtists()
     {
 
@@ -2903,6 +2679,7 @@ public class DBservices
         }
 
     }
+    // Gets a random band name to generate a question.
     public string GetRandomBand()
     {
 
@@ -2949,6 +2726,7 @@ public class DBservices
         }
 
     }
+    // Returns 3 random release years of songs as a list of strings to generate a question. Cannot include ReleaseYearToIgnore
     public List<string> Get3RandomReleaseYear(int ReleaseYearToIgnore)
     {
         SqlConnection con;
@@ -2997,6 +2775,7 @@ public class DBservices
         }
 
     }
+    // Gets 3 random genres names as a list of strings to generate a question. Cannot include GenreToIgnore.
     public List<string> Get3RandomGenres(string GenreToIgnore)
     {
         SqlConnection con;
@@ -3105,7 +2884,8 @@ public class DBservices
             else if ((int)result == 1) throw new ArgumentException("Wrong password");
         }
     }
-    // TEMP
+    // TEMP - used for testing and inserts mp3 data as hex to this song id.
+    // Saved in SQL as VARBINARY.
     public int InsertFileDataToSongID(int SongID, byte[] fileData)
     {
         SqlConnection con;
@@ -3177,6 +2957,7 @@ public class DBservices
 
         return cmd;
     }
+    // Inserts a new quiz to our db.
     public int Insert(Quiz q)
     {
         SqlConnection con;
@@ -3231,7 +3012,7 @@ public class DBservices
         }
     }
 
-    // TEMP
+    // TEMP - Used for testing purposes!!! to insert songs through the swagger.
     public int InsertSong(Song SongToInsert, byte[] fileData)
     {
         SqlConnection con;
@@ -3261,7 +3042,6 @@ public class DBservices
         try
         {
             int numEffected = cmd.ExecuteNonQuery(); // execute the command
-            //int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
             return numEffected;
         }
         catch (Exception ex)
@@ -3339,7 +3119,7 @@ public class DBservices
             }
         }
     }
-
+    // Deletes a song from user's favorites.
     public int DeleteFromFavorites(int UserID, int SongID)
     {
         SqlConnection con;
@@ -3383,6 +3163,7 @@ public class DBservices
             }
         }
     }
+    // Delets a song from the playlist.
     public int DeleteSongFromPlaylist(int PlaylistID, int SongID)
     {
         SqlConnection con;
@@ -3426,6 +3207,7 @@ public class DBservices
             }
         }
     }
+    // Delets a whole playlist.
     public int DeleteUserPlaylist(int UserID, int PlaylistID)
     {
         SqlConnection con;
@@ -3469,7 +3251,7 @@ public class DBservices
             }
         }
     }
-
+    // Gets user past solo quizes data without the questions, to generate the quizhistory.html page.
     public List<object> GetUserPastQuizDataWithoutQuestions(int UserID)
     {
         SqlConnection con;
@@ -3519,7 +3301,7 @@ public class DBservices
             }
         }
     }
-
+    // Gets a specific quiz questions to watch specific quiz history (also includes info such as grade, date, etc..)
     public Quiz GetQuizQuestions(int QuizID)
     {
         SqlConnection con;
@@ -3572,7 +3354,7 @@ public class DBservices
             }
         }
     }
-
+    // Gets user past quizzes with the questions
     public List<Quiz> GetUserPastQuizzesAndQuestions(int UserID)
     {
         SqlConnection con;
@@ -3646,7 +3428,7 @@ public class DBservices
             }
         }
     }
-
+    // Returns the comments on a specific performer.
     public List<Comment> ReadComments(int PerformerID)
     {
 
@@ -3701,7 +3483,7 @@ public class DBservices
         }
 
     }
-
+    // Gets all performers. Not sorted.
     public List<Performer> GetAllPerformers()
     {
         SqlConnection con;
@@ -3752,6 +3534,59 @@ public class DBservices
             }
         }
     }
+    // Gets the user's following list. (Each performer he follows)
+    public List<Performer> GetUserFollowingList(int UserID)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@UserID", UserID);
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetUserFollowingPerformers", con, paramDic);             // create the command
+
+
+        List<Performer> performers = new List<Performer>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            while (dataReader.Read())
+            {
+                Performer p = new Performer();
+                p.PerformerID = Convert.ToInt32(dataReader["PerformerID"]);
+                p.PerformerName = dataReader["PerformerName"].ToString();
+                p.PerformerImage = dataReader["PerformerImage"].ToString();
+                performers.Add(p);
+            }
+            return performers;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+    // Gets all genres. Not sorted.
     public List<Genre> GetAllGenres()
     {
         SqlConnection con;
@@ -3796,7 +3631,7 @@ public class DBservices
             }
         }
     }
-
+    // Adds a song without the mp3 file data.
     public int PostSongDataWithoutFile(Song song)
     {
         SqlConnection con;
@@ -3840,6 +3675,7 @@ public class DBservices
             }
         }
     }
+    // Gets the scope identity of the Songs table. Used to insert get the new SongID to insert.
     private int GetSongScopeIdentity()
     {
 

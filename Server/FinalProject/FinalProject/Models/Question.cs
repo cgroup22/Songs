@@ -32,7 +32,7 @@ namespace FinalProject.Models
         public List<string> Answers { get => answers; set => answers = value; }
         public int CorrectAnswer { get => correctAnswer; set => correctAnswer = value; }
         public int UserAnswer { get => userAnswer; set => userAnswer = value; }
-
+        // Generates random question with random answers.
         public static Question GetRandomQuestion() {
             Random random = new Random();
             int randomNumber = random.Next(1, 5);
@@ -60,6 +60,7 @@ namespace FinalProject.Models
             q.ShuffleAnswers();
             return q;
         }
+        // Format:
         // מתי שוחרר השיר?
         private static Question GenerateQuestionWhenWasTheSongReleased()
         {
@@ -70,7 +71,8 @@ namespace FinalProject.Models
             q.ShuffleAnswers();
             return q;
         }
-        
+
+        // Format:
         // מאיזה ז'אנר השיר הבא?
         private static Question GenerateQuestionWhichGenreIsTheSong()
         {
@@ -81,7 +83,8 @@ namespace FinalProject.Models
             q.ShuffleAnswers();
             return q;
         }
-        
+
+        // Format:
         // איזה מהבאים הוא להקה?
         private static Question GenerateQuestionWhichOfTheseIsABand()
         {
@@ -93,9 +96,7 @@ namespace FinalProject.Models
             return q;
         }
 
-
-
-
+        // Shuffles the answers of the question.
         private void ShuffleAnswers()
         {
             Random random = new Random();
@@ -119,10 +120,12 @@ namespace FinalProject.Models
                 }
             }
         }
+        // Gets the answers of the question.
         public List<string> getAnswers()
         {
             return answers;
         }
+        // Updates user answer to this question.
         public static bool PutUserAnswer(int QID, int answer)
         {
             if (QID < 1)

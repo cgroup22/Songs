@@ -33,7 +33,7 @@ $(document).ready(function() {
       });
 });
 function GetArtists() { // ajax call to get the artists data
-    const api = `${apiStart}/Artists/GetArtists`;
+    const api = `${apiStart}/Performers/GetArtists`;
     ajaxCall("GET", api, "", UpdateArtists, ECB);
 }
 // Updates artists html (by # of listeners)

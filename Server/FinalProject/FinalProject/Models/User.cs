@@ -39,7 +39,7 @@ namespace FinalProject.Models
             return user;
         }
 
-        // Inserts a new user into the user table
+        // Inserts a new user into the user table. Initiates email verification.
         public bool Insert()
         {
             //Execute().Wait();
@@ -69,6 +69,14 @@ namespace FinalProject.Models
                 //Execute(Token).Wait();
             return tmp;
         }
+        // Returns user's following list. (performers he follows)
+        public static List<Performer> GetFollowingList(int UserID)
+        {
+            if (UserID < 1)
+                throw new ArgumentException("User doesn't exist");
+            DBservices db = new DBservices();
+            return db.GetUserFollowingList(UserID);
+        }
         // returns true if this user is verified
         public static bool IsUserVerified(int id)
         {
@@ -77,76 +85,6 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.IsUserVerified(id);
         }
-        /*
-        public static async Task<string> Zibi()
-        {
-            // Set your Spotify API credentials
-            string clientId = "spotClientID";
-            string clientSecret = "spotClientSecret";
-            string redirectUri = "https://proj.ruppin.ac.il/cgroup22/test2/tar5/Pages/index.html";
-
-            // Specify the required scopes for accessing Spotify resources
-            string[] scopes = { "user-read-private", "user-read-email" }; // Add any additional required scopes
-
-            // Build the authorization URL
-            string authorizationUrl = $"https://accounts.spotify.com/authorize" +
-                $"?response_type=code" +
-                $"&client_id={Uri.EscapeDataString(clientId)}" +
-                $"&scope={Uri.EscapeDataString(string.Join(" ", scopes))}" +
-                $"&redirect_uri={Uri.EscapeDataString(redirectUri)}";
-
-            // Prompt the user to authorize the application
-            Console.WriteLine("Please authorize the application by visiting the following URL:");
-            Console.WriteLine(authorizationUrl);
-            Console.WriteLine("Enter the authorization code:");
-
-            // Read the authorization code from the user input
-            string authorizationCode = Console.ReadLine();
-
-            // Exchange the authorization code for an access token
-            string accessToken = await GetAccessToken(authorizationCode, clientId, clientSecret, redirectUri);
-
-            // Make API requests using the access token
-            return await SearchTracks(accessToken);
-        }
-
-        static async Task<string> GetAccessToken(string authorizationCode, string clientId, string clientSecret, string redirectUri)
-        {
-            // Set the token endpoint for exchanging the authorization code
-            string tokenEndpoint = "https://accounts.spotify.com/api/token";
-
-            // Create the HTTP client
-            HttpClient httpClient = new HttpClient();
-
-            // Set the request parameters
-            var parameters = new Dictionary<string, string>
-    {
-        { "grant_type", "authorization_code" },
-        { "code", authorizationCode },
-        { "client_id", clientId },
-        { "client_secret", clientSecret },
-        { "redirect_uri", redirectUri }
-    };
-
-            // Send the request to exchange the authorization code for an access token
-            var response = await httpClient.PostAsync(tokenEndpoint, new FormUrlEncodedContent(parameters));
-
-            // Check if the request was successful
-            if (response.IsSuccessStatusCode)
-            {
-                // Extract the access token from the response
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var tokenResponse = JsonConvert.DeserializeObject<AccessTokenResponse>(responseContent);
-                return tokenResponse.AccessToken;
-            }
-            else
-            {
-                // Request failed
-                Console.WriteLine("Request failed with status code: " + response.StatusCode);
-                return null;
-            }
-        }
-        */
         // Validates that the user info is correct. Throws an exception otherwise.
         private void Validate()
         {
@@ -185,7 +123,7 @@ namespace FinalProject.Models
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             var response = await client.SendEmailAsync(msg);
         }*/
-
+        // Sends email verification request.
         async Task Execute(string Token)
         {
             var apiKey = "SGAPIKEY";
@@ -244,7 +182,7 @@ namespace FinalProject.Models
             var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
             var response = await client.SendEmailAsync(msg);
         }*/
-        // TEMP
+        // TEMP - tests, used to search tracks with the Spotify API.
         static async Task<string> SearchTracks(string accessToken)
         {
             // Set the search query
@@ -321,11 +259,13 @@ namespace FinalProject.Models
             //Execute(Token).Wait();
             return tmp;
         }
+        // Gets user favorites songs. returns List of json objects (needed because special data is used)
         public static List<object> GetUserFavorites(int UserID)
         {
             DBservices db = new DBservices();
             return db.GetUserFavorites(UserID);
         }
+        // Posts a new song to user favorites
         public static bool PostUserFavorite(int UserID, int SongID)
         {
             if (UserID < 1)
@@ -335,7 +275,7 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.PostUserFavorite(UserID, SongID) > 0;
         }
-
+        // Deletes a song from user favorites.
         public static bool DeleteFromFavorite(int UserID, int SongID)
         {
             if (UserID < 1)
@@ -345,19 +285,20 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.DeleteFromFavorites(UserID, SongID) > 0;
         }
-
+        // Returns user information for the admin's report.
+        // For security reasons, some information is not returned. Such as passwords.
         public static List<User> LoadUserInformation()
         {
             DBservices db = new DBservices();
             return db.LoadUserInformation();
         }
-
+        // Builds the general admin report.
         public static object GetAdminReport()
         {
             DBservices db = new DBservices();
             return db.BuildReport();
         }
-
+        // Used for the user to follow an artist.
         public static bool FollowArtist(int UserID, int PerformerID)
         {
             if (UserID < 1)
@@ -367,6 +308,7 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.FollowArtist(UserID, PerformerID) >= 0;
         }
+        // Used when user wants to unfollow an artist.
         public static bool UnfollowArtist(int UserID, int PerformerID)
         {
             if (UserID < 1)
@@ -376,6 +318,8 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.UnfollowArtist(UserID, PerformerID) >= 0;
         }
+        // Gets the registration date of the user as json object. There's no need to return a whole User object because we
+        // only use the date field.
         public static object GetRegistrationDate(int UserID)
         {
             if (UserID < 1)
@@ -383,6 +327,7 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.GetUserRegistarationDate(UserID);
         }
+        // Gets the XP of the user. There's no need to return a whole User object because we only use the XP field.
         public static object GetXP(int UserID)
         {
             if (UserID < 1)
@@ -390,6 +335,7 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.GetUserXP(UserID);
         }
+        // Adds XP to the UserID it recieved.
         public static bool AddUserXP(int UserID, int XP)
         {
             if (UserID < 1)
@@ -397,6 +343,8 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.AddUserXP(UserID, XP) > 0;
         }
+        // Gets user data on the leaderboard. Returns List of objects because we don't use many of the User class's fields,
+        // and we'd also like to hide some of them for security reasons. (such as passwords!)
         public static List<object> GetLeaderboard()
         {
             DBservices db = new DBservices();

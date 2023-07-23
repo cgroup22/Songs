@@ -23,6 +23,7 @@ namespace FinalProject.Controllers
         }
         
         // GET api/<UsersController>/5
+        // Returns whether the user is verified or not.
         [HttpGet("IsUserVerified/id/{id}")]
         public IActionResult Get(int id)
         {
@@ -35,7 +36,20 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = e.Message });
             }
         }
-
+        // Returns user's following list. (performers he follows)
+        [HttpGet("GetUserFollowingList/UserID/{UserID}")]
+        public IActionResult GetUserFollowingList(int UserID)
+        {
+            try
+            {
+                return Ok(Models.User.GetFollowingList(UserID));
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = "SERVER ERROR " + e.Message });
+            }
+        }
+        // Gets user favorites songs.
         [HttpGet("GetUserFavorites/UserID/{UserID}")]
         public IActionResult GetUserFavorites(int UserID)
         {
@@ -48,7 +62,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new {message = "Server error " + e.Message });
             }
         }
-
+        // Returns user information for the admin report.
         [HttpGet("LoadUserInformation")]
         public IActionResult LoadUserInformation()
         {
@@ -61,6 +75,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "Server error " + e.Message });
             }
         }
+        // Generates the general admin report and returns the data.
         [HttpGet("GetAdminReport")]
         public IActionResult GetAdminReport()
         {
@@ -73,8 +88,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "Server error " + e.Message });
             }
         }
-
-
+        // Gets user registration date by his id.
         [HttpGet("GetUserRegistrationDate/UserID/{UserID}")]
         public IActionResult GetUserRegistrationDate(int UserID)
         {
@@ -87,7 +101,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "Server error " + e.Message });
             }
         }
-
+        // Gets user XP by his id.
         [HttpGet("GetUserXP/UserID/{UserID}")]
         public IActionResult GetUserXP(int UserID)
         {
@@ -117,7 +131,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = e.Message });
             }
         } 
-        // Login
+        // User Login to our site.
         [HttpPost("Login")]
         public IActionResult Post(string email, string password)
         {
@@ -130,6 +144,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = e.Message });
             }
         }
+        // Adds a song to user favorites.
         [HttpPost("PostUserFavorite/UserID/{UserID}/SongID/{SongID}")]
         public IActionResult PostUserFavorite(int UserID, int SongID)
         {
@@ -151,6 +166,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = e.Message });
             }
         }
+        // Adds a follower to the user following list.
         [HttpPost("FollowArtist/UserID/{UserID}/PerformerID/{PerformerID}")]
         public IActionResult FollowArtist(int UserID, int PerformerID)
         {
@@ -163,6 +179,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "SERVER ERROR " + e.Message });
             }
         }
+        // Deletes a follower from the following list of the user.
         [HttpDelete("UnfollowArtist/UserID/{UserID}/PerformerID/{PerformerID}")]
         public IActionResult UnfollowArtist(int UserID, int PerformerID)
         {
@@ -175,6 +192,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "SERVER ERROR " + e.Message });
             }
         }
+        // Deletes a song from user favorites.
         [HttpDelete("DeleteUserFavorite/UserID/{UserID}/SongID/{SongID}")]
         public IActionResult DeleteUserFavorite(int UserID, int SongID)
         {
@@ -203,6 +221,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = e.Message });
             }
         }
+        // Adds XP to the user. Used when getting questions right on quizzes.
         [HttpPut("AddUserXP/UserID/{UserID}/XP/{XP}")]
         public IActionResult Put(int UserID, int XP)
         {
@@ -215,6 +234,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "SERVER ERROR " + e.Message });
             }
         }
+        // Gets the users on the leaderboard.
         [HttpGet("GetLeaderboard")]
         public IActionResult GetLeaderboard()
         {

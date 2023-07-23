@@ -16,6 +16,7 @@ namespace FinalProject.Controllers
         }
 
         // GET api/<CommentsController>/5
+        // Returns the comments of a specific artist by its id
         [HttpGet("GetArtistsComments/PerformerID/{PerformerID}")]
         public IActionResult GetArtistsComments(int PerformerID)
         {
@@ -30,6 +31,7 @@ namespace FinalProject.Controllers
         }
 
         // POST api/<CommentsController>
+        // adds a comment to the artist page. by artist id and user id (to know who posted the comment)
         [HttpPost]
         public IActionResult Post(Models.Comment CommentToPost)
         {

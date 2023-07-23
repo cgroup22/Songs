@@ -29,6 +29,7 @@ namespace FinalProject.Controllers
         {
         }
 
+        // Updates user answer to the question (solo quiz)
         // PUT api/<QuestionsController>/5
         [HttpPut("UpdateUserAnswer/QuestionID/{QuestionID}/Answer/{Answer}")]
         public IActionResult Put(int QuestionID, int Answer)

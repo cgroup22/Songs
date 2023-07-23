@@ -460,6 +460,57 @@ function AddToPlaylistECB(e) {
     elem.style.display = `block`;
     elem.style.color = 'red';
 }
+// Plays artist songs without shuffling the queue.
+function PlayArtistSongsWithoutShuffle(PID) {
+  // console.log(PID)
+  let UserID = GetUserID();
+  const api = `${apiStart}/Songs/GetPerformerSongs/PerformerID/${PID}/UserID/${UserID}`;
+  ajaxCall("GET", api, "", PlayArtistSongsWithoutShuffleSCB, ECB);
+}
+// Moves to following list page. (Only if the user is logged in!)
+function MoveToFollowing() {
+    if (!IsLoggedIn()) {
+        openPopup('ERROR', 'red', "You must be logged in!");
+        return;
+    }
+    window.location.href = 'following.html';
+}
+// Plays all of the songs of a specific artist, also saves them to the queue.
+function PlayArtistSongsWithoutShuffleSCB(data) {
+  window.myPlaylist.playlist = [];
+  window.myPlaylist.original = [];
+  //console.log(data);
+  let song;
+  for (i in data) {
+      song = {
+          image: data[i].performerImage,	
+          title: data[i].songName,
+          artist: data[i].performerName,
+          mp3: `${apiStart}/Songs/GetSongByID/SongID/${data[i].songID}`,
+          oga: `${apiStart}/Songs/GetSongByID/SongID/${data[i].songID}`,
+          option : window.myPlayListOtion
+      };
+      window.myPlaylist.playlist.push(song);
+      window.myPlaylist.original.push(song);
+  }
+  window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
+  localStorage['Queue'] = JSON.stringify(window.myPlaylist.playlist);
+  HandleIndexPlayFirstInQueue();
+  PlayFirstInQueue();
+}
+// logs in if there's anything in the storage, moves to index.html if the user is not logged in
+function FavoriteTryLogin() {
+    if (!IsLoggedIn()) {
+        openPopup('ERROR', "red", 'Log in first!');
+        setTimeout(() => {location.href = `index.html`;}, 2000);
+        return;
+    }
+    let data = localStorage['User'] == undefined || localStorage['User'] == "" ? JSON.parse(sessionStorage['User']) : JSON.parse(localStorage['User']);
+    document.getElementById('LoginRegisterAccountHeader').innerHTML = `<a href="javascript:;" class="ms_admin_name" onclick="ToggleProfile()">Hello ${data.name.split(' ')[0]} <span class="ms_pro_name">${GetFirstLettersOfName(data.name)}</span></a><ul class="pro_dropdown_menu"><li><a href="profile.html">Profile</a></li>` + 
+    //`<li><a href="manage_acc.html" target="_blank">Pricing Plan</a></li><li><a href="blog.html" target="_blank">Blog</a></li><li><a href="#">Setting</a></li>` +
+    `<li><a onclick="Logout()" href="#">Logout</a></li></ul>`;
+    document.getElementById('NeedsMSProfile').classList.add('ms_profile');
+}
 // Adds the current playing song to favorites
 function AddCurrentPlayingSongToFavorites(SongID) {
     if (!IsLoggedIn()) {

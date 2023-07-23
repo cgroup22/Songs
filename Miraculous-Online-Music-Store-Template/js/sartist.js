@@ -501,34 +501,3 @@ function ArtistAddSongToFavorites(SongID, elem) {
                  }
       });
   }
-  // Plays artist songs without shuffling the queue.
-  function PlayArtistSongsWithoutShuffle(PID) {
-    // console.log(PID)
-    let UserID = GetUserID();
-    const api = `${apiStart}/Songs/GetPerformerSongs/PerformerID/${PID}/UserID/${UserID}`;
-    ajaxCall("GET", api, "", PlayArtistSongsWithoutShuffleSCB, ECB);
-    // TODO: play artist's first song and save other songs to the queue
-}
-// Plays all of the songs of a specific artist, also saves them to the queue.
-function PlayArtistSongsWithoutShuffleSCB(data) {
-    window.myPlaylist.playlist = [];
-    window.myPlaylist.original = [];
-    //console.log(data);
-    let song;
-    for (i in data) {
-        song = {
-            image: data[i].performerImage,	
-            title: data[i].songName,
-            artist: data[i].performerName,
-            mp3: `${apiStart}/Songs/GetSongByID/SongID/${data[i].songID}`,
-            oga: `${apiStart}/Songs/GetSongByID/SongID/${data[i].songID}`,
-            option : window.myPlayListOtion
-        };
-        window.myPlaylist.playlist.push(song);
-        window.myPlaylist.original.push(song);
-    }
-    window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
-    localStorage['Queue'] = JSON.stringify(window.myPlaylist.playlist);
-    HandleIndexPlayFirstInQueue();
-    PlayFirstInQueue();
-}

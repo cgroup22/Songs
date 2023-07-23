@@ -37,13 +37,14 @@
         public string Content { get => content; set => content = value; }
         public DateTime Date { get => date; set => date = value; }
         public string UserName { get => userName; set => userName = value; }
-
+        // Inserts a comment to our db
         public bool Insert()
         {
             Validate();
             DBservices db = new DBservices();
             return db.Insert(this) > 0;
         }
+        // Checks the data is valid
         private void Validate()
         {
             if (userID < 1)
@@ -51,7 +52,7 @@
             if (performerID < 1)
                 throw new ArgumentException("Artist doesn't exist!");
         }
-
+        // Gets artist comments by his id.
         public static List<Comment> GetArtistsComments(int PerformerID)
         {
             if (PerformerID < 1)

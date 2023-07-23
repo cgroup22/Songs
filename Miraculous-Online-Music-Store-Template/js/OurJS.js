@@ -196,7 +196,7 @@ function PlaySong(elem, SongID) {
 }
 // gets featured artists (by num of plays)
 function GetFeaturedArtists() {
-    const api = `${apiStart}/Artists/GetFeaturedArtists`;
+    const api = `${apiStart}/Performers/GetFeaturedArtists`;
     ajaxCall("GET", api, "", UpdateFeaturedArtists, ECB);
 }
 // Updates featured artists section (by # of listeners)

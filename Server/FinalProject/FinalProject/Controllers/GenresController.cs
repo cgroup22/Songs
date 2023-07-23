@@ -10,6 +10,7 @@ namespace FinalProject.Controllers
     public class GenresController : ControllerBase
     {
         // GET: api/<GenresController>
+        // Returns all genres
         [HttpGet]
         public IActionResult Get()
         {
@@ -22,6 +23,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "SERVER ERROR " + e.Message });
             }
         }
+        // Returns genres by plays, for the admin report.
         [HttpGet("AdminGetGenresInformation")]
         public IActionResult AdminGetGenresInformation()
         {

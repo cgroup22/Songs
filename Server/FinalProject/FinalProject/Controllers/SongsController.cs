@@ -24,6 +24,7 @@ namespace FinalProject.Controllers
             return "value";
         }
 
+        // Gets top 15 songs by # of plays
         [HttpGet("GetTop15")]
         public IActionResult GetTop15(int UserID = -1)
         {
@@ -36,6 +37,8 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "Server error " + e.Message });
             }
         }
+        // Initiates search by query string. UserID is required to know whteher the user has the songs on his favorites.
+        // If not logged in, returns -1 and then we know he cannot favorite the songs. (Show popup instead to login first)
         [HttpGet("Search/query/{query}/UserID/{UserID}")]
         public IActionResult Search(string query, int UserID)
         {
@@ -48,6 +51,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "Server error " + e.Message });
             }
         }
+        // Gets song lyrics by its id.
         [HttpGet("GetSongLyrics/SongID/{SongID}")]
         public IActionResult GetSongLyrics(int SongID)
         {
@@ -60,6 +64,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "Server error " + e.Message });
             }
         }
+        // Get performer songs by its id. UserID to know whether he has them on his favorites.
         [HttpGet("GetPerformerSongs/PerformerID/{PerformerID}/UserID/{UserID}")]
         public IActionResult GetPerformerSongs(int PerformerID, int UserID)
         {
@@ -72,6 +77,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "SERVER ERROR " + e.Message });
             }
         }
+        // Gets songs data to generate the admin report on site usage.
         [HttpGet("AdminGetSongsData")]
         public IActionResult AdminGetSongsData()
         {
@@ -84,6 +90,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "SERVER ERROR " + e.Message });
             }
         }
+        // Gets most played track to feature in index.html
         [HttpGet("GetMostPlayedTrack")]
         public IActionResult GetMostPlayedTrack()
         {
@@ -96,6 +103,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "Server error " + e.Message });
             }
         }
+        // Get songs by their genre.
         [HttpGet("GetGenreSongs/GenreID/{GenreID}")]
         public IActionResult GetGenreSongs(int GenreID)
         {
@@ -108,7 +116,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "Server error " + e.Message });
             }
         }
-
+        // Posts a song without the actual data file.
         [HttpPost("PostSongDataWithoutFile")]
         public IActionResult PostSongDataWithoutFile(Song s)
         {
@@ -121,7 +129,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = "SERVER ERROR " + e.Message });
             }
         }
-
+        // Post file data to song by its id.
         // POST api/<SongsController>
         [HttpPost("PostFileDataFromJS/SongID/{SongID}")]
         public IActionResult PostFileDataFromJS(int SongID)
@@ -149,7 +157,7 @@ namespace FinalProject.Controllers
         public void Delete(int id)
         {
         }
-        // TEMP UPLOAD SONG
+        // TEMP UPLOAD SONG, used for testing and uploading song through Swagger.
         [HttpPost("UploadSong")]
         //public IActionResult UploadSong(string SongName, string SongLyrics, DateTime ReleaseDate, int GenreID, IFormFile file)
         public IActionResult UploadSong([FromBody] Song SongToInsert, [FromForm] IFormFile file)
@@ -166,7 +174,8 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = e.Message });
             }
         }
-        // TEMP UPLOAD MP3
+        // TEMP UPLOAD MP3.
+        // Used for testing, inserts mp3 data to song by its id through Swagger.
         [HttpPost("InsertSongHEXData")]
         public IActionResult InsertFileDataToSongID(int SongID, IFormFile file)
         {
@@ -182,7 +191,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = e.Message });
             }
         }
-        // TEMP
+        // Returns a song file data by its id to play.
         [HttpGet("GetSongByID/SongID/{SongID}")]
         public IActionResult GetSongByID(int SongID)
         {
