@@ -115,7 +115,7 @@ function GetSongsInfoSCB(data) {
         Songs.totalFavorites.push(i.totalFavorites);
     }
     let str = `<a onclick="DisplayOptions()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a>
-    <a onclick="DownloadSongsReport()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Songs Report</a>
+    <a onclick="DownloadSongsReport()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Download</a>
     <ul class="album_list_name">
                             <li style="width:7%;">Song ID</li>
 							<li>Song Name</li>
@@ -165,7 +165,7 @@ function GetPerformersInfoSCB(data) {
         PerformersData.PerformerInstagram.push(i.performerInstagram);
     }
     let str = `<a onclick="DisplayOptions()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a>
-    <a onclick="DownloadPerformersReport()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Performers Report</a><br>
+    <a onclick="DownloadPerformersReport()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Download</a><br>
     <ul class="album_list_name">
     <li>Performer ID</li>
     <li>Performer Name</li>
@@ -204,7 +204,7 @@ function GetGenresInfoSCB(data) {
     }
     // console.log(data);
     let str = `<a onclick="DisplayOptions()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a>
-    <a onclick="DownloadPerformersReport()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Genres Report</a><br>
+    <a onclick="DownloadPerformersReport()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Download</a><br>
     <ul class="album_list_name">
     <li>Genre ID</li>
     <li>Genre Name</li>
@@ -259,7 +259,7 @@ function LoadUserSCB(data){
     document.getElementById("AdminOptions").style.display = 'none';
     let Users = data;
     let str = `<a onclick="DisplayOptions()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a>
-    <a onclick="DownloadUsersReport()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Users Report</a><br>
+    <a onclick="DownloadUsersReport()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Download</a><br>
     <ul class="album_list_name">
     <li>User ID</li>
     <li>Name</li>
