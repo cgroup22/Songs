@@ -38,18 +38,18 @@ function Login() {
         document.getElementById("LoginErrorMSG").innerHTML = "Please enter your email";
     if (password.length < 3)
         document.getElementById("LoginErrorMSG").innerHTML = "Please enter your password";
-    if (email === "admin@gmail.com" && password === "123") {
-        localStorage['User'] = "";
-        sessionStorage['User'] = "";
-        location.href = 'managePortal.html';
-        return false;
-    }
     const api = `${apiStart}/Users/Login?email=${email}&password=${password}`;
     ajaxCall("POST", api, "", LoginSuccessCallback, LoginErrorCallback);
     return false;
 }
 // On sucess, save the user and refresh
 function LoginSuccessCallback(data) {
+    if (data.email == "admin@gmail.com") {
+        localStorage['User'] = "";
+        sessionStorage['User'] = "";
+        location.href = 'managePortal.html';
+        return;
+    }
     let KeepSignedIn = document.getElementById("KeepMeSignedInCheckBox").checked;
     if (KeepSignedIn)
         localStorage['User'] = JSON.stringify(data);
