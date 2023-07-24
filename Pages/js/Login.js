@@ -50,6 +50,10 @@ function LoginSuccessCallback(data) {
         location.href = 'managePortal.html';
         return;
     }
+    if (data.isBanned) {
+        document.getElementById('LoginErrorMSG').innerHTML = "You're Banned!";
+        return;
+    }
     let KeepSignedIn = document.getElementById("KeepMeSignedInCheckBox").checked;
     if (KeepSignedIn)
         localStorage['User'] = JSON.stringify(data);

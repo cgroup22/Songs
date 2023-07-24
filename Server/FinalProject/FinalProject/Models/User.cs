@@ -19,6 +19,33 @@ namespace FinalProject.Models
         private string password;
         private bool isVerified;
         private DateTime registrationDate;
+        private bool isBanned;
+
+        public User(int id, string email, string name, string password, bool isVerified, DateTime registrationDate)
+        {
+            Id = id;
+            Email = email;
+            Name = name;
+            Password = password;
+            IsVerified = isVerified;
+            RegistrationDate = registrationDate;
+        }
+
+        public User(int id, string email, string name, string password, bool isVerified, DateTime registrationDate, bool ib)
+        {
+            Id = id;
+            Email = email;
+            Name = name;
+            Password = password;
+            IsVerified = isVerified;
+            RegistrationDate = registrationDate;
+            IsBanned = ib;
+        }
+
+        public User()
+        {
+
+        }
 
         public int Id { get => id; set => id = value; }
         public string Email { get => email; set => email = value; }
@@ -26,6 +53,7 @@ namespace FinalProject.Models
         public string Password { get => password; set => password = value; }
         public bool IsVerified { get => isVerified; set => isVerified = value; }
         public DateTime RegistrationDate { get => registrationDate; set => registrationDate = value; }
+        public bool IsBanned { get => isBanned; set => isBanned = value; }
 
         // Used for user login
         public static User Login(string email, string password)
@@ -321,6 +349,22 @@ namespace FinalProject.Models
         {
             DBservices db = new DBservices();
             return db.GetLeaderboard();
+        }
+
+        public static bool BanUser(int UserID)
+        {
+            if (UserID < 1)
+                throw new ArgumentException("User doesn't exist");
+            DBservices db = new DBservices();
+            return db.BanUser(UserID) > 0;
+        }
+
+        public static bool UnbanUser(int UserID)
+        {
+            if (UserID < 1)
+                throw new ArgumentException("User doesn't exist");
+            DBservices db = new DBservices();
+            return db.UnbanUser(UserID) > 0;
         }
     }
 }

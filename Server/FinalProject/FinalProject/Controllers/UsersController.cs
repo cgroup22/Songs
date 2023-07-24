@@ -221,6 +221,30 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = e.Message });
             }
         }
+        [HttpPut("BanUser")]
+        public IActionResult BanUser(int UserID)
+        {
+            try
+            {
+                return Models.User.BanUser(UserID) ? Ok(new { message = "Banned" }) : BadRequest(new { message = "Server error, please try again later" });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
+        }
+        [HttpPut("UnbanUser")]
+        public IActionResult UnbanUser(int UserID)
+        {
+            try
+            {
+                return Models.User.UnbanUser(UserID) ? Ok(new { message = "Banned" }) : BadRequest(new { message = "Server error, please try again later" });
+            }
+            catch (Exception e)
+            {
+                return BadRequest(new { message = e.Message });
+            }
+        }
         // Adds XP to the user. Used when getting questions right on quizzes.
         [HttpPut("AddUserXP/UserID/{UserID}/XP/{XP}")]
         public IActionResult Put(int UserID, int XP)

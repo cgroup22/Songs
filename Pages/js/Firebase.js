@@ -15,15 +15,15 @@ function initFirebase() {
     firebase.analytics();
     database = firebase.database();
     //UpdateActiveGames();
-    if (location.href.split("/").slice(-1)[0] === "MultiplayerQuizzes.html")
+    if (location.href.split("/").slice(-1)[0].toLowerCase() === "MultiplayerQuizzes.html".toLowerCase())
     ListenToGames();
-    if (location.href.split("/").slice(-1)[0] === "MPQuizzesGame.html")
+    if (location.href.split("/").slice(-1)[0].toLowerCase() === "MPQuizzesGame.html".toLowerCase())
     SetGame();
-    if (location.href.split("/").slice(-1)[0] === "quizhistory.html") {
+    if (location.href.split("/").slice(-1)[0].toLowerCase() === "quizhistory.html".toLowerCase()) {
         UpdatePastMPGames();
         return;
     }
-    if (location.href.split("/").slice(-1)[0] === "managePortal.html") {
+    if (location.href.split("/").slice(-1)[0].toLowerCase() === "managePortal.html".toLowerCase()) {
         GetHowManyMPGames();
         return;
     }

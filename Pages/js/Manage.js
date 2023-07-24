@@ -33,7 +33,7 @@ function GenerateReportSCB(data) {
     <p class="Report">Most played genre: ${Report.mostPlayedGenre} with: ${Report.mostPlayedGenrePlays} Plays</p>
     <p class="Report">We currently have: ${Report.numberOfUsers} registered users.</p>
     <p class="Report">Solo quizzes played: ${Report.soloQuizzesPlayed}</p>`
-    if (MPQuizzes != undefined)
+    if (typeof MPQuizzes != "undefined")
     str += `<p class="Report">Multiplayer quizzes played: ${MPQuizzes}</p>`;
     str += `<div class="ms_btn manageBTNS" onclick="DownloadReport()" style="margin-bottom:10px;"><a href="javascript:void(0)" style="color:white;">Download</a></div>`;
     document.getElementById('ReportData').innerHTML = str;
@@ -43,8 +43,8 @@ function GenerateReportSCB(data) {
 // Download admin report
 function DownloadReport() {
     // console.log(Report)
-    if (undefined == Report) return;
-    if (MPQuizzes != undefined)
+    if ("undefined" == typeof Report) return;
+    if (typeof MPQuizzes != "undefined")
         Report.multiplayerQuizzesPlayed = MPQuizzes;
     const csvData = convertObjectToCSV(Report);
     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
@@ -80,7 +80,19 @@ function convertObjectToCSV(obj) {
       document.body.removeChild(downloadLink);
   }
   function DownloadPerformersReport() {
-    if (undefined == GenresData) return;
+    if (typeof PerformersData == 'undefined') return;
+    const csvData = convertObjectToCSV(PerformersData);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const downloadLink = document.createElement("a");
+      downloadLink.setAttribute("href", url);
+      downloadLink.setAttribute("download", "PerformersReport.csv");
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+  }
+  function DownloadGenresReport() {
+    if (typeof GenresData == 'undefined') return;
     const csvData = convertObjectToCSV(GenresData);
     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
@@ -127,7 +139,7 @@ function GetSongsInfoSCB(data) {
 						</ul>`;
     for (i of data) {
         str += `<ul>
-        <li style="width:7%;"><a href="javascript:void(0)"><span class="play_no">${i.songID}</span><span class="play_hover"></span></a></li>
+        <li style="width:7%;"><a href="javascript:void(0)"><span class="play_no">${i.songID}</span></a></li>
         <li><a href="javascript:void(0)">${i.songName}</a></li>
         <li style="width:10%;"><a href="javascript:void(0)">${i.releaseYear}</a></li>
         <li><a href="javascript:void(0)">${i.numOfPlays}</a></li>
@@ -154,7 +166,8 @@ function GetPerformersInfoSCB(data) {
         'isABand': [],
         'totalFollowers': [],
         'totalPlays': [],
-        'PerformerInstagram': []
+        'PerformerInstagram': [],
+        'NumOfUserFavorites': []
     };
     for (i of data) {
         PerformersData.PerformerID.push(i.performerID);
@@ -163,25 +176,28 @@ function GetPerformersInfoSCB(data) {
         PerformersData.totalFollowers.push(i.totalFollowers);
         PerformersData.totalPlays.push(i.totalPlays);
         PerformersData.PerformerInstagram.push(i.performerInstagram);
+        PerformersData.NumOfUserFavorites.push(i.numOfUserFavorites);
     }
     let str = `<a onclick="DisplayOptions()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a>
     <a onclick="DownloadPerformersReport()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Download</a><br>
     <ul class="album_list_name">
-    <li>Performer ID</li>
+    <li style="width:10%;">Performer ID</li>
     <li>Performer Name</li>
-    <li>Is A Band</li>
+    <li style="width:10%;">Is A Band</li>
     <li>Instagram Handle</li>
-    <li>Total Plays</li>
-    <li>Followers</li>
+    <li style="width:10%;">Total Plays</li>
+    <li style="width:8%;">Followers</li>
+    <li>User Favorites</li>
 </ul>`;
     for (i of data) {
         str += `<ul>
-        <li><a href="javascript:void(0)"><span class="play_no">${i.performerID}</span><span class="play_hover"></span></a></li>
+        <li style="width:10%;"><a href="javascript:void(0)"><span class="play_no">${i.performerID}</span></a></li>
         <li><a href="javascript:void(0)">${i.performerName}</a></li>
-        <li><a href="javascript:void(0)">${i.isABand}</a></li>
+        <li style="width:10%;"><a href="javascript:void(0)">${i.isABand}</a></li>
         <li><a href="javascript:void(0)">${i.performerInstagram}</a></li>
-        <li><a href="javascript:void(0)">${i.totalPlays}</a></li>
-        <li><a href="javascript:void(0)">${i.totalFollowers}</a></li>
+        <li style="width:10%;"><a href="javascript:void(0)">${i.totalPlays}</a></li>
+        <li style="width:8%;"><a href="javascript:void(0)">${i.totalFollowers}</a></li>
+        <li><a href="javascript:void(0)">${i.numOfUserFavorites}</a></li>
     </ul>`;
     }
     document.getElementById("AdminOptions").style.display = 'none';
@@ -204,7 +220,7 @@ function GetGenresInfoSCB(data) {
     }
     // console.log(data);
     let str = `<a onclick="DisplayOptions()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a>
-    <a onclick="DownloadPerformersReport()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Download</a><br>
+    <a onclick="DownloadGenresReport()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Download</a><br>
     <ul class="album_list_name">
     <li>Genre ID</li>
     <li>Genre Name</li>
@@ -213,10 +229,10 @@ function GetGenresInfoSCB(data) {
 </ul>`;
     for (i of data) {
         str += `<ul>
-        <li><a href="javascript:void(0)"><span class="play_no">${i.genreID}</span><span class="play_hover"></span></a></li>
+        <li><a href="javascript:void(0)"><span class="play_no">${i.genreID}</span></a></li>
         <li><a href="javascript:void(0)">${i.genreName}</a></li>
         <li><a href="javascript:void(0)">${i.numOfSongs}</a></li>
-        <li class="text-center"><a href="javascript:void(0)">${i.numOfPlays}</a></li>
+        <li><a href="javascript:void(0)">${i.numOfPlays}</a></li>
     </ul>`;
     }
     document.getElementById("GenresContainer").style.display = 'block';
@@ -228,8 +244,9 @@ function LoadUserInformation() {
     const api = `${apiStart}/Users/LoadUserInformation`;
     ajaxCall("GET", api, "", LoadUserSCB, ECB);
 }
+// Downloads the user report to the admins local PC
 function DownloadUsersReport() {
-    if (undefined == UsersData) return;
+    if ("undefined" == typeof UsersData) return;
     const csvData = convertObjectToCSV(UsersData);
     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
@@ -241,19 +258,21 @@ function DownloadUsersReport() {
       document.body.removeChild(downloadLink);
 }
 // updates users dynamically
-function LoadUserSCB(data){
+function LoadUserSCB(data) {
     // console.log(data)
     UsersData = {
         'UserID': [],
         'email': [],
         'isVerified': [],
-        'registrationDate': []
+        'registrationDate': [],
+        'IsBanned': []
     };
     for (i of data) {
         UsersData.UserID.push(i.id);
         UsersData.email.push(i.email);
         UsersData.isVerified.push(i.isVerified);
         UsersData.registrationDate.push(i.registrationDate.split('T')[0]);
+        UsersData.IsBanned.push(i.isBanned ? "Banned" : "Not Banned");
     }
     document.getElementById("UsersContainer").style.display = 'block';
     document.getElementById("AdminOptions").style.display = 'none';
@@ -264,15 +283,100 @@ function LoadUserSCB(data){
     <li>User ID</li>
     <li>Name</li>
     <li>Email</li>
-    <li>Registration Date</li></ul>`;
+    <li>Registration Date</li>
+    <li>User Favorites</li>
+    <li>Ban</li></ul>`;
     for(i in Users){
         str += `<ul>
         <li><a href="javascript:void(0)">${Users[i].id}</a></li>
         <li><a href="javascript:void(0)">${Users[i].name}</a></li>
         <li><a href="javascript:void(0)" class="sNames">${Users[i].email}</a></li>
-        <li><a href="javascript:void(0)">${Users[i].registrationDate.split('T')[0]}</a></li></ul>`;
+        <li><a href="javascript:void(0)">${Users[i].registrationDate.split('T')[0]}</a></li>
+        <li onclick="WatchUserFav(${Users[i].id})"><a href="javascript:void(0)" class="sNames"><span class="ms_icon1 ms_active_icon"></span></a></li>`;
+        if (Users[i].isBanned)
+        str += `<li onclick="Unban(${Users[i].id})" id="${Users[i].id}"><a href="javascript:void(0)">Unban</a></li>`;
+        else str += `<li onclick="Ban(${Users[i].id})" id="${Users[i].id}"><a href="javascript:void(0)">Ban</a></li>`;
+        str += `</ul>`;
     }
     document.getElementById("UsersContainer").innerHTML = str;
+}
+// Used to unban a user
+function Unban(uid) {
+    tmpUnbanElem = document.getElementById(uid);
+    tmpUID = uid;
+    const api = `${apiStart}/Users/UnbanUser?UserID=${uid}`;
+    ajaxCall("PUT", api, "", UnbanSCB, ECB);
+}
+// On sucess, update html.
+function UnbanSCB() {
+    tmpUnbanElem.querySelector('a').innerHTML = 'Ban';
+    tmpUnbanElem.setAttribute('onclick', `Ban(${tmpUID})`);
+}
+// Used to ban a user
+function Ban(uid) {
+    tmpBanElem = document.getElementById(uid);
+    tmpUID = uid;
+    const api = `${apiStart}/Users/BanUser?UserID=${uid}`;
+    ajaxCall("PUT", api, "", BanSCB, ECB);
+}
+// On sucess, update html.
+function BanSCB() {
+    tmpBanElem.querySelector('a').innerHTML = 'Unban';
+    tmpBanElem.setAttribute('onclick', `Unban(${tmpUID})`);
+}
+// Used to show the admin the user's favorites.
+function WatchUserFav(uid) {
+    const api = `${apiStart}/Users/GetUserFavorites/UserID/${uid}`;
+    ajaxCall("GET", api, "", WatchUserFavSCB, ECB);
+}
+function WatchUserFavSCB(data) {
+    // console.log(data);
+    UserFav = data;
+    UserFavReport = {
+        'SongID': [],
+        'SongName': [],
+        'Length': [],
+        'PerformerID': [],
+        'PerformerName': [],
+    };
+    let str = `<a onclick="LoadUserInformation()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a>
+    <a onclick="DownloadUsersFav()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Download</a><br>
+    <ul class="album_list_name">
+    <li>Song ID</li>
+    <li>Song Name</li>
+    <li>Duration</li>
+    <li>Performer ID</li>
+    <li>Performer Name</li>
+    </ul>`;
+    for (i in data) {
+        str += `<ul>
+        <li><a href="javascript:void(0)">${UserFav[i].songID}</a></li>
+        <li><a href="javascript:void(0)">${UserFav[i].songName}</a></li>
+        <li><a href="javascript:void(0)">${UserFav[i].length}</a></li>
+        <li><a href="javascript:void(0)">${UserFav[i].performerID}</a></li>
+        <li><a href="javascript:void(0)">${UserFav[i].performerName}</a></li>
+        </ul>`;
+        UserFavReport.SongID.push(UserFav[i].songID);
+        UserFavReport.SongName.push(UserFav[i].songName);
+        UserFavReport.Length.push(UserFav[i].length);
+        UserFavReport.PerformerID.push(UserFav[i].performerID);
+        UserFavReport.PerformerName.push(UserFav[i].performerName);
+    }
+    if (data.length == 0)
+        str += `<p style="color:white;font-size:20px;text-align:center;margin-top:20px;">None</p>`
+    document.getElementById('UsersContainer').innerHTML = str;
+}
+function DownloadUsersFav() {
+    if ("undefined" == typeof UserFavReport) return;
+    const csvData = convertObjectToCSV(UserFavReport);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const downloadLink = document.createElement("a");
+    downloadLink.setAttribute("href", url);
+    downloadLink.setAttribute("download", "UsersFavoritesReport.csv");
+    document.body.appendChild(downloadLink);
+    downloadLink.click();
+    document.body.removeChild(downloadLink);
 }
 // display admin's options
 function DisplayOptions() {

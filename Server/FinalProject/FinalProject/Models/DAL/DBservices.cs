@@ -93,6 +93,96 @@ public class DBservices
         }
 
     }
+    // Used for admins to ban users
+    public int BanUser(int UserID)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@UserID", UserID);
+
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_BanUser", con, paramDic);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
+    // Used for admins to unban users
+    public int UnbanUser(int UserID)
+    {
+
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@UserID", UserID);
+
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_UnbanUser", con, paramDic);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+
+    }
     // Returns true if this user is verified
     public bool IsUserVerified(int id)
     {
@@ -1642,6 +1732,7 @@ public class DBservices
                 bool ISB = Convert.ToInt32(dataReader["isABand"]) == 1;
                 int TPlays = Convert.ToInt32(dataReader["TotalPlays"]);
                 int TFollowers = Convert.ToInt32(dataReader["TotalFollowers"]);
+                int NOUF = Convert.ToInt32(dataReader["NumOfUserFavorites"]);
                 object s = new
                 {
                     PerformerID = PerformerID,
@@ -1649,7 +1740,8 @@ public class DBservices
                     isABand = ISB,
                     PerformerInstagram = PInstagram,
                     TotalPlays = TPlays,
-                    TotalFollowers = TFollowers
+                    TotalFollowers = TFollowers,
+                    NumOfUserFavorites = NOUF
                 };
                 performers.Add(s);
             }
@@ -2514,6 +2606,7 @@ public class DBservices
                 u.Email = dataReader["UserEmail"].ToString();
                 u.Name = dataReader["UserName"].ToString();
                 u.RegistrationDate = Convert.ToDateTime(dataReader["registrationDate"]);
+                u.IsBanned = Convert.ToInt32(dataReader["IsBanned"]) == 1;
                 userList.Add(u);
             }
             return userList;
@@ -2863,6 +2956,7 @@ public class DBservices
                 u.Password = dataReader["UserPassword"].ToString();
                 u.Name = dataReader["UserName"].ToString();
                 u.Id = Convert.ToInt32(dataReader["UserID"]);
+                u.IsBanned = Convert.ToInt32(dataReader["IsBanned"]) == 1;
                 return u;
             }
             throw new Exception("Server error");

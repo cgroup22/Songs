@@ -50,7 +50,7 @@ function UpdateLeaderboardSCB(data) {
     for (i in str) {
         if (data[i] == undefined) break;
         str += `<ul>
-        <li style="width:3%;"><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
+        <li style="width:3%;"><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span></a></li>
         <li><a href="javascript:void(0)" class="sNames">${data[i].userName}</a></li>
         <li style="width:5%;"><a href="javascript:void(0)">${data[i].level}</a></li>` +
         `<li class="text-center"><a href="javascript:void(0)">${data[i].soloAverage.toFixed(2)}%</a></li>
