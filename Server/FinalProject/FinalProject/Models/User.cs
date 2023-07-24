@@ -60,7 +60,7 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             string Token = GenerateToken();
             bool tmp = db.Insert(this, Token) > 0;
-            //Execute(Token).Wait(); email verification - turn the comment off when ready.
+            Execute(Token).Wait(); // email verification
             return tmp;
         }
 
@@ -136,7 +136,7 @@ namespace FinalProject.Models
         // Sends email verification request.
         async Task Execute(string Token)
         {
-            var apiKey = "SGAPIKEY";
+            var apiKey = "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";
             var client = new SendGridClient(apiKey);
             var from = new EmailAddress("csbgroup22@gmail.com", "Ruppin Music");
             var subject = "Sending with SendGrid is Fun";

@@ -9,7 +9,7 @@
 
 
 <head>
-    <title>Miraculous - Online Music Store Html Template</title>
+    <title>Email Verification</title>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta name="description" content="Music">
@@ -21,9 +21,20 @@
     <script src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha256-2Pmvv0kuTBOenSvLm6bvfBSSHrUJ+3A7x6P5Ebd07/g=" crossorigin="anonymous"></script>
     <script src="js/ajaxCalls.js"></script>
     <script src="JS/VerifyEmail.js"></script>
+    <link type="stylesheet" href="css/OurSS.css">
 </head>
 <body onload="VerifyEmail()">
-    <p id="Verify"></p>
+    <div class="ms_loader">
+		<div class="wrap">
+		  <img src="images/loader.gif" alt="">
+		</div>
+	</div>
+    <div class="ms_main_wrapper" id="NeedsMSProfile">
+        <!---Main Content Start--->
+        <div class="ms_content_wrapper padder_top80">
+            <p id="Verify"></p>
+        </div>
+    </div>
 </body>
 
 </html>

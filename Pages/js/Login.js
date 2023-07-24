@@ -21,7 +21,7 @@ function RegisterSuccessCallback(data) {
     // TODO: change the alert
     // console.log(data)
     // alert(data.message);
-    document.getElementById("RegisterErrorMSG").innerHTML = "";
+    document.getElementById("RegisterErrorMSG").innerHTML = "A verification email was sent to you.";
 }
 // On error, show the error to the user
 function RegisterErrorCallback(error) {
