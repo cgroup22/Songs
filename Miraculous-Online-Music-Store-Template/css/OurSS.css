@@ -254,3 +254,6 @@ input[type="submit"] {
   font-size:50px;
   margin-top:40px;
 }
+.ms_footer_inner {
+  display:none;
+}
