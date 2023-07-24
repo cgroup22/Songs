@@ -221,6 +221,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = e.Message });
             }
         }
+        // Used for admins to ban users
         [HttpPut("BanUser")]
         public IActionResult BanUser(int UserID)
         {
@@ -233,6 +234,7 @@ namespace FinalProject.Controllers
                 return BadRequest(new { message = e.Message });
             }
         }
+        // Used for admins to unban users
         [HttpPut("UnbanUser")]
         public IActionResult UnbanUser(int UserID)
         {

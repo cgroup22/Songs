@@ -351,6 +351,7 @@ namespace FinalProject.Models
             return db.GetLeaderboard();
         }
 
+        // Used for admins to ban users
         public static bool BanUser(int UserID)
         {
             if (UserID < 1)
@@ -359,6 +360,7 @@ namespace FinalProject.Models
             return db.BanUser(UserID) > 0;
         }
 
+        // Used for admins to unban users
         public static bool UnbanUser(int UserID)
         {
             if (UserID < 1)

@@ -1,7 +1,7 @@
 // ATTENTION: THESE ARE THE SOLO QUIZZES.
 
-// Called when the favorites page is loaded
-function FavLoaded() {
+// Called when the solo quiz page is loaded
+function SoloQuizLoaded() {
     // Saves whether we want our queue to loop
     IsLooped = false;
     QuizTryLogin();
