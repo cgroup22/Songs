@@ -116,9 +116,8 @@ function IsUserVerifiedSuccessCallback(bIsVerified) {
 function VerifyRequest() {
     if (!IsLoggedIn()) return;
     let data = localStorage['User'] == undefined || localStorage['User'] == "" ? JSON.parse(sessionStorage['User']) : JSON.parse(localStorage['User']);
-    const api = `${apiStart}/Users/InitiateNewValidation?id=${data.id}`;
-    console.log(api);
-    ajaxCall("PUT", api, "", VerificationSentSCB, GeneralErrorCallback);
+    const api = `${apiStart}/Users/InitiateNewValidation`;
+    ajaxCall("PUT", api, JSON.stringify(data), VerificationSentSCB, GeneralErrorCallback);
 }
 // show message verification sent.
 function VerificationSentSCB(msg) {

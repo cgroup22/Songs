@@ -249,11 +249,11 @@ namespace FinalProject.Controllers
         }
         // Initiates a new email validation. Needed when the user wants to verify his email, but his old request timed out.
         [HttpPut("InitiateNewValidation")]
-        public IActionResult Put(int id)
+        public IActionResult Put(User u)
         {
             try
             {
-                return Models.User.InitiateNewValidation(id) ? Ok(new {message = "Check your email to verify the account"}) : BadRequest(new {message = "Server error, please try again later"});
+                return u.InitiateNewValidation() ? Ok(new {message = "Check your email to verify the account"}) : BadRequest(new {message = "Server error, please try again later"});
             }
             catch (Exception e)
             {

@@ -124,6 +124,7 @@ function UpdateArtistSCB(data) {
     GetArtistInfoFromLastFM(data[0].performerName);
     document.getElementById('ArtistName').innerHTML = data[0].performerName;
     document.getElementById('TopArtistPage').querySelector('img').src = data[0].performerImage;
+    document.getElementById('ArtistImage').style.display = 'block';
     if (data[0].isUserFollowingArtist == -1) {
       $("#CommentForm").submit(LoginToPostComment);
       document.getElementById('CommentBTN').setAttribute('onclick', 'LoginToPostComment()');

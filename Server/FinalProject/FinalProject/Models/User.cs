@@ -119,20 +119,6 @@ namespace FinalProject.Models
             if (!Regex.IsMatch(email, emailPattern))
                 throw new ArgumentException("Please insert correct email");
         }
-
-        /*static async Task Execute()
-        {
-            //var apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
-            var apiKey = "x";
-            var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("csbgroup22@gmail.com", "Example User");
-            var subject = "Sending with SendGrid is Fun";
-            var to = new EmailAddress("natipur89@gmail.com", "Example User");
-            var plainTextContent = "and easy to do anywhere, even with C#";
-            var htmlContent = "<strong>and easy to do anywhere, even with C#</strong>";
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-            var response = await client.SendEmailAsync(msg);
-        }*/
         // Sends email verification request.
         async Task Execute(string Token)
         {
@@ -168,30 +154,6 @@ namespace FinalProject.Models
             DBservices db = new DBservices();
             return db.ValidateUser(email, token) > 0;
         }
-
-
-        /*static async Task Execute()
-        {
-            // Generate the verification token
-            string verificationToken = GenerateVerificationToken();
-
-            // Store the verification token in your database (replace this with your database logic)
-            StoreVerificationTokenInDatabase(verificationToken);
-
-            // Construct the verification link
-            string verificationLink = GenerateVerificationLink(verificationToken);
-
-            // Send the verification email
-            var apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY");
-            var client = new SendGridClient(apiKey);
-            var from = new EmailAddress("csbgroup22@gmail.com", "Example User");
-            var subject = "Email Verification";
-            var to = new EmailAddress("natipur89@gmail.com", "Example User");
-            var plainTextContent = $"Please click the following link to verify your email: {verificationLink}";
-            var htmlContent = $"<p>Please click the following link to verify your email:</p><p><a href='{verificationLink}'>Verify Email</a></p>";
-            var msg = MailHelper.CreateSingleEmail(from, to, subject, plainTextContent, htmlContent);
-            var response = await client.SendEmailAsync(msg);
-        }*/
         // TEMP - tests, used to search tracks with the Spotify API.
         static async Task<string> SearchTracks(string accessToken)
         {
@@ -259,14 +221,14 @@ namespace FinalProject.Models
         }
         // Sends an email to the user, to verify himself.
         // Don't forget to update your api key
-        public static bool InitiateNewValidation(int id)
+        public bool InitiateNewValidation()
         {
-            if (id < 1)
+            if (Id < 1)
                 throw new ArgumentException("User doesn't exist");
             DBservices db = new DBservices();
             string Token = GenerateToken();
-            bool tmp = db.InitiateNewValidation(id, Token) > 0;
-            //Execute(Token).Wait();
+            bool tmp = db.InitiateNewValidation(Id, Token) > 0;
+            Execute(Token).Wait();
             return tmp;
         }
         // Gets user favorites songs. returns List of json objects (needed because special data is used)

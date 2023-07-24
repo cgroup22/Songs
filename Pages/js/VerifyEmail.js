@@ -1,6 +1,6 @@
-const port = "44355"; // port of the server.
-const apiStart = `https://localhost:${port}/api`; // host url.
-//const apiStart = `https://proj.ruppin.ac.il/cgroup22/test2/tar1/api`;
+//const port = "44355"; // port of the server.
+//const apiStart = `https://localhost:${port}/api`; // host url.
+const apiStart = `https://proj.ruppin.ac.il/cgroup22/test2/tar1/api`;
 function VerifyEmail() {
     // Get the email and token from the URL
     const urlParams = new URLSearchParams(window.location.search);
