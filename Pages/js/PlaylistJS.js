@@ -118,7 +118,7 @@ function PlayPlaylist() {
     let userID = GetUserID();
     if (userID == null || userID < 1 || PlaylistID < 1)
         return;
-    if (PlaylistID == undefined)
+    if (typeof PlaylistID == "undefined")
         return;
     // console.log(PlaylistSongs);
     window.myPlaylist.playlist = [];

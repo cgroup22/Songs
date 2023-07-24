@@ -11,7 +11,7 @@ function FavLoaded() {
         let tmp = document.getElementById('FavoritesContainer');
         let index = window.myPlaylist.current;
         for (i of tmp.children) {
-            if (!i.classList.contains('album_list_name')) {
+            if (!i.classList.contains('album_list_name') && !i.classList.contains('ms_btn')) { // ignore the list definition and the play btn.
                 if (i.querySelector('.sNames').innerHTML === window.myPlaylist.playlist[index].title) {
                     i.classList.add('play_active_song');
                 }
@@ -54,10 +54,36 @@ function GetFavoritesSCB(data) {
     FavoriteSongs = data;
     UpdateFavSongs();
 }
+function PlayUserFav() {
+    if (!IsLoggedIn()) return;
+    let UserID = GetUserID();
+    if (UserID < 1) return;
+    if (typeof FavoriteSongs == "undefined") return;
+    window.myPlaylist.playlist = [];
+    window.myPlaylist.original = [];
+    let song;
+    for (i in FavoriteSongs) {
+        song = {
+            image: FavoriteSongs[i].performerImage,	
+            title: FavoriteSongs[i].songName,
+            artist: FavoriteSongs[i].performerName,
+            mp3: `${apiStart}/Songs/GetSongByID/SongID/${FavoriteSongs[i].songID}`,
+            oga: `${apiStart}/Songs/GetSongByID/SongID/${FavoriteSongs[i].songID}`,
+            option : window.myPlayListOtion
+        };
+        window.myPlaylist.playlist.push(song);
+        window.myPlaylist.original.push(song);
+    }
+    window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
+    localStorage['Queue'] = JSON.stringify(window.myPlaylist.playlist);
+    HandleIndexPlayFirstInQueue();
+    PlayFirstInQueue();
+}
 // updates html elems
 function UpdateFavSongs() {
     let counter = 1;
-    let str = `<ul class="album_list_name"><li>#</li><li>Song Title</li><li>Artist</li><li class="text-center">Duration</li><li class="text-center">More</li><li class="text-center">remove</li></ul>`;
+    let str = `<div class="ms_btn" onclick="PlayUserFav()" style="margin-bottom:20px;"><a href="javascript:void(0);" style="color:white;">Play Songs</a></div>
+    <ul class="album_list_name"><li>#</li><li>Song Title</li><li>Artist</li><li class="text-center">Duration</li><li class="text-center">More</li><li class="text-center">remove</li></ul>`;
     for (i in FavoriteSongs) {
     str += `<ul>
         <li onclick='FavoritePlaySong(${i})'><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
