@@ -1,6 +1,6 @@
-const port = "44355"; // port of the server.
-const apiStart = `https://localhost:${port}/api`; // host url.
-//const apiStart = `https://proj.ruppin.ac.il/cgroup22/test2/tar1/api`;
+//const port = "44355"; // port of the server.
+//const apiStart = `https://localhost:${port}/api`; // host url.
+const apiStart = `https://proj.ruppin.ac.il/cgroup22/test2/tar1/api`;
 $(document).ready(function() { // onload. Updates playlists and search.
     $("#SearchForm").submit(SearchQuery);
     document.getElementsByClassName('nav_playlist')[0].children[0].style.display = "none";
