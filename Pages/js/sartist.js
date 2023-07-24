@@ -76,7 +76,7 @@ function GetArtistInfoFromLastFM(queryArtistName) {
     const apiKey = 'cdd5f93673066c226a1250d12317c85d';
 const artistName = queryArtistName;
 
-const apiUrl = `http://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${encodeURIComponent(
+const apiUrl = `https://ws.audioscrobbler.com/2.0/?method=artist.getinfo&artist=${encodeURIComponent(
   artistName
 )}&api_key=${apiKey}&format=json`;
 

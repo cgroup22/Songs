@@ -56,7 +56,7 @@ function UpdateArtists(data) {
                                     </div>
                                 </div>
                                 <div class="ms_rcnt_box_text">
-                                    <h3><a href="artist_single.html">${data[i].performerName}</a></h3>
+                                    <h3 onclick="MoveToArtist(${data[i].performerID})"><a href="javascript:void(0)">${data[i].performerName}</a></h3>
                                 </div>
                             </div>
                         </div>`

@@ -1529,6 +1529,8 @@ public class DBservices
                     SoloQuestionsGotRight = QGR,
                     SoloQuestionsAnswered = SQA,
                     SoloAverage = SQA == 0 ? 0.0f : (QGR / (float)SQA) * 100,
+                    test1 = QGR,
+                    test2 = SQA,
                     Level = Math.Floor(XP / 100.0f) + 1
                 };
                 users.Add(s);

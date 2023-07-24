@@ -59,17 +59,6 @@ function UpdateFavSongs() {
     let counter = 1;
     let str = `<ul class="album_list_name"><li>#</li><li>Song Title</li><li>Artist</li><li class="text-center">Duration</li><li class="text-center">More</li><li class="text-center">remove</li></ul>`;
     for (i in FavoriteSongs) {
-        /*str += `<ul>
-        <li onclick='FavoritePlaySong(${i})'><a href="#"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
-        <li><a href="#">${FavoriteSongs[i].songName}</a></li>
-        <li><a href="#">${FavoriteSongs[i].performerName}</a></li>` +
-        //<li class="text-center"><a href="javascript:void(0)">Free</a></li>
-        `<li class="text-center"><a href="javascript:void(0)">${FavoriteSongs[i].length}</a></li>
-        <li style="text-align:center;" onclick="AddToQueueFav(${i})"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add</a></li>`+
-        //<li style="text-align:center;"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download</a></li>
-        `<li class="text-center"><a href="#"><span class="ms_close" onclick="RemoveFromFavorites(${FavoriteSongs[i].songID})">
-                <img src="images/svg/close.svg" alt=""></span></a></li>
-    </ul>`;*/
     str += `<ul>
         <li onclick='FavoritePlaySong(${i})'><a href="javascript:void(0)"><span class="play_no">${counter < 10 ? "0" + counter : counter}</span><span class="play_hover"></span></a></li>
         <li onclick="getLyrics(${FavoriteSongs[i].songID})"><a href="javascript:void(0)" class="sNames">${FavoriteSongs[i].songName}</a></li>
