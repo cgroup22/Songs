@@ -475,6 +475,14 @@ function MoveToFollowing() {
     }
     window.location.href = 'following.html';
 }
+// Moves to contact us page, if logged in.
+function MoveToContactUs() {
+    if (!IsLoggedIn()) {
+        openPopup('ERROR', 'red', "You must be logged in!");
+        return;
+    }
+    window.location.href = 'contactus.html';
+}
 // Plays all of the songs of a specific artist, also saves them to the queue.
 function PlayArtistSongsWithoutShuffleSCB(data) {
   window.myPlaylist.playlist = [];

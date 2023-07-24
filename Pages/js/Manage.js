@@ -8,6 +8,69 @@ function ManageLoaded() {
     HideAudioPlayer();
     DisplayOptions();
 }
+// Gets all messages the users have submitted.
+function GetMessages() {
+    const api = `${apiStart}/Messages`;
+    ajaxCall("GET", api, "", GetMessagesSCB, ECB);
+}
+// On success, build the html page dynamically.
+function GetMessagesSCB(data) {
+    MessageReport = {
+        "MessageID": [],
+        "UserID": [],
+        "Subject": [],
+        "Content": [],
+        "UserEmail": [],
+        "Date": [],
+        "UserName": []
+    };
+    let str = `<a onclick="DisplayOptions()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a>
+    <a onclick="DownloadMessagesReport()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Download</a>
+    <ul class="album_list_name">
+    <li style="width:7%;">Message ID</li>
+    <li style="width:7%;">User ID</li>
+    <li>User Name</li>
+    <li>User Email</li>
+    <li>Subject</li>
+    <li>Content</li>
+    <li>Date</li>
+    </ul>`;
+    for (i of data) {
+        i.date = i.date.split('T')[0];
+        MessageReport.MessageID.push(i.messageID);
+        MessageReport.UserID.push(i.userID);
+        MessageReport.Subject.push(i.subject);
+        MessageReport.Content.push(i.content);
+        MessageReport.UserEmail.push(i.userEmail);
+        MessageReport.Date.push(i.date);
+        MessageReport.UserName.push(i.userName);
+        str += `<ul>
+        <li style="width:7%;"><a href="javascript:void(0)">${i.messageID}</a></li>
+        <li style="width:7%;"><a href="javascript:void(0)">${i.userID}</a></li>
+        <li><a href="javascript:void(0)">${i.userName}</a></li>
+        <li><a href="javascript:void(0)">${i.userEmail}</a></li>
+        <li><a href="javascript:void(0)">${i.subject}</a></li>
+        <li><a href="javascript:void(0)">${i.content}</a></li>
+        <li><a href="javascript:void(0)">${i.date}</a></li>
+    </ul>`;
+    }
+    document.getElementById('MessagesData').innerHTML = str;
+    document.getElementById("AdminOptions").style.display = 'none';
+    document.getElementById("MessagesData").style.display = 'block';
+}
+// Downloads messages as csv file.
+function DownloadMessagesReport() {
+    if ("undefined" == typeof MessageReport) return;
+    const csvData = convertObjectToCSV(MessageReport);
+    const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+      const downloadLink = document.createElement("a");
+      downloadLink.setAttribute("href", url);
+      downloadLink.setAttribute("download", "MessagesReport.csv");
+      document.body.appendChild(downloadLink);
+      downloadLink.click();
+      document.body.removeChild(downloadLink);
+}
 // get genres
 function GetGenresInfo() {
     const api = `${apiStart}/Genres/AdminGetGenresInformation`;
@@ -68,7 +131,7 @@ function convertObjectToCSV(obj) {
     return csvRows.join("\n");
   }
   function DownloadSongsReport() {
-    if (undefined == Songs) return;
+    if ("undefined" == typeof Songs) return;
     const csvData = convertObjectToCSV(Songs);
     const blob = new Blob([csvData], { type: "text/csv;charset=utf-8;" });
       const url = URL.createObjectURL(blob);
@@ -388,6 +451,7 @@ function DisplayOptions() {
     document.getElementById("PerformersData").style.display = 'none';
     document.getElementById("SongsData").style.display = 'none';
     document.getElementById("ReportData").style.display = 'none';
+    document.getElementById("MessagesData").style.display = 'none';
 }
 // uploads artist form
 function UploadArtist() {

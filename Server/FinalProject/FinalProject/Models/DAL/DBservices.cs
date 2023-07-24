@@ -1135,6 +1135,61 @@ public class DBservices
             }
         }
     }
+    // Gets all messages
+    public List<Message> GetAllMessages()
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_GetMessages", con, null);             // create the command
+
+        List<Message> messages = new List<Message>();
+
+        try
+        {
+            SqlDataReader dataReader = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+
+            while (dataReader.Read())
+            {
+                Message m = new Message();
+                m.Subject = dataReader["subject"].ToString();
+                m.UserID = Convert.ToInt32(dataReader["UserID"]);
+                m.MessageID = Convert.ToInt32(dataReader["MessageID"]);
+                m.Subject = dataReader["subject"].ToString();
+                m.Content = dataReader["content"].ToString();
+                m.Date = Convert.ToDateTime(dataReader["dateOfMessage"]);
+                m.UserName = dataReader["UserName"].ToString();
+                m.UserEmail = dataReader["UserEmail"].ToString();
+                messages.Add(m);
+            }
+            return messages;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
     // Gets most played performer. Used to generate the admin's general report.
     private Dictionary<string, object> AdminReportGetMostPlayedPerformer()
     {
@@ -1947,6 +2002,51 @@ public class DBservices
 
 
         cmd = CreateCommandWithStoredProcedure("Proj_SP_PostComment", con, paramDic);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            // int numEffected = Convert.ToInt32(cmd.ExecuteScalar()); // returning the id
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+    // Inserts a new message
+    public int Insert(Message m)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("FinalProject"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        Dictionary<string, object> paramDic = new Dictionary<string, object>();
+        paramDic.Add("@subject", m.Subject);
+        paramDic.Add("@content", m.Content);
+        paramDic.Add("@UserID", m.UserID);
+
+
+        cmd = CreateCommandWithStoredProcedure("Proj_SP_PostMessage", con, paramDic);             // create the command
 
         try
         {

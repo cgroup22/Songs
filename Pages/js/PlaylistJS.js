@@ -1,4 +1,4 @@
-// Called when the favorites page is loaded
+// Called when the playlist page is loaded
 function PlaylistLoaded() { // Gets playlist songs, updates audio player, and login info.
     // Saves whether we want our queue to loop
     IsLooped = false;

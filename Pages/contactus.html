@@ -8,7 +8,7 @@
 <!-- Begin Head -->
 
 <head>
-    <title>Manage portal</title>
+    <title>Contact Us</title>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
     <meta name="description" content="Music">
@@ -28,7 +28,7 @@
     <link rel="shortcut icon" type="image/png" href="images/favicon.png">
     <link rel="stylesheet" type="text/css" href="css/OurSS.css">
 </head>
-<body onload="ManageLoaded()">
+<body onload="ContactUsLoaded()">
 	<!----Loader---->
 	<div class="ms_inner_loader">
 		<div class="ms_loader">
@@ -57,30 +57,39 @@
             </div>
           </div>
           <div class="PlaylistPopup" id="CreatePlaylistPopup" style="display:none;">
-              <div class="playlist-popup-inner">
-                  <h2 id="CNPTitle">Create New Playlist</h2>
-                  <input type="text" id="playlist-name" placeholder="Enter playlist name">
-                  <br>
-                  <a href="javascript:void(0);"><button onclick="CreatePlaylistOK()" class="ms_btn" id="CreatePlaylistBTN">Create</button></a>
-                  <a href="javascript:void(0);"><button onclick="CreatePlaylistCancel()" class="ms_btn" id="CreatePlaylistBTN">Cancel</button></a>
+            <div class="playlist-popup-inner">
+                <h2 id="CNPTitle">Create New Playlist</h2>
+                <input type="text" id="playlist-name" placeholder="Enter playlist name">
+                <br>
+                <a href="javascript:void(0);"><button onclick="CreatePlaylistOK()" class="ms_btn" id="CreatePlaylistBTN">Create</button></a>
+                <a href="javascript:void(0);"><button onclick="CreatePlaylistCancel()" class="ms_btn" id="CreatePlaylistBTN">Cancel</button></a>
+            </div>
+        </div>
+        <div class="PlaylistPopup" id="AddToPlaylistPopup" style="display:none;">
+            <div class="playlist-popup-inner" id="CPLWindow">
+                <h2 id="CPTitle">Choose Playlist</h2>
+                <div id="AddToPlaylistInfo">
+                    <a href="javascript:void(0)" class="PlaylistOption">Test</a>
+                    <br>
+                </div>
+                <a href="javascript:void(0);"><button onclick="AddToPlaylistCancel()" class="ms_btn" id="CreatePlaylistBTN">Cancel</button></a>
+                <p id="AddedToPlaylistInfo">Added To X</p>
+            </div>
+        </div>
+        <div class="popup-container">
+            <div id="lyrics-overlay" class="lyrics-overlay">
+              <div class="lyrics-content">
+                <h1 style="font-size: 30px;" id="songLyrics">Song Lyrics</h1>
+                <p id="lyrics-text"></p>
+                <span id="close-button" class="close-button">&times;</span>
               </div>
-          </div>
-          <div class="PlaylistPopup" id="AddToPlaylistPopup" style="display:none;">
-              <div class="playlist-popup-inner" id="CPLWindow">
-                  <h2 id="CPTitle">Choose Playlist</h2>
-                  <div id="AddToPlaylistInfo">
-                      <a href="javascript:void(0)" class="PlaylistOption">Test</a>
-                      <br>
-                  </div>
-                  <a href="javascript:void(0);"><button onclick="AddToPlaylistCancel()" class="ms_btn" id="CreatePlaylistBTN">Cancel</button></a>
-                  <p id="AddedToPlaylistInfo">Added To X</p>
-              </div>
+            </div>
           </div>
         <!---Header--->
         <div class="ms_header">
             <div class="ms_top_left">
                 <div class="ms_top_search">
-                    <form id="SearchForm" style="display:none;">
+                    <form id="SearchForm">
                     <input type="text" class="form-control" placeholder="Search Music Here.." id="SearchBar">
                     <a href="javascript:void(0)" id="MicSVG"><img src="images/mic.svg" alt="Microphone" style="width:20px;height:30px;position: absolute;left:0px;top:3px;" onclick="SearchByVoice()"></a>
                         <button class="search_icon" onclick="SearchQuery()" id="SearchBTN">
@@ -88,18 +97,19 @@
 						</button>
                     </form>
                 </div>
-                <div class="ms_top_trend">
+                <div class="ms_top_trend" style="display:none;">
                     <!--<span><a href="#"  class="ms_color">Trending Songs :</a></span> <span class="top_marquee"><a href="#">Dream your moments, Until I Met You, Gimme Some Courage, Dark Alley (+8 More)</a></span>-->
-                    <a class="ms_btn" id="TakeQuizBTN" href="javascript:void(0)" onclick="TakeAQuiz()" style="display:none;">Take A Quiz</a>
+                    <a class="ms_btn" id="TakeQuizBTN" href="javascript:void(0)" onclick="TakeAQuiz()">Take A Quiz</a>
                 </div>
             </div>
-            <div class="ms_top_right" style="visibility:hidden;">
+            <div class="ms_top_right">
                 <div class="ms_top_btn" id="LoginRegisterAccountHeader">
 					<a href="javascript:;" class="ms_btn reg_btn" data-toggle="modal" data-target="#myModal"><span>register</span></a>
 					<a href="javascript:;" class="ms_btn login_btn" data-toggle="modal" data-target="#myModal1"><span>login</span></a>
 				</div>
             </div>
         </div>
+        
         <!---Side Menu Start--->
         <!---Side Menu Start--->
         <div class="ms_sidemenu_wrapper">
@@ -135,7 +145,7 @@
 						</span>
 						</a>
                         </li>
-                        <li style="display:none;"><a href="artist.html" title="Artists">
+                        <li><a href="artist.html" title="Artists">
 						<span class="nav_icon">
 							<span class="icon icon_artists"></span>
 						</span>
@@ -144,33 +154,33 @@
 						</span>
 						</a>
                         </li>
-                        <li style="display:none;"><a href="genres.html" title="Genres">
+                        <li onclick="TakeAQuiz()"><a href="javascript:void(0)" title="Solo Quiz">
 						<span class="nav_icon">
 							<span class="icon icon_genres"></span>
 						</span>
 						<span class="nav_text">
-							genres
+							Solo Quiz
 						</span>
 						</a>
                         </li>
-                        <li style="display:none;"><a href="top_track.html" title="Top Tracks">
+                        <li onclick="MPQuiz()"><a href="javascript:void(0)" title="Multiplayer Quiz">
 						<span class="nav_icon">
 							<span class="icon icon_tracks"></span>
 						</span>
 						<span class="nav_text">
-							top tracks
+							MP Quiz
 						</span>
 						</a>
                         </li>
-                        <li style="display:none;"><a href="free_music.html" title="Free Music">
-						<span class="nav_icon">
-							<span class="icon icon_music"></span>
-						</span>
-						<span class="nav_text">
-							free music
-						</span>
-						</a>
-                        </li>
+                        <li onclick="MoveToFollowing()"><a href="javascript:void(0)" title="Following">
+                            <span class="nav_icon">
+                                <span class="icon icon_music"></span>
+                            </span>
+                            <span class="nav_text">
+                                Following
+                            </span>
+                            </a>
+                            </li>
                         <li style="display:none;"><a href="stations.html" title="Stations">
 						<span class="nav_icon">
 							<span class="icon icon_station"></span>
@@ -200,7 +210,7 @@
 						</span>
 						</a>
                         </li>
-                        <li onclick="MoveToFavorites()" style="display:none;"><a href="javascript:void(0)" title="Favourites">
+                        <li><a href="favourite.html" title="Favourites">
 						<span class="nav_icon">
 							<span class="icon icon_favourite"></span>
 						</span>
@@ -209,17 +219,26 @@
 						</span>
 						</a>
                         </li>
-                        <li style="display:none;"><a href="history.html" title="History">
+                        <li onclick="MoveToQuizHistory()"><a href="javascript:void(0)" title="Quiz History">
 						<span class="nav_icon">
 							<span class="icon icon_history"></span>
 						</span>
 						<span class="nav_text">
-							history
+							Quiz History
 						</span>
 						</a>
                         </li>
+                        <li onclick="Leaderboard()"><a href="javascript:void(0)" title="Leaderboard">
+                            <span class="nav_icon">
+                                <span class="icon icon_station"></span>
+                            </span>
+                            <span class="nav_text">
+                                Leaderboard
+                            </span>
+                            </a>
+                            </li>
                     </ul>
-                    <ul class="nav_playlist" style="display:none;">
+                    <ul class="nav_playlist">
                         <li><a href="feature_playlist.html" title="Featured Playlist">
 						<span class="nav_icon">
 							<span class="icon icon_fe_playlist"></span>
@@ -248,16 +267,25 @@
             <!----Free Download Css Start---->
             <div class="ms_free_download ms_purchase_wrapper">
                 <div class="ms_heading">
-                    <h1>Manage Portal</h1>
+                    <h1 id="PlaylistName">Contact Us</h1>
                 </div>
-				<div class="album_inner_list">
-					<div class="album_list_wrapper" id="UsersContainer" style="display:none;">
+                <form id="ContactUsForm" style="display:block; text-align: center;">
+                    <div style="margin-top:15px;"><span class="Upload">Subject: </span><input type="text" id="SubjectTB" style="width:400px;" required><br></div>
+                    <div style="margin-top:15px"><span class="Upload">Content: </span><textarea id="ContentTB" rows="5" cols="50" required></textarea><br></div>
+                    <button class="ms_btn" style="border:0;margin-top:15px;">Submit</button>
+                    <p style="margin-top:30px;color:lightgreen;font-size:40px;display:none;" id="MsgSCB">Your meesage was sent!</p>
+                </form>
+				<div class="album_inner_list" style="display:none;">
+					<div class="album_list_wrapper" id="FavoritesContainer">
 						<ul class="album_list_name">
-							<li>Name</li>
-							<li>Email</li>
-							<li>Registration Date</li>
+							<li>#</li>
+							<li>Song Title</li>
+							<li>Artist</li>
 							<!--<li class="text-center">price</li>-->
-							<li class="text-center">Favorites</li>
+							<li class="text-center">Duration</li>
+							<li class="text-center">Add To Queue</li>
+							<!--<li class="text-center">Download</li>-->
+							<li class="text-center">remove</li>
 						</ul>
 						<!--<ul>
 							<li><a href="#"><span class="play_no">01</span><span class="play_hover"></span></a></li>
@@ -293,175 +321,6 @@
 							<a href="#" class="ms_btn">view more</a>
 						</div>-->
 					</div>
-                    <div class="album_list_wrapper" id="GenresContainer" style="display:none;">
-						<ul class="album_list_name">
-                            <li>Genre ID</li>
-							<li>Genre Name</li>
-							<li>Number Of Songs</li>
-							<li>Number Of Plays</li>
-							<!--<li class="text-center">price</li>-->
-							<!--<li class="text-center">Favorites</li>-->
-						</ul>
-						<!--<ul>
-							<li><a href="#"><span class="play_no">01</span><span class="play_hover"></span></a></li>
-							<li><a href="#">Bloodlust</a></li>
-							<li><a href="#">Dream Your Moments</a></li>
-							<li class="text-center"><a href="javascript:void(0)">Free</a></li>
-							<li class="text-center"><a href="javascript:void(0)">5:26</a></li>
-							<li class="text-center"><a href="javascript:void(0)"><span class="ms_icon1 ms_fav_icon"></span></a></li>
-							<li class="text-center ms_more_icon"><a href="javascript:;"><span class="ms_icon1 ms_active_icon"></span></a>
-								<ul class="more_option">
-									<li><a href="#"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
-									<li><a href="#"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
-									<li><a href="#"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-									<li><a href="#"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
-									<li><a href="#"><span class="opt_icon"><span class="icon icon_share"></span></span>Share</a></li>
-								</ul>
-							</li>
-							<li class="text-center"><a href="#"><span class="ms_close">
-									<img src="images/svg/close.svg" alt=""></span></a></li>
-						</ul>
-                        <ul>
-							<li><a href="#"><span class="play_no">01</span><span class="play_hover"></span></a></li>
-							<li><a href="#">Bloodlust</a></li>
-							<li><a href="#">Dream Your Moments</a></li>
-							<li class="text-center"><a href="javascript:void(0)">Free</a></li>
-							<li class="text-center"><a href="javascript:void(0)">5:26</a></li>
-                            <li style="text-align:center;"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add</a></li>
-							<li style="text-align:center;"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download</a></li>
-							<li class="text-center"><a href="#"><span class="ms_close">
-									<img src="images/svg/close.svg" alt=""></span></a></li>
-						</ul>-->
-						<!--<div class="ms_view_more">
-							<a href="#" class="ms_btn">view more</a>
-						</div>-->
-					</div>
-                    <div class="album_list_wrapper" id="PerformersData" style="display:none;">
-						<ul class="album_list_name">
-                            <li>Performer ID</li>
-							<li>Performer Name</li>
-							<li>Is A Band</li>
-							<li>Instagram Handle</li>
-							<li>Total Plays</li>
-							<li>Followers</li>
-							<!--<li class="text-center">price</li>-->
-							<!--<li class="text-center">Favorites</li>-->
-						</ul>
-						<!--<ul>
-							<li><a href="#"><span class="play_no">01</span><span class="play_hover"></span></a></li>
-							<li><a href="#">Bloodlust</a></li>
-							<li><a href="#">Dream Your Moments</a></li>
-							<li class="text-center"><a href="javascript:void(0)">Free</a></li>
-							<li class="text-center"><a href="javascript:void(0)">5:26</a></li>
-							<li class="text-center"><a href="javascript:void(0)"><span class="ms_icon1 ms_fav_icon"></span></a></li>
-							<li class="text-center ms_more_icon"><a href="javascript:;"><span class="ms_icon1 ms_active_icon"></span></a>
-								<ul class="more_option">
-									<li><a href="#"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
-									<li><a href="#"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
-									<li><a href="#"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-									<li><a href="#"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
-									<li><a href="#"><span class="opt_icon"><span class="icon icon_share"></span></span>Share</a></li>
-								</ul>
-							</li>
-							<li class="text-center"><a href="#"><span class="ms_close">
-									<img src="images/svg/close.svg" alt=""></span></a></li>
-						</ul>
-                        <ul>
-							<li><a href="#"><span class="play_no">01</span><span class="play_hover"></span></a></li>
-							<li><a href="#">Bloodlust</a></li>
-							<li><a href="#">Dream Your Moments</a></li>
-							<li class="text-center"><a href="javascript:void(0)">Free</a></li>
-							<li class="text-center"><a href="javascript:void(0)">5:26</a></li>
-                            <li style="text-align:center;"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add</a></li>
-							<li style="text-align:center;"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download</a></li>
-							<li class="text-center"><a href="#"><span class="ms_close">
-									<img src="images/svg/close.svg" alt=""></span></a></li>
-						</ul>-->
-						<!--<div class="ms_view_more">
-							<a href="#" class="ms_btn">view more</a>
-						</div>-->
-					</div>
-                    <div class="album_list_wrapper" id="SongsData" style="display:none;">
-						<ul class="album_list_name">
-                            <li>Song ID</li>
-							<li>Song Name</li>
-							<li>Release Year</li>
-							<li>Plays</li>
-							<li>Performer</li>
-							<li>Genre</li>
-							<li>Song Favorites</li>
-							<!--<li class="text-center">price</li>-->
-							<!--<li class="text-center">Favorites</li>-->
-						</ul>
-						<!--<ul>
-							<li><a href="#"><span class="play_no">01</span><span class="play_hover"></span></a></li>
-							<li><a href="#">Bloodlust</a></li>
-							<li><a href="#">Dream Your Moments</a></li>
-							<li class="text-center"><a href="javascript:void(0)">Free</a></li>
-							<li class="text-center"><a href="javascript:void(0)">5:26</a></li>
-							<li class="text-center"><a href="javascript:void(0)"><span class="ms_icon1 ms_fav_icon"></span></a></li>
-							<li class="text-center ms_more_icon"><a href="javascript:;"><span class="ms_icon1 ms_active_icon"></span></a>
-								<ul class="more_option">
-									<li><a href="#"><span class="opt_icon"><span class="icon icon_fav"></span></span>Add To Favourites</a></li>
-									<li><a href="#"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add To Queue</a></li>
-									<li><a href="#"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download Now</a></li>
-									<li><a href="#"><span class="opt_icon"><span class="icon icon_playlst"></span></span>Add To Playlist</a></li>
-									<li><a href="#"><span class="opt_icon"><span class="icon icon_share"></span></span>Share</a></li>
-								</ul>
-							</li>
-							<li class="text-center"><a href="#"><span class="ms_close">
-									<img src="images/svg/close.svg" alt=""></span></a></li>
-						</ul>
-                        <ul>
-							<li><a href="#"><span class="play_no">01</span><span class="play_hover"></span></a></li>
-							<li><a href="#">Bloodlust</a></li>
-							<li><a href="#">Dream Your Moments</a></li>
-							<li class="text-center"><a href="javascript:void(0)">Free</a></li>
-							<li class="text-center"><a href="javascript:void(0)">5:26</a></li>
-                            <li style="text-align:center;"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_queue"></span></span>Add</a></li>
-							<li style="text-align:center;"><a href="javascript:void(0)"><span class="opt_icon"><span class="icon icon_dwn"></span></span>Download</a></li>
-							<li class="text-center"><a href="#"><span class="ms_close">
-									<img src="images/svg/close.svg" alt=""></span></a></li>
-						</ul>-->
-						<!--<div class="ms_view_more">
-							<a href="#" class="ms_btn">view more</a>
-						</div>-->
-					</div>
-                    <div id="ReportData">
-                        
-                    </div>
-                    <div id="MessagesData" class="album_list_wrapper">
-                        
-                    </div>
-                    <div id="AdminOptions">
-                        <a class="ms_btn manageBTNS" onclick="LoadUserInformation()" style="color:white;" href="javascript:void(0)">Users</a>
-                        <a class="ms_btn manageBTNS" onclick="GetGenresInfo()" style="color:white;" href="javascript:void(0)">Most Played Genres</a>
-                        <a class="ms_btn manageBTNS" onclick="GetPerformersInfo()" style="color:white;" href="javascript:void(0)">Performers Data</a>
-                        <a class="ms_btn manageBTNS" onclick="GetSongsInfo()" style="color:white;" href="javascript:void(0)">Songs Data</a>
-                        <a class="ms_btn manageBTNS" onclick="GenerateReport()" style="color:white;" href="javascript:void(0)">General Report</a>
-                        <a class="ms_btn manageBTNS" onclick="GetMessages()" style="color:white;" href="javascript:void(0)">Messages</a>
-                        <a class="ms_btn manageBTNS" onclick="UploadArtist()" style="color:white;" href="javascript:void(0)">Upload Artist</a>
-                        <a class="ms_btn manageBTNS" onclick="UploadSong()" style="color:white;" href="javascript:void(0)">Upload Song</a>
-                    </div>
-                    <form id="UploadArtistForm" style="display:none;">
-                        <a onclick="DisplayOptions()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a><br>
-                        <div style="margin-top:15px;"><span class="Upload">Name: </span><input type="text" id="PName" style="width:400px;" required><br></div>
-                        <div style="margin-top:15px"><span class="Upload">Is it a band? </span><input type="checkbox" id="PIsBand"><br></div>
-                        <div style="margin-top:15px;"><span class="Upload">Image URL: </span><input type="text" id="PImage" style="width:400px;" required><br></div>
-                        <div style="margin-top:15px;"><span class="Upload">Instagram Handle: </span><input type="text" id="PInstagram" style="width:400px;"><br></div>
-                        <button class="ms_btn" style="border:0;margin-top:15px;">Submit</button>
-                    </form>
-                    <form id="UploadSongForm" style="display:none;">
-                        <a onclick="DisplayOptions()" href="javascript:void(0)" class="ms_btn manageBTNS" style="color:white; margin-bottom:10px;">Back</a><br>
-                        <div style="margin-top:15px;"><span class="Upload">Name: </span><input type="text" id="SName" style="width:400px;" required><br></div>
-                        <div style="margin-top:15px"><span class="Upload">Genre: </span><select id="GenreSelect"></select><br></div>
-                        <div style="margin-top:15px"><span class="Upload">Release Year: </span><input type="number" id="SYear" style="width:400px;" required></select><br></div>
-                        <div style="margin-top:15px"><span class="Upload">Artist: </span><select id="PerformerSelect"></select><br></div>
-                        <div style="margin-top:15px;"><span class="Upload">Length: </span><input type="text" id="SLength" style="width:400px;" required><br></div>
-                        <div style="margin-top:15px;"><span class="Upload">Lyrics: </span><textarea id="SLyrics" style="width:400px;" required cols="1000" rows="10"></textarea><br></div>
-                        <div style="margin-top:15px;"><span class="Upload">MP3 File: </span><input type="file" id="SFile" style="width:400px;color:wheat;" accept="audio/mp3" required><br></div>
-                        <button class="ms_btn" style="border:0;margin-top:15px;">Submit</button>
-                    </form>
 				</div>
             </div>
             <!----Live Radio Section Start---->
@@ -1079,7 +938,7 @@
                             <li>
                                 <label class="lang_check_label">
 							 German 
-							<input type="checkbox" name="check">
+							<input type="checkbox" name="check"> 
 							<span class="label-text"></span>
 							</label>
                             </li>
@@ -1139,8 +998,8 @@
                     <div class="modal-body">
 						<h1>Are you sure you want to clear your queue?</h1>
 						<div class="clr_modal_btn">
-							<a onclick="FavClearQueue()">clear all</a>
-							<a href="#">cancel</a>
+							<a onclick="FavClearQueue()" href="javascript:void(0)">clear all</a>
+							<a href="javascript:void(0)">cancel</a>
 						</div>
                     </div>
                 </div>
@@ -1193,12 +1052,9 @@
 	<script type="text/javascript" src="js/plugins/scroll/jquery.mCustomScrollbar.js"></script>
     <script type="text/javascript" src="js/custom.js"></script>
     <script src="js/ajaxCalls.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/firebase/8.2.2/firebase-analytics.min.js"></script>
-    <script type="text/javascript" src="js/Firebase.js"></script>
     <script type="text/javascript" src="js/GeneralJS.js"></script>
-    <script type="text/javascript" src="js/Manage.js"></script>
+    <script type="text/javascript" src="js/FavoritesJS.js"></script>
+    <script type="text/javascript" src="js/contant.js"></script>
 </body>
 
 </html>
