@@ -141,6 +141,36 @@ function PlayPlaylist() {
     HandleIndexPlayFirstInQueue();
     PlayFirstInQueue();
 }
+// Play the whole playlist - IN RANDOMIZED ORDER (sets queue songs to be playlist's songs and plays the first song in the playlist)
+function ShufflePlaylist() {
+    let userID = GetUserID();
+    if (userID == null || userID < 1 || PlaylistID < 1)
+        return;
+    if (typeof PlaylistID == "undefined")
+        return;
+    // console.log(PlaylistSongs);
+    window.myPlaylist.playlist = [];
+    window.myPlaylist.original = [];
+    let song;
+    for (i in PlaylistSongs) {
+        song = {
+            image: PlaylistSongs[i].performerImage,	
+            title: PlaylistSongs[i].songName,
+            artist: PlaylistSongs[i].performerName,
+            mp3: `${apiStart}/Songs/GetSongByID/SongID/${PlaylistSongs[i].songID}`,
+            oga: `${apiStart}/Songs/GetSongByID/SongID/${PlaylistSongs[i].songID}`,
+            option : window.myPlayListOtion
+        };
+        window.myPlaylist.playlist.push(song);
+        window.myPlaylist.original.push(song);
+    }
+    shuffle(window.myPlaylist.playlist);
+    window.myPlaylist.original = window.myPlaylist.playlist;
+    window.myPlaylist.setPlaylist(window.myPlaylist.playlist);
+    localStorage['Queue'] = JSON.stringify(window.myPlaylist.playlist);
+    HandleIndexPlayFirstInQueue();
+    PlayFirstInQueue();
+}
 // delete playlist
 function DeletePlaylist() {
     let userID = GetUserID();
